@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Host: picosite.ir
+Sitemap: https://picosite.ir/sitemap.xml

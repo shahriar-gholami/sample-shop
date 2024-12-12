@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}قوانین و مقررات{% endblock %}
+
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">قوانین و مقررات</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">فروشگاه</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">قوانین و مقررات</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card mt-0">
+            <div class="card-body p-5 text-dark">
+                <div class="statistics-info p-4">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="">
+                                <h2>قوانین و مقررات</h2>
+                                <p>{{store.policies|safe}}</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div></div></div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}سوالات متداول{% endblock %}
+
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">سوالات متداول</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:index' %)">فروشگاه</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'shop:faq_list' %}">سوالات متداول</a></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- Row-->
+            <div class="row ">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">سوالات و پاسخ‌ها</h3>
+                            </div>
+                            <div class="card-body">
+                                {% for faq in faqs %}
+                                <div class="panel-group1" id="accordion1">
+                                    <div class="panel panel-default mb-4">
+                                        <div class="panel-heading1 ">
+                                            <h4 class="panel-title1">
+                                                <a aria-expanded="false" class="accordion-toggle collapsed"
+                                                   data-bs-parent="#accordion" data-bs-toggle="collapse"
+                                                   href="#faq{{faq.id}}">{{faq.question}}</a>
+                                            </h4>
+                                        </div>
+                                        <div aria-expanded="false" class="panel-collapse collapse" id="faq{{faq.id}}"
+                                             role="tabpanel">
+                                            <div class="panel-body">
+                                                <p>{{faq.answer}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {% endfor %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Row-->
+        </div>
+        <!-- CONTAINER CLOSED -->
+    </div>
+</div>
+<!--app-content closed-->
+{% block js %}
+
+
+
+
+
+
+
+{% endblock %}
+{% endblock %}
+

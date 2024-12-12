@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}ویرایش حساب کاربری{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">حساب کاربری</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">فروشگاه</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'shop:customer_dashboard' %}">حساب کاربری</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'shop:customer_dashboard_info' %}">ویرایش حساب کاربری</a></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- Row -->
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="position-lg-relative w-100" id="scroll-stickybar">
+                        <div class="card">
+                            <div class="list-group list-group-transparent mb-0 mail-inbox pb-3">
+                                <div class="mt-4 mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:index' %}">{{customer.full_name}} عزیز خوش‌آمدید</a>
+                                </div>
+                                {% if request.user.phone_number == store.get_owner_phone_number %}
+                                    <div class="mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:owner_dashboard' %}" class="nav-link">داشبورد فروشندگی</a>
+                                    </div>
+                                {% endif %}
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:customer_dashboard' %}">
+                                    <span class="icons"><i class="fa fa-bars"></i></span>داشبورد
+                                </a>
+                                <a class="list-group-item d-flex align-items-center  mx-4"
+                                   href="{% url 'shop:customer_dashboard_orders' %}">
+                                    <span class="icons"><i class="fa fa-shopping-bag"></i></span>سفارشات                                
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:customer_dashboard_favorites' %}">
+                                    <span class="icons"><i class="fa fa-heart-o"></i></span> لیست علاقمندی‌ها 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center active mx-4"
+                                   href="{% url 'shop:customer_dashboard_info' %}">
+                                    <span class="icons"><i class="fa fa-user-o"></i></span> اطلاعات کاربری
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:customer_dashboard_comments' %}">
+                                    <span class="icons"><i class="fa fa-comment-o"></i></span> دیدگاه‌ها
+                                </a>
+                                <!-- <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="javascript:void(0)">
+                                    <span class="icons"><i class="fa fa-envelope-o"></i></span> پیام‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="javascript:void(0)">
+                                    <span class="icons"><i class="fa fa-power-off"></i></span> خروج
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش نمایه</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname">شماره تماس</label>
+                                        <input class="form-control" disabled="" id="exampleInputname" placeholder="{{customer.phone_number}}"
+                                               type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname">نام و نام خانوادگی</label>
+                                        <input name="full_name" class="form-control" id="exampleInputname" value="{{customer.full_name}}" placeholder="{{customer.full_name}}"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname1">ایمیل</label>
+                                        <input name="email" class="form-control" id="exampleInputname1" value="{{customer.email}}" placeholder="{{customer.email}}"
+                                               type="email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">شهر</label>
+                                <input name="city" class="form-control" id="exampleInputEmail1" value="{{customer.city}}" placeholder="{{customer.city}}"
+                                       type="text">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">کد پستی</label>
+                                <input name="zip_code" class="form-control" id="exampleInputEmail1" value="{{customer.zip_code}}" placeholder="{{customer.zip_code}}"
+                                       type="text">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">آدرس</label>
+                                <input name="address" class="form-control" id="exampleInputEmail1" value="{{customer.address}}" placeholder="{{customer.address}}"
+                                       type="text">
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">بروزرسانی</button>
+                        </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ROW-1 CLOSED -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+
+    </div>
+</div>
+<!--app-content closed-->
+    
+{% endblock %}

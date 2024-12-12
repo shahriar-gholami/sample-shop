@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}افزودن محصول{% endblock %}
+
+{% block content %}
+
+    
+    <!--app-content open-->
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">افزودن محصول</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">صفحات</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">افزودن محصول</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">افزودن محصول از دیجی‌کالا</div>
+                            </div>
+                            <form method="post" action="{% url 'shop:add_product_from_dg' %}">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">کد dkp محصول یا محصولات (با خط فاصله - از هم جدا نمایید) <span class="text-red">*</span></label>
+                                                <input name="dkp_code" class="form-control" placeholder="کد محصول یا لیست کد محصولات" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">دسته‌بندی هدف<span class="text-red">*</span></label>
+                                                <select name="category" class="form-control select2" data-placeholder="انتخاب" type="text" multiple>
+                                                    <option selected="selected" value="0">دسته‌بندی نشده</option>
+                                                    {% for category in categories %}
+                                                    <option value="{{category.id}}">{{category.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="container-login100-form-btn">
+                                            <button type="submit" class="login100-form-btn btn-primary">افزودن</button>    
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">افزودن محصول جدید</div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="card-body">
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">نام محصول :</label>
+                                        <div class="col-md-9">
+                                            <input name="name" class="form-control" placeholder="نام محصول" type="text">
+                                            <p class="text-danger">{{ name_message }}</p>
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">قیمت :</label>
+                                        <div class="col-md-9">
+                                            <input name="price" class="form-control" placeholder="قیمت به تومان" type="number">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">قیمت تخفیف خورده :</label>
+                                        <div class="col-md-9">
+                                            <input name="sales_price" class="form-control" placeholder="در صورت فعال بودن تخفیف قیمت پس از تخفیف را به تومان وارد نمایید" type="number">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">فعال بودن حراجی :</label>
+
+                                        <div class="col-md-9">
+                                            <p>در حال حاضر حراج {% if product.off_active == True %} فعال {% else %} غیر فعال {% endif %} است.</p>
+                                            <select name="off_active" class="single-select" multiple="multiple">
+                                                <option value="1">حراج فعال</option>
+                                                <option selected="selected" value="0">حراج غیرفعال</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <!-- <div class="row mb-4">
+                                        <label class="col-md-3 form-label">فعال :</label>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label class="custom-control custom-checkbox mb-0">
+                                                    <input class="custom-control-input" name="available"
+                                                        type="checkbox" value="option1">
+                                                    <span class="custom-control-label">اگر محصول فعال است این تیک را بزنید</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>   -->
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">دسته‌بندی :</label>
+                                        <div class="col-md-9">
+                                            <select name="category" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                            <option selected="selected" value="0">دسته‌بندی نشده</option>
+                                            {% for category in categories %}
+                                            <option value="{{category.id}}">{{category.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">برند :</label>
+                                        <div class="col-md-9">
+                                            <input name="brand" class="form-control" placeholder="برند محصول - اگر محصول برند خاصی ندارد خالی گذاشته شود." type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="row" id="des">
+                                        <label class="col-md-3 form-label mb-4">معرفی محصول :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea ID="description" class="content" name="description">
+توضیحات محصول:
+در این بخش مشخصات محصول خود را در چند پاراگراف کوتاه و ساده شرح دهید.</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-md-3 form-label mb-4">ویژگی‌‌های محصول :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea class="form-control" rows="6" name="features">
+ویژگی‌های شاخص محصول را به این صورت وارد کنید:
+1. عنوان ویژگی اول: مقدار ویژگی اول
+2. عنوان ویژگی دوم: مقدار ویژگی دوم
+3. و الی آخر...
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-md-3 form-label mb-4">تگ‌های محصول :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea class="form-control" rows="6" name="tags">‌تگ‌های محوصل خود را وارد نمایید. تگ‌ها را با فشردن دکمه Enter از هم جدا نمایید.</textarea>
+                                        </div>
+                                    </div>
+
+
+
+                                    
+
+                                    
+
+                                    
+
+                                    <!--Row-->
+                                    <!-- <div class="row">
+                                        <label class="col-md-3 form-label mb-4">بارگذاری محصول :</label>
+                                        <div class="col-md-9">
+                                            <input accept=".jpg, .png, image/jpeg, image/png" id="demo" multiple
+                                                name="files" type="file">
+                                        </div>
+                                    </div> -->
+                                    <!--End Row-->
+                                </div>
+
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-3"></div>
+                                        <div class="container-login100-form-btn">
+                                            <button type="submit" class="login100-form-btn btn-primary">ادامه</button>    
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ROW-1 CLOSED -->
+            </div>
+            <!-- CONTAINER CLOSED -->
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/custom.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/wysiwyag/jquery.richtext.js' %} "></script>
+<script src="{% static 'assets/plugins/wysiwyag/wysiwyag.js' %} "></script>
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+{% endblock %}

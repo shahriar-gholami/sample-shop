@@ -1,0 +1,642 @@
+{% load static %}
+{% load humanize %}
+<!doctype html>
+<html class="no-js" dir="rtl" lang="Fa_IR">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LRSH37XQV"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-3LRSH37XQV');
+    </script>
+
+{% block meta %}
+<!-- META DATA -->
+
+
+{% endblock %}
+
+     <!-- FAVICON -->
+     <link href="{{ store.get_logo_image }}" rel="shortcut icon" type="image/x-icon"/>
+
+     <!-- TITLE -->
+     <title>{% block title %}Sticky Sidebars{% endblock %}</title>
+
+    <link href="{% static 'assets2/css/normalize.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/font/bootstrap-icon/bootstrap-icons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/js/plugin/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/js/plugin/countdown/countdown.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/js/plugin/rasta-contact/style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/js/plugin/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'assets2/css/responsive.css' %}" rel="stylesheet">
+
+    <meta content="#f4f5f9" name="theme-color">
+</head>
+
+<body>
+
+<!-- start header -->
+
+<header>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+
+            <div class="col-lg-3 col-sm-4 col-6 order-lg-1 order-3">
+                <div class="header-cart d-flex align-items-center">
+                    <div class="header-cart-icon">
+                        <div class="header-cart-icon-toggle" href="{% if request.user.is_authenticated %}{% url 'shop:cart_view'  cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}">
+                            <a href="{% if request.user.is_authenticated %}{% url 'shop:cart_view'  cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}"><i class="bi bi-basket fs-4"></i></a>
+                            <span class="header-cart-icon-counter">{{cart_items_count}}</span>
+                        </div>
+                        <!-- end mini cart -->
+                    </div>
+                    <div class="header-auth ms-3">
+                        <div class="dropdown">
+                            <a href="#register" data-bs-toggle="dropdown" aria-expanded="true" role="button"
+                               class="btn btn-white header-register border-0 rounded-pill show">
+                                <span class="fw-bold d-lg-inline-block d-none">{% if request.user.is_authenticated %}{{request.user.full_name}}{% else %}خوش آمدید{% endif %}</span>
+                                <i class="bi bi-person-check fs-1 d-lg-none d-inline"></i>
+                            </a>
+                            <ul class="dropdown-menu flex-column"
+                                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 42px, 0px);"
+                                data-popper-placement="bottom-end">
+                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-house-door me-2"></i>پروفایل</a>
+                                </li>
+                                {% if request.user.is_authenticated %}
+                                <li><a href="
+                                    {% if request.user.phone_number in store.get_owner_phone_number %}
+                                    {% url 'shop:owner_dashboard'  %}
+                                    {% endif %}" class="dropdown-item"><i class="bi bi-arrow-up-right-square me-2"></i>داشبورد فروشندگی</a>
+                                </li>
+                                {% endif %}
+                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_orders'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-cart-check me-2"></i>سفارش های
+                                    من</a></li>
+                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_comments'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-chat-dots me-2"></i>نظرات
+                                    من</a></li>
+                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_favorites'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-heart me-2"></i>محصولات مورد
+                                    علاقه</a></li>
+                                <li><a href="" class="dropdown-item mct-hover"><i
+                                        class="bi bi-arrow-right-square me-2"></i>خروج از حساب کاربری</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-4 d-sm-block d-none order-lg-2 order-2">
+                <div class="header-top-menu text-center">
+                    <div class="header-logo text-center">
+                        <a href="{% url 'shop:index'  %}">
+                            <img class="mb-2" alt="" src="{{ store.get_logo_image }}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 order-3 d-lg-block d-none">
+                <div class="header-search">
+                    <form method="get" action="{% url 'shop:product_search'  %}">
+                        <input name="q" class="header-search-txt" placeholder="جستجوی محصولات" type="text">
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-6 order-lg-5 order-1">
+
+                <div class="responsive-menu d-lg-none text-center d-block">
+                    <div class="d-flex align-items-center">
+
+                        <button aria-controls="responsive menu" class="btn border-0 p-3 ps-0 btn-responsive-menu"
+                                data-bs-target="#responsiveMenu"
+                                data-bs-toggle="offcanvas" type="button">
+                            <svg class="bi bi-list" fill="currentColor" height="32" viewBox="0 0 16 16"
+                                 width="32" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+                                      fill-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <!-- <div class="header-logo d-sm-none text-center d-flex">
+                            <a href="{% url 'shop:index'  %}">
+                                <img alt="" src="{{ store.get_logo_image }}" height="60px" width="60">
+                            </a>
+                        </div> -->
+                    </div>
+                    <div aria-labelledby="responsive menu" class="offcanvas offcanvas-start" id="responsiveMenu"
+                         tabindex="-1">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel">{{ store.name }}</h5>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas"
+                                    type="button"></button>
+                        </div>
+                        <div class="offcanvas-body d-flex flex-column">
+                            <a class="text-center d-block mb-3" href="">
+                                <img alt="" class="img-fluid" src="{{ store.get_logo_image }}" width="100">
+                            </a>
+                            <div class="header-search pb-4 w-100">
+                                <form method="get" action="{% url 'shop:product_search'  %}">
+                                    <input name="q" class="header-search-txt py-3" placeholder="جستجوی محصولات"
+                                           type="text">
+                                </form>
+                            </div>
+                            <ul class="rm-item-menu navbar-nav">
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:index'  %}">خانه</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:product_list'  %}">فروشگاه</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="">دسته‌بندی‌ها</a>
+                                    <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                    <ul class="navbar-nav h-0">
+                                    {% for t_category in top_categories.all %}
+                                        {% if t_category.get_sub_categories.all.first != None %}
+                                            {% if t_category.is_sub != True %}
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a>
+                                                <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                                <ul class="navbar-nav h-0 bg-ul-f7">
+                                                    <li class="nav-item"><a class="nav-link" href="{% url 'shop:category_products'  t_category.slug %}">همه محصولات این دسته</a>
+                                                    </li>
+                                                    {% for sub_category in t_category.get_sub_categories.all %}
+                                                    <li class="nav-item"><a class="nav-link" href="{% url 'shop:category_products'  sub_category.slug %}">{{sub_category.name}}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            {% endif %}
+                                        {% else %}
+                                        {% if t_category.is_sub == False %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a></li>
+                                        {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="">ویژه‌ها</a>
+                                    <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                    <ul class="navbar-nav h-0">
+                                    {% for tag in special_tags %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:special_tag_products' tag.name %}">{{tag.name}}</a></li>
+                                    {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="">برندها</a>
+                                    <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                    <ul class="navbar-nav h-0">
+                                    {% for brand in store.get_brands %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:special_brand_products' brand.name %}">{{brand.name}}</a></li>
+                                    {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:about'  %}">درباره ما</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:contact'  %}">تماس با ما</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:post_list'  %}">وبلاگ</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:policies'  %}">قوانین و مقررات</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:faq_list'  %}">سوالات متداول</a>
+                                </li>
+                                
+                             
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- start serach float -->
+    <!-- <div class="search-float">
+        <div class="container-fluid">
+            <div class="search-float-close float-end pointer">
+                <i class="bi bi-x fs-1"></i>
+            </div>
+            <div class="search-float-form">
+                <form action="">
+                    <input class="header-search-txt" placeholder="جستجوی محصولات" type="text">
+                </form>
+            </div>
+
+            <div class="search-float-tag">
+                <div class="search-float-tag-title d-flex align-items-center pt-4">
+                    <i class="bi bi-tag me-3"></i>
+                    <h6>بیشترین جستجو های اخیر:</h6>
+                </div>
+                <div class="search-float-tag-items">
+                    <ul class="navbar-nav flex-row flex-wrap w-100">
+                        <li class="nav-item"><a class="btn" href="">#آویز ساعت طلا زنانه</a></li>
+                        <li class="nav-item"><a class="btn" href="">#پیراهن مردانه</a></li>
+                        <li class="nav-item"><a class="btn" href="">#کیف زنانه</a></li>
+                        <li class="nav-item"><a class="btn" href="">#کفش ورزشی مردانه</a></li>
+                        <li class="nav-item"><a class="btn" href="">#شلوار زنانه</a></li>
+                        <li class="nav-item"><a class="btn" href="">#ساعت مردانه</a></li>
+                        <li class="nav-item"><a class="btn" href="">#کرم مرطوب کننده</a></li>
+                        <li class="nav-item"><a class="btn" href="">#شامپو مو</a></li>
+                        <li class="nav-item"><a class="btn" href="">#اصلاح مو صورت</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div> -->
+    <!-- end search float -->
+</header>
+
+<!--end header-->
+
+<!-- start mega menu -->
+<div class="mega-menu mega-menu-top d-lg-block d-none">
+    <div class="container-fluid position-relative">
+        <div class="header-mega-menu">
+            <div class="top-menu-menu">
+                <ul class="navbar-nav align-items-center">
+                    <li class="position-relative m-0"></li>
+                    <li class="nav-item"><a class="nav-link header-top-menu-link-a fw-bold-hover " href="{% url 'shop:index'  %}">
+                        خانه</a></li>
+                    <!-- <li class="nav-item main-menu-head">
+                        <a class="nav-link header-top-menu-link-a fw-bold-hover nav-active" href="">
+                            مگا تب منو
+                        </a>
+                        <ul class="main-menu mega-container">
+                            <li class="main-menu-sub-active-li">
+                                <a href=""> <i class="bi bi-phone"></i> موبایل</a>
+                                <ul class="main-menu-sub back-menu"
+                                    style=" background: #fff url('assets/img/509-5092096_offering-high-quality-mobile-repair-service-main-image_prev_ui.png') no-repeat;">
+                                    <li><a class="title my-flex-baseline" href="">برند های مختلف
+                                        گوشی</a>
+                                    </li>
+                                    <li><a href="">گوشی اپل</a></li>
+                                    <li><a href="">گوشی سامسونگ</a></li>
+                                    <li><a href="">گوشی شیائومی</a></li>
+                                    <li><a href="">گوشی بلک بری</a></li>
+                                    <li><a href="">گوشی ایرانی</a></li>
+                                    <li><a class="title my-flex-baseline" href="">گوشی بر اساس
+                                        قیمت</a></li>
+                                    <li><a href="">گوشی تا 2 میلیون</a></li>
+                                    <li><a href="">گوشی تا 5 میلیون</a></li>
+                                    <li><a href="">گوشی تا 10 میلیون</a></li>
+                                    <li><a href="">گوشی تا 12 میلیون</a></li>
+                                    <li><a href="">گوشی تا 15 میلیون</a></li>
+                                    <li><a class="title my-flex-baseline" href="">گوشی براساس حافظه
+                                        داخلی</a></li>
+                                    <li><a href="">گوشی تا 16 گیگابایت</a></li>
+                                    <li><a href="">گوشی تا 32 گیگابایت</a></li>
+                                    <li><a href="">گوشی تا 64 گیگابایت</a></li>
+                                    <li><a href="">گوشی تا 128 گیگابایت</a></li>
+                                    <li><a href="">گوشی تا 256 گیگابایت</a></li>
+                                    <li><a href="">گوشی تا 512 گیگابایت</a></li>
+                                    <li><a href="">گوشی تا 1 ترابایت</a></li>
+                                    <li><a class="title my-flex-baseline" href="">گوشی براساس
+                                        کاربری</a>
+                                    </li>
+                                    <li><a href="">گوشی اقتصادی</a></li>
+                                    <li><a href="">گوشی دانش آموزی</a></li>
+                                    <li><a href="">گوشی لاکچری</a></li>
+                                    <li><a href="">گوشی پرچمدار</a></li>
+                                </ul>
+                            </li>
+                            <li><a href=""><i class="bi bi-tablet"></i> تبلت</a>
+                                <ul class="main-menu-sub back-menu"
+                                    style=" background: #fff url('assets/img/tablet-menu.png') no-repeat;">
+                                    <li><a class="title my-flex-baseline" href="">برند های مختلف
+                                        تبلت</a>
+                                    </li>
+                                    <li><a href="">تبلت اپل</a></li>
+                                    <li><a href="">تبلت سامسونگ</a></li>
+                                    <li><a href="">تبلت شیائومی</a></li>
+                                    <li><a href="">تبلت بلک بری</a></li>
+                                    <li><a href="">تبلت ایرانی</a></li>
+                                    <li><a class="title my-flex-baseline" href="">تبلت بر اساس
+                                        قیمت</a></li>
+                                    <li><a href="">تبلت تا 2 میلیون</a></li>
+                                    <li><a href="">تبلت تا 5 میلیون</a></li>
+                                    <li><a href="">تبلت تا 10 میلیون</a></li>
+                                    <li><a href="">تبلت تا 12 میلیون</a></li>
+                                    <li><a href="">تبلت تا 15 میلیون</a></li>
+                                    <li><a class="title my-flex-baseline" href="">تبلت براساس حافظه
+                                        داخلی</a></li>
+                                    <li><a href="">تبلت تا 16 گیگابایت</a></li>
+                                    <li><a href="">تبلت تا 32 گیگابایت</a></li>
+                                    <li><a href="">تبلت تا 64 گیگابایت</a></li>
+                                    <li><a href="">تبلت تا 128 گیگابایت</a></li>
+                                    <li><a href="">تبلت تا 256 گیگابایت</a></li>
+                                    <li><a href="">تبلت تا 512 گیگابایت</a></li>
+                                    <li><a href="">تبلت تا 1 ترابایت</a></li>
+                                    <li><a class="title my-flex-baseline" href="">تبلت براساس
+                                        کاربری</a>
+                                    </li>
+                                    <li><a href="">گتبلتوشی اقتصادی</a></li>
+                                    <li><a href="">تبلت دانش آموزی</a></li>
+                                    <li><a href="">تبلت لاکچری</a></li>
+                                    <li><a href="">تبلت پرچمدار</a></li>
+                                </ul>
+                            </li>
+                            <li><a href=""><i class="bi bi-shield"></i>آنتی ویروس</a>
+                                <ul class="main-menu-sub back-menu"
+                                    style=" background: #fff url('assets/img/EAV.png') no-repeat;">
+                                    <li><a class="title my-flex-baseline" href="">براساس برند</a>
+                                    </li>
+                                    <li><a href="">نود 32</a></li>
+                                    <li><a href="">کسپر اسکای</a></li>
+                                    <li><a href="">360 سکوریتی</a></li>
+                                    <li><a href="">بیت دیفیندر</a></li>
+                                    <li><a href="">ایمن</a></li>
+                                    <li><a class="title my-flex-baseline" href="">براساس ویندوز</a>
+                                    </li>
+                                    <li><a href="">ویندوز 7</a></li>
+                                    <li><a href="">ویندوز 8</a></li>
+                                    <li><a href="">ویندوز 8.1</a></li>
+                                    <li><a href="">ویندوز 10</a></li>
+                                    <li><a href="">ویندوز 11</a></li>
+                                    <li><a class="title my-flex-baseline" href="">براساس برند</a>
+                                    </li>
+                                    <li><a href="">نود 32</a></li>
+                                    <li><a href="">کسپر اسکای</a></li>
+                                    <li><a href="">360 سکوریتی</a></li>
+                                    <li><a href="">بیت دیفیندر</a></li>
+                                    <li><a href="">ایمن</a></li>
+                                </ul>
+                            </li>
+                            <li><a href=""><i class="bi bi-laptop"></i>لبتاپ</a>
+                                <ul class="main-menu-sub back-menu"
+                                    style=" background: #fff url('assets/img/labtop.png') no-repeat;">
+                                    <li><a class="title my-flex-baseline" href="">برند های مختلف
+                                        لبتاپ</a>
+                                    </li>
+                                    <li><a href="">لبتاپ اپل</a></li>
+                                    <li><a href="">لبتاپ سامسونگ</a></li>
+                                    <li><a href="">لبتاپ شیائومی</a></li>
+                                    <li><a href="">لبتاپ بلک بری</a></li>
+                                    <li><a href="">لبتاپ ایرانی</a></li>
+                                    <li><a class="title my-flex-baseline" href="">لبتاپ بر اساس
+                                        قیمت</a>
+                                    </li>
+                                    <li><a href="">لبتاپ تا 2 میلیون</a></li>
+                                    <li><a href="">لبتاپ تا 5 میلیون</a></li>
+                                    <li><a href="">لبتاپ تا 10 میلیون</a></li>
+                                    <li><a href="">لبتاپ تا 12 میلیون</a></li>
+                                    <li><a href="">لبتاپ تا 15 میلیون</a></li>
+                                    <li><a class="title my-flex-baseline" href="">لبتاپ براساس حافظه
+                                        داخلی</a></li>
+                                    <li><a href="">لبتاپ تا 16 گیگابایت</a></li>
+                                    <li><a href="">لبتاپ تا 32 گیگابایت</a></li>
+                                    <li><a href="">لبتاپ تا 64 گیگابایت</a></li>
+                                    <li><a href="">لبتاپ تا 128 گیگابایت</a></li>
+                                    <li><a href="">لبتاپ تا 256 گیگابایت</a></li>
+                                    <li><a href="">لبتاپ تا 512 گیگابایت</a></li>
+                                    <li><a href="">لبتاپ تا 1 ترابایت</a></li>
+                                    <li><a class="title my-flex-baseline" href="">لبتاپ براساس
+                                        کاربری</a>
+                                    </li>
+                                    <li><a href="">لبتاپ اقتصادی</a></li>
+                                    <li><a href="">لبتاپ دانش آموزی</a></li>
+                                    <li><a href="">لبتاپ لاکچری</a></li>
+                                    <li><a href="">لبتاپ پرچمدار</a></li>
+                                </ul>
+                            </li>
+                            <li><a href=""><i class="bi bi-tag"></i>پر فروش ترین ها</a>
+                                <ul class="main-menu-sub back-menu"
+                                    style=" background: #fff url('assets/img/top-sales.jpeg') no-repeat;">
+                                    <li><a class="title my-flex-baseline" href="">زیر منو شماره
+                                        1 </a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a class="title my-flex-baseline" href="">زیر منو شماره
+                                        1 </a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a class="title my-flex-baseline" href="">زیر منو شماره
+                                        1 </a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a class="title my-flex-baseline" href="">زیر منو شماره
+                                        1 </a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">فروشگاه</a>
+                        <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                            style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                            {% for t_category in top_categories.all %}
+                                {% if t_category.is_sub == False %}
+                                <li><a class="title" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a></li>
+                                    {% if t_category.get_sub_categories.all.first != None %}
+                                        {% for sub_category in t_category.get_sub_categories.all %}
+                                        <li><a href="{% url 'shop:category_products'  sub_category.slug %}">{{sub_category.name}}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">ویژه‌ها</a>
+                        <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                            style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                            {% for tag in special_tags %}
+                                <li><a class="title" href="{% url 'shop:special_tag_products' tag.name %}">{{tag.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">برندها</a>
+                        <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                            style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                            {% for brand in store.get_brands %}
+                                <li><a class="title" href="{% url 'shop:special_brand_products' brand.name %}">{{brand.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link  header-top-menu-link-a fw-bold-hover" href="">منو ساده</a>
+                        <ul class="level-one">
+                            <li><a href="">منو شماره 1</a></li>
+                            <li><a href="">منو شماره 2</a></li>
+                            <li class="position-relative"><a href="">منو شماره 3 <i
+                                    class="bi bi-chevron-left"></i></a>
+                                <ul class="level-two">
+                                    <li><a href="">زیر منو شماره 1</a></li>
+                                    <li><a href="">2 زیر منو شماره </a></li>
+                                    <li><a href="">3 زیر منو شماره </a></li>
+                                </ul>
+                            </li>
+                            <li><a href="">منو شماره 4</a></li>
+                            <li><a href="">منو شماره 5</a></li>
+                            <li><a href="">منو شماره 6</a></li>
+                        </ul>
+                    </li> -->
+                    <li class="nav-item"><a class="nav-link header-top-menu-link-a fw-bold-hover " href="{% url 'shop:contact'  %}">
+                    تماس با ما</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link header-top-menu-link-a fw-bold-hover " href="{% url 'shop:about'  %}">
+                    درباره ما</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link header-top-menu-link-a fw-bold-hover " href="{% url 'shop:policies'  %}">
+                    قوانین و مقررات</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link header-top-menu-link-a fw-bold-hover " href="{% url 'shop:post_list'  %}">
+                    وبلاگ</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link header-top-menu-link-a fw-bold-hover " href="{% url 'shop:faq_list'  %}">
+                    سوالات متداول</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end mega menu -->
+
+{% block content %}{% endblock %}
+
+<!-- start footer -->
+
+<footer class="footer py-40 bg-white">
+    <div class="container-fluid">
+        <div class="row gy-4">
+            <div class="col-lg-3 col-md-6 order-lg-1 order-2 footer-item">
+                <div class="footer-main-links">
+                   <div class="row">
+                       <div class="col-6">
+                           <ul class="navbar-nav">
+                               <li class="nav-item ms-2"><a href="{% url 'shop:about'  %}" class="nav-link">درباره ما</a></li>
+                               <li class="nav-item ms-2"><a href="{% url 'shop:contact'  %}" class="nav-link">تماس با ما</a></li>
+                               <li class="nav-item ms-2"><a href="{% url 'shop:policies'  %}" class="nav-link">قوانین و مقررات</a></li>
+                               <li class="nav-item ms-2"><a href="{% url 'shop:post_list'  %}" class="nav-link">وبلاگ</a></li>
+                               <li class="nav-item ms-2"><a href="{% url 'shop:faq_list'  %}" class="nav-link">سولات متداول</a></li>
+                           </ul>
+                       </div>
+                       
+                   </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-2 order-1 footer-item">
+                <div class="footer-logo">
+                    <a href="">
+                        <img alt="" src="{{store.get_logo_image}}">
+                    </a>
+                </div>
+                <div class="footer-logo-desc">
+                    <p class="text-muted mb-0 text-justify">{{store.about_description|safe}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 order-3">
+                <div class="footer-main-links">
+                    <div class="row">
+                        
+                        <div class="col-6">
+                            <ul class="navbar-nav">
+                                <li class="nav-item ms-2"><a href="" class="nav-link">ایمیل: {{store.email}}</a></li>
+                                <li class="nav-item ms-2"><a href="" class="nav-link">اینستاگرام: {{store.instagram}}</a></li>
+                                <li class="nav-item ms-2"><a href="" class="nav-link">آدرس: {{store.address}}</a></li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+            <div class="col-12 order-4">
+                <div class="footer-rss-notifi pt-md-5">
+                    <div class="col-lg-3 col-md-6 order-3">
+                        <div class="footer-calls d-md-block d-none">
+                            <div class="d-flex footer-call mt-2 justify-content-end">
+                                <div class="footer-contact-right">
+                                    <a href="">
+                                        <h4 style="line-height: 2" class="title-font mt-0 text-end">خبرنامه</h4>
+                                        <h4 style="line-height: 0" class="text-end fw-lighter fs-6 mb-0 text-muted-two">دریافت آخرین اخبار</h4>
+                                    </a>
+                                </div>
+                                <div class="panel-meta-item-icon main-color-three-bg ms-3 footer-contact-left">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-form">
+                        <form action="">
+                            <div class="form-group d-flex">
+                                <input type="text" class="form-control rounded-0 py-3 footer-form-txt" placeholder="ایمیل خود را وارد کنید">
+                                <button type="submit" class="btn main-color-two-bg border-0 rounded-0">عضویت</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-3 col-md-6 order-3">
+                        <div class="footer-calls d-md-block d-none">
+                            <div class="d-flex footer-call mt-2 justify-content-end">
+                                <div class="footer-contact-right">
+                                    <a href="">
+                                        <h4 style="line-height: 2" class="title-font mt-0 text-end">تلفن</h4>
+                                        <h4 style="line-height: 0" class="text-end fw-lighter fs-6 mb-0 text-muted-two">{{ store.phone_number }}</h4>
+                                    </a>
+                                </div>
+                                <div class="panel-meta-item-icon main-color-three-bg ms-3 footer-contact-left">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 order-6">
+                <div class="footer-copy-right pt-3 d-flex justify-content-between align-items-center">
+                    <p class="font-16 my-4">طراحی شده توسط سایت ساز <a href="https://picosite.ir">پیکوسایت</a></p>
+                    
+                    <nav class="navbar navbar-expand">
+                        <ul class="navbar-nav">
+                            <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-instagram"></i></a></li>
+                            <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-twitter"></i></a></li>
+                            <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-linkedin"></i></a></li>
+                            <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-telegram"></i></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- end footer -->
+
+
+<!-- start login modal -->
+
+
+
+
+
+
+<script src="{% static 'assets2/js/vendor/modernizr-3.11.2.min.js' %}"></script>
+<script src="{% static 'assets2/js/vendor/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'assets2/js/vendor/bootstrap.bundle-5.3.2.min.js' %}"></script>
+<script src="{% static 'assets2/js/plugin/swiper/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'assets2/js/plugin/countdown/countdown.js' %}"></script>
+<script src="{% static 'assets2/js/plugin/vanilla-tilt/vanilla-tilt.min.js' %}"></script>
+<script src="{% static 'assets2/js/plugin/rasta-contact/script.js' %}"></script>
+<script src="{% static 'assets2/js/plugin/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+<script src="{% static 'assets2/js/plugins.js' %}"></script>
+<script src="{% static 'assets2/js/main.js' %}"></script>
+
+</body>
+
+</html>

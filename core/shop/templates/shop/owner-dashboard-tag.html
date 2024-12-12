@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}برچسب‌ها{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">داشبورد فروشندگی</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:owner_dashboard' %}">پنل فروشندگی</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">برچسب‌ها</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- Row -->
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="position-lg-relative w-100" id="scroll-stickybar">
+                        <div class="card">
+                            <div class="list-group list-group-transparent mb-0 mail-inbox pb-3">
+                                <div class="mt-4 mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:index'  %}">مشاهده فروشگاه</a>
+                                </div>
+                                <a class="list-group-item d-flex align-items-center mx-4 "
+                                   href="{% url 'shop:owner_dashboard'  %}">
+                                    <span class="icons"><i class="fa fa-bars"></i></span>داشبورد
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4 {% if store.has_notif == True %}text-danger{% endif %}"
+                                href="{% url 'shop:owner_dashboard_announcements'  %}">
+                                    <span class="icons"><i class="fa fa-fa fa-bell {% if store.has_notif == True %}text-danger{% endif %}"></i></span> اطلاعیه‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center  mx-4"
+                                   href="{% url 'shop:owner_dashboard_orders'  %}">
+                                    <span class="icons"><i class="fa fa-shopping-bag"></i></span>سفارشات                                
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_products'  %}">
+                                    <span class="icons"><i class="fa fa-cubes"></i></span> محصولات 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_categories'  %}">
+                                    <span class="icons"><i class="fa fa-th-large"></i></span> دسته‌بندی‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center active mx-4"
+                                   href="{% url 'shop:owner_dashboard_tag' %}">
+                                    <span class="icons"><i class="fa fa-tags"></i></span> برچسب‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_filters'  %}">
+                                    <span class="icons"><i class="fa fa-filter"></i></span> فیلترها 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_edit_home'  %}">
+                                    <span class="icons"><i class="fa fa-home"></i></span> نمای صفحه خانه
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_customers'  %}">
+                                    <span class="icons"><i class="fa fa-user"></i></span> مشتریان
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_messages'  %}">
+                                    <span class="icons"><i class="fa fa-envelope"></i></span> پیام‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_comments'  %}">
+                                    <span class="icons"><i class="fa fa-comment"></i></span> دیدگاه‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_delivery'  %}">
+                                    <span class="icons"><i class="fa fa-truck"></i></span> رویه‌های ارسال
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_coupons'  %}">
+                                    <span class="icons"><i class="fa fa-usd"></i></span> کوپن‌های تخفیف
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_store_update'  %}">
+                                    <span class="icons"><i class="fa fa-gear"></i></span> تنظیمات فروشگاه
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_blog'  %}">
+                                    <span class="icons"><i class="fa fa-th"></i></span> وبلاگ
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_blog_category'  %}">
+                                    <span class="icons"><i class="fa fa-th-list"></i></span> دسته‌بندی‌های پست‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:faq_create'  %}">
+                                    <span class="icons"><i class="fa fa-question"></i></span> سوالات متداول
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_policies'  %}">
+                                    <span class="icons"><i class="fa fa-info-circle"></i></span> قوانین و مقررات
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_finance'  %}">
+                                    <span class="icons"><i class="fa fa-money"></i></span> مالی
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                href="{% url 'shop:owner_dashboard_tutorials'  %}">
+                                <span class="icons"><i class="fa fa-laptop"></i></span> آموزشی
+                            </a>
+                            <a class="list-group-item d-flex align-items-center mx-4"
+                               href="{% url 'shop:owner_dashboard_ticket_list'  %}">
+                                <span class="icons"><i class="fa fa-comments"></i></span> تیکت‌ها
+                            </a>
+                            <a class="list-group-item d-flex align-items-center mx-4"
+                               href="{% url 'shop:owner_dashboard_meta'  %}">
+                                <span class="icons"><i class="fa fa-fa fa-google"></i></span> متاتگ‌ها
+                            </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">برجسب جدید</div>
+                                </div>
+                                <form method="post" action="{% url create_tag_url  %}">
+                                    {% csrf_token %}
+                        
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-group">
+                                                    <input name="name" class="form-control" id="city" placeholder="عنوان" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-group">
+                                                    <input name="slug" class="form-control" id="city" placeholder="نامک" type="text">
+                                                </div>
+                                            </div>
+                                            
+
+                                            
+
+                                        </div>
+                                        <div class="form-footer mt-2">
+                                            <button type="submit" class="login100-form-btn btn-primary">افزودن برچسب جدید</button>
+                                        </div>
+                                        <div><br></div>
+                                    </div>
+                                </form>
+                        
+                                    <div class="card-header">
+                                            <h3 class="card-title">برچسب‌ها</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered text-nowrap mb-0" id="autofill-table">
+                                                    <thead>
+                                                    <tr class="border-top">
+                                                        <th>عنوان</th>
+                                                        <th>برچسب ویژه</th>                                                   
+                                                        <th>عملیات</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for tag in tags %}
+                                                            <tr>
+                                                                <form method="post" action="{% url edit_tag_url  tag.id %}">
+                                                                    {% csrf_token %}
+                                                                    <td class="align-middle">{{tag.name}}</td>
+                                                                    <td class="align-middle">
+                                                                        <label class="custom-switch form-switch me-5">
+                                                                            <input {% if tag.is_special == True %}checked{% endif %} class="custom-switch-input" name="is_special"
+                                                                                   type="checkbox">
+                                                                            <span class="custom-switch-indicator custom-switch-indicator-md"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <div class=" d-flex g-2">
+                                                                            <button type="submit" class="login100-form-btn btn-primary">ذخیره</button> 
+                                                                            
+                                                                            <a href="{% url 'shop:delete_tag'  tag.id %}" class="btn text-danger bg-danger-transparent btn-icon py-1"
+                                                                            data-bs-original-title="حذف" data-bs-toggle="tooltip"><span
+                                                                                    class="bi bi-trash fs-16"></span></a>
+                                                                        </div>
+                                                                    </td>
+                                                                </form>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        
+                                    
+                                    
+                        
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Row -->
+
+                </div>
+            </div>
+            <!-- ROW-1 CLOSED -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+
+    </div>
+</div>
+<!--app-content closed-->
+    
+{% endblock %}
+
+
+{% block js %}
+
+<script src="{% static 'assets/js/handlecounter.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/js/autofill-table.js' %}"></script>
+
+{% endblock %}

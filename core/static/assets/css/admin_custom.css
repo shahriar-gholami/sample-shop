@@ -1,0 +1,11 @@
+/* admin_custom.css */
+.field-code, .field-brand {
+    max-width: 75px; /* محدود کردن عرض */
+    overflow: hidden; /* جلوگیری از overflow */
+}
+
+/* admin_custom.css */
+/* مخفی کردن فقط آیکون‌های عملیات اضافه، ویرایش، و حذف */
+.related-widget-wrapper a {
+    display: none !important; /* مخفی کردن لینک‌های آیکون */
+}

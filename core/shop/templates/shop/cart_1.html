@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}سبد خرید{% endblock %}
+
+{% block content %}
+
+
+
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">سبد خرید</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">تجارت الکترونیک</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">سبد خرید</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+                        <div class="card cart">
+                            <div class="card-header">
+                                <h3 class="card-title">سبد خرید</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-vcenter">
+                                        <thead>
+                                        <tr class="border-top">
+                                            <th>محصول</th>
+                                            <th>عنوان</th>
+                                            <th>قیمت</th>
+                                            <th>مقدار</th>
+                                            <th>مجموع</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in cart.items.all %}
+                                            
+                                            <form method="post" action="{% url 'shop:cart_item_update' cart.pk item.pk %}">
+                                                {% csrf_token %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <img alt="" class="cart-img text-center"
+                                                                src="{{item.variety.product.get_main_image}}">
+                                                        </div>
+                                                    </td>
+                                                    <td>{{item.variety.product.name}} {% if item.variety.name != 'default variety' %}- {{item.variety.name}}{% endif %}</td>
+                                                    <td class="fw-bold">{{item.variety.product.get_active_price|intcomma}}</td>
+                                                    <td>
+                                                        <div class="handle-counter" id="handleCounter4">
+                                                            <button class="counter-minus btn btn-white lh-2 shadow-none"
+                                                                    type="button">
+                                                                <i class="fa fa-minus text-muted"></i>
+                                                            </button>
+                                                            <input name = 'count' class="qty" type="text" value="{{item.quantity}}">
+                                                            <button class="counter-plus btn btn-white lh-2 shadow-none"
+                                                                    type="button">
+                                                                <i class="fa fa-plus text-muted"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{item.get_item_price|intcomma}}</td>
+                                                    <td>
+                                                        <div class=" d-flex g-2">
+                                                            <div class="btn-group align-top">
+                                                                <button type="submit" class="btn btn-sm btn-primary badge"
+                                                                        data-bs-toggle="" data-target="#user-form-modal"
+                                                                        type="button">بروز رسانی
+                                                                </button>
+                                                                
+                                                                    
+
+                                                                        <a href="{% url 'shop:cart_item_delete' cart.id item.id %}" class="btn text-danger bg-danger-transparent btn-icon py-1"
+                                                                        data-bs-original-title="حذف" data-bs-toggle="tooltip"><span
+                                                                             class="bi bi-trash fs-16"></span></a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 text-end"><a class="btn btn-primary " href="{% url 'shop:create_order' %}">مبلغ اولیه سفارش: {{cart.get_total_price|intcomma}} تومان - ادامه فرایند خرید</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                </div>
+                <!-- ROW-1 CLOSED -->
+            </div>
+            <!-- CONTAINER CLOSED -->
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/js/handlecounter.js' %}"></script>
+{% endblock %}

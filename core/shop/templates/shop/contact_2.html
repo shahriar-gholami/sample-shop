@@ -1,0 +1,165 @@
+{% extends "base_2.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}تماس با ما{% endblock %}
+
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:contact' %}" class="font-14 text-muted-two">خانه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">تماس با ما</a></li>
+
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="contact-title text-center">
+            <h1 class="title-font title-line-bottom-center mb-3">تماس با ما</h1>
+            <p class="text-muted mb-4">شما می‌توانید برای پیگیری سفارشات خود از اطلاعات این صفحه استفاده نمایید همچنین برای هر گونه انتقادات و پیشنهادات از طریق فرم زیر اقدام نمایید.</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                        <div class="statistics-info p-4">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="">
+                                        <div class="card-header">
+                                            
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="card-body no-padding">
+                                            <ul class="list-group no-margin">
+                                                <div class="single_address">
+                                                    <i class="bi bi-pin-map"></i>
+                                                    <h4>آدرس</h4>
+                                                    <p>{{store.address}}</p>
+                                                </div>
+                                                <div class="single_address">
+                                                    <i class="bi bi-envelope"></i>
+                                                    <h4>ایمیل</h4>
+                                                    <p>{{store.email}}</p>
+                                                </div>
+                                                <div class="single_address">
+                                                    <i class="bi bi-telephone"></i>
+                                                    <h4>شماره تماس</h4>
+                                                    <p>{{store.phone_number}}</p>
+                                                </div>
+                                                <div class="single_address">
+                                                    <i class="bi bi-instagram"></i>
+                                                    <h4>اینستاگرام</h4>
+                                                    <p>{{store.instagram}}</p>
+                                                </div>
+                                            </ul>
+                                        </div>
+        
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    
+                                    <form method="post">
+                                    {% csrf_token %}
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="exampleInputname">نام</label>
+                                                    <input name="name" class="form-control form-label label-float" id="exampleInputname" placeholder="نام"
+                                                           type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="exampleInputname1">نام خانوادگی</label>
+                                                    <input name="familly_name" class="form-control form-label label-float" id="exampleInputname1" placeholder="نام خانوادگی را وارد کنید"
+                                                           type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">آدرس ایمیل</label>
+                                            <input name="email" class="form-control form-label label-float" id="exampleInputEmail1" placeholder="آدرس ایمیل"
+                                                   type="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputnumber">شماره تماس</label>
+                                            <input name="phone" class="form-control form-label label-float" id="exampleInputnumber" placeholder="شماره تماس"
+                                                   type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputnumber">موضوع پیام</label>
+                                            <input name="subject" class="form-control form-label label-float" id="exampleInputnumber" placeholder="موضوع پیام"
+                                                   type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">متن پیام</label>
+                                            <textarea name="message_text" class="form-control form-label label-float" rows="6"></textarea>
+                                        </div>
+                                        
+                                            <button type="submit" class="btn-flat dark disount-btn-action">ارسال پیام</button>  
+                                            {{message}}
+                                        
+                                     
+                                    </div>
+                                    </form> 
+                                    
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- end content -->
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

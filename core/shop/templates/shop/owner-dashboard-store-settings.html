@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}تنظیمات فروشگاه{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">داشبورد فروشندگی</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:owner_dashboard' %}">پنل فروشندگی</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">تنظیمات فروشگاه</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- Row -->
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="position-lg-relative w-100" id="scroll-stickybar">
+                        <div class="card">
+                            <div class="list-group list-group-transparent mb-0 mail-inbox pb-3">
+                                <div class="mt-4 mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:index' %}">مشاهده فروشگاه</a>
+                                </div>
+                                <a class="list-group-item d-flex align-items-center  mx-4"
+                                   href="{% url 'shop:owner_dashboard' %}">
+                                    <span class="icons"><i class="fa fa-bars"></i></span>داشبورد
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4 {% if store.has_notif == True %}text-danger{% endif %}"
+                                href="{% url 'shop:owner_dashboard_announcements' %}">
+                                    <span class="icons"><i class="fa fa-fa fa-bell {% if store.has_notif == True %}text-danger{% endif %}"></i></span> اطلاعیه‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center  mx-4"
+                                   href="{% url 'shop:owner_dashboard_orders' %}">
+                                    <span class="icons"><i class="fa fa-shopping-bag"></i></span>سفارشات                                
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_products' %}">
+                                    <span class="icons"><i class="fa fa-cubes"></i></span> محصولات 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_categories' %}">
+                                    <span class="icons"><i class="fa fa-th-large"></i></span> دسته‌بندی‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_tag' %}">
+                                    <span class="icons"><i class="fa fa-tags"></i></span> برچسب‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_filters' %}">
+                                    <span class="icons"><i class="fa fa-filter"></i></span> فیلترها 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_edit_home' %}">
+                                    <span class="icons"><i class="fa fa-home"></i></span> نمای صفحه خانه
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_customers' %}">
+                                    <span class="icons"><i class="fa fa-user"></i></span> مشتریان
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_messages' %}s">
+                                    <span class="icons"><i class="fa fa-envelope"></i></span> پیام‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_comments' %}">
+                                    <span class="icons"><i class="fa fa-comment"></i></span> دیدگاه‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_delivery' %}">
+                                    <span class="icons"><i class="fa fa-truck"></i></span> رویه‌های ارسال
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_coupons' %}">
+                                    <span class="icons"><i class="fa fa-usd"></i></span> کوپن‌های تخفیف
+                                </a>
+                                <a class="list-group-item d-flex align-items-center active mx-4"
+                                   href="{% url 'shop:owner_dashboard_store_update' %}">
+                                    <span class="icons"><i class="fa fa-gear"></i></span> تنظیمات فروشگاه
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_blog' %}">
+                                    <span class="icons"><i class="fa fa-th"></i></span> وبلاگ
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_blog_category' %}">
+                                    <span class="icons"><i class="fa fa-th-list"></i></span> دسته‌بندی‌های پست‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:faq_create' %}">
+                                    <span class="icons"><i class="fa fa-question"></i></span> سوالات متداول
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_policies' %}">
+                                    <span class="icons"><i class="fa fa-info-circle"></i></span> قوانین و مقررات
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_finance' %}">
+                                    <span class="icons"><i class="fa fa-money"></i></span> مالی
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                href="{% url 'shop:owner_dashboard_tutorials' %}">
+                                <span class="icons"><i class="fa fa-laptop"></i></span> آموزشی
+                            </a>
+                            <a class="list-group-item d-flex align-items-center mx-4"
+                               href="{% url 'shop:owner_dashboard_ticket_list' %}">
+                                <span class="icons"><i class="fa fa-comments"></i></span> تیکت‌ها
+                            </a>
+                            <a class="list-group-item d-flex align-items-center mx-4"
+                               href="{% url 'shop:owner_dashboard_meta' %}">
+                                <span class="icons"><i class="fa fa-fa fa-google"></i></span> متاتگ‌ها
+                            </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش نمایه</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname">عنوان فروشگاه</label>
+                                        <input class="form-control" disabled="" id="exampleInputname" value="{{store.name}}"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname1">کد معرف</label>
+                                        <input class="form-control" disabled="" id="exampleInputname1" value="{{store.recommender}}"
+                                               type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname">کشور</label>
+                                        <input name="country" class="form-control" id="exampleInputname" value="{{store.country}}"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname1">شهر</label>
+                                        <input name="city" class="form-control" id="exampleInputname1" value="{{store.city}}"
+                                               type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">آدرس فروشگاه</label>
+                                <input name="address" class="form-control" id="exampleInputEmail1" value="{{store.address}}"
+                                       type="text">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">آدرس ایمیل</label>
+                                <input name="email" class="form-control" id="exampleInputEmail1" value="{{store.email}}"
+                                       type="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputnumber">شماره تماس</label>
+                                <input name="phone_number" class="form-control" id="exampleInputnumber" value="{{store.phone_number}}"
+                                       type="number">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">درباره فروشگاه</label>
+                                <textarea name="about" class="form-control" rows="6">{{store.about_description}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">اکانت اینستاگرام</label>
+                                <input name="instagram" class="form-control" value="{{store.instagram}}">
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">بروزرسانی فروشگاه</button>
+                        </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش عنوان صفحه نخست</h3>
+                        </div>
+                        <div class="card-body">
+                            
+                            <form method="post" action="{% url 'shop:index_title_update' %}">
+                                {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label class="form-label">عنوان صفحه نخست فروشگاه</label>
+                                <label class="form-label">از اینجا می‌توانید عنوان صفحه نخست فروشگاه که به طور پیش‌فرض برابر با عبارت - خانه - است را بروز رسانی نمایید. برای تایید بخش فنی دریافت ای‌نماد نیز از این بخش استفاده نمایید و عبارت داده شده را به صورت موقت تا تایید ای‌نماد در این بخش قرار دهید.</label>
+                                <input name="index_title" class="form-control" value="{{store.index_title}}">
+                            </div>
+            
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">بروزرسانی</button>
+                                <p class="text-danger">{{ wrong_input_message }}</p>
+                            </div>
+                            
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">درج مرچنت کد درگاه پرداخت زرین پال</h3>
+                        </div>
+                        <div class="card-body">
+                            
+                            <form method="post" action="{% url 'shop:owner_dashboard_merchant_update' %}">
+                                {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label class="form-label">کد مرچنت</label>
+                                <label class="form-label">کد مرچنتی که در بخش مدیریت درگاه پنل زرین پال خود دریافت نموده‌اید در این قسمت وارد نمایید و پس از ثبت حتما یک بار درگاه پرداخت خود را تا مرحله‌ی ورود به صفحه درگاه و مشاهده‌ی مبلغ پرداختی آزمایش نمایید.</label>
+                                <input name="merchant_code" class="form-control" value="{{store.merchant}}">
+                            </div>
+            
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">بروزرسانی</button>
+                                <p class="text-danger">{{ wrong_merchant_message }}</p>
+                            </div>
+                            
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">درج کد ای‌نماد</h3>
+                        </div>
+                        <div class="card-body">
+                            
+                            <form method="post" action="{% url 'shop:enamad_update' %}">
+                                {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label class="form-label">کد ای‌نماد</label>
+                                <label class="form-label">در این قسمت می‌توانید کد ای‌نمادی که در پنل ای‌نماد به شما تخصیص یافته است را وارد نمایید.</label>
+                                <textarea name="enamad" class="form-control" rows="4">{{store.enamad_code}}</textarea>
+                            </div>
+            
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">ثبت کد</button>
+                                <p class="text-danger">{{ wrong_input_message }}</p>
+                            </div>
+                            
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">تغییر لوگوی فروشگاه</h3>
+                        </div>
+                        <form method="post" action="{% url 'shop:update_logo' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label mt-0" for="formFile">آپلود ورودی تک فایل</label>
+                                        <input name="logo" class="form-control" id="formFile" type="file">
+                                    </div>
+                                    
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer text-end">
+                                        <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">آپلود لوگو</button>
+                        </div>
+                        </form>
+                    </div>
+                    
+                    
+                </div>
+
+                
+
+
+            </div>
+            <!-- ROW-1 CLOSED -->
+            
+        </div>
+        <!-- CONTAINER CLOSED -->
+
+    </div>
+</div>
+<!--app-content closed-->
+    
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}

@@ -1,0 +1,612 @@
+{% extends "base_3.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}صفحه نخست{% endblock %}
+{% block content %}
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<!-- start main slider -->
+
+<div class="main-slider py-20">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 py-1">
+                <div class="slider shadow-box" >
+                    <div class="swiper" id="homeSlider">
+                        <div class="swiper-wrapper">
+                            {% for slide in slides %}
+                            <div class="swiper-slide" style="object-fit: fill;">
+                                <a href="{% url 'shop:featured_products' slide.source %}">
+                                    <img src="{{slide.image.url}}" class="img-fluid" alt="" style="object-fit: inherit;">
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="swiper-button-next d-lg-flex d-none"></div>
+                        <div class="swiper-button-prev d-lg-flex d-none"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 py-1">
+                <div class="sugget-moment shadow-box rounded-4 d-lg-flex" style="height: 100%;">
+                    <div class="swiper" id="suggetMoment" style="height: 100%;">
+                        <div class="swiper-wrapper position-relative">
+                            {% for product in products %}
+                            {% if product.off_active %}
+                            <div class="swiper-slide" style="height: 100%;">
+                                <div class="product-box " style="height: 100%;">
+                                    <a href="">
+                                        <div class="product-box-sugget">
+                                            <h6>پیشنهاد لحظه ای</h6>
+                                        </div>
+                                        <div class="product-box-image mt-3">
+                                            <a href="{% url 'shop:product_detail' product.slug %}"><img src="{{product.get_main_image}}" width="30" alt=""></a>
+                                        </div>
+                                        <div class="product-box-title">
+                                            <a href="{% url 'shop:product_detail' product.slug %}"><h5 class="text-overflow-2">{{ product.name }}</h5></a>
+                                        </div>
+                                        {% if product.off_active == True %}
+                                            {% if product.ref_class != None %}
+                                                <div >
+                                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                                            {{ product.get_class_price|intcomma }}</p>
+                                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                            تومان</h6>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div >
+                                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                                            {{ product.price|intcomma }}</p>
+                                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                            تومان</h6>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if product.ref_class != None %}
+                                                <div >
+                                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                        
+                                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_class_price|intcomma}}
+                                                            تومان</h6>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                            <div >
+                                                <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                    
+                                                    <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
+                                                        تومان</h6>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        {% endif %}
+                                        <div class="product-box-hover">
+                                            <nav class="navbar navbar-expand justify-content-center">
+                                                <ul class="navbar-nav align-items-center">
+                                                    <li class="nav-item"><a href="{% url 'shop:product_detail' product.slug %}"
+                                                                            class="nav-item product-box-hover-item me-3">مشاهده
+                                                        محصول</a></li>
+
+                                                    <li class="nav-item"><a href="{% url 'shop:add_to_favorites' product_id=product.id ref='index' %}"
+                                                                            class="nav-item product-box-hover-item product-box-hover-item-btn"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-placement="top"
+                                                                            data-bs-title="افزودن به علاقه ها"><i
+                                                            class="bi bi-heart"></i></a></li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="swiper-progress-bar">
+                            <span class="slide_progress-bar"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end main slider -->
+
+<!-- برچسب‌های سرویس‌های فروشگاه -->
+
+<!-- <div class="feature py-20 text-center">
+    <div class="container-fluid text-center">
+        <div class="row justify-content-center g-2 row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 text-center">
+
+ 
+
+            <div class="col">
+                <div class="feature-item">
+                    <div class="feature-item-icon">
+                        <img src="{% static 'assets3/img/credit-card.png' %}" alt="">
+                    </div>
+                    <div class="feature-item-desc">
+                        <h5>تضمین قیمت
+                        </h5>
+                        <p class="text-muted mb-0 mt-1">کمترین قیمت بازار
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="feature-item">
+                    <div class="feature-item-icon">
+                        <img src="{% static 'assets3/img/fast.png' %}" alt="">
+                    </div>
+                    <div class="feature-item-desc">
+                        <h5>ارسال سریع
+                        </h5>
+                        <p class="text-muted mb-0 mt-1">امن و مطمئن
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="feature-item">
+                    <div class="feature-item-icon">
+                        <img src="{% static 'assets3/img/headphone.png' %}" alt="">
+                    </div>
+                    <div class="feature-item-desc">
+                        <h5>پشتیبانی عالی
+                        </h5>
+                        <p class="text-muted mb-0 mt-1">24 ساعته شبانه روز
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="feature-item">
+                    <div class="feature-item-icon">
+                        <img src="{% static 'assets3/img/badge.png' %}" alt="">
+                    </div>
+                    <div class="feature-item-desc">
+                        <h5>اصالت کالا
+                        </h5>
+                        <p class="text-muted mb-0 mt-1">
+                            تضمین اصالت کالا
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div> -->
+
+
+<!--  start site category -->
+
+<div class="site-category py-20">
+    <div class="container-fluid">
+        <div class="section-title">
+            <h3 class="title-font text-center"><span class="main-color-one-color">دسته بندی</span> محصولات</h3>
+            <img src="{% static 'assets3/img/line.png' %}" height="50" alt="">
+        </div>
+
+        <div class="site-categories">
+            <div class="row g-2 row-cols-2 justify-content-center">
+                {% for f_cat in featured_categories.categories.all %}
+                <div class="col-lg-2 col-sm-6">
+                    <div class="site-category-items p-2 shadow-box rounded-3 mt-4">
+                        <a href="{% url 'shop:category_products' f_cat.slug %}">
+                            <div class="site-category-items-icon">
+                                <img class="rounded-4" src="{{f_cat.get_image_url}}" alt="">
+                            </div>
+                            <!-- <h6 class="text-center">{{ f_cat.name }}</h6> -->
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--  end site category -->
+
+<!-- start product slider -->
+
+<div class="product-boxs site-slider py-20">
+    <div class="container-fluid">
+
+        <div class="slider-title">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="slider-title-desc">
+                        <div class="slider-title-icon">
+                            <div class="slider-title-icon-parent">
+                                <div>
+                                    <span><i class="bi bi-caret-right-fill"></i></span>
+                                    <h6>تخفیفات</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-title-title">
+                            <h2 class="h1">محصولات <span class="main-color-one-color title-font">ویژه سایت</span></h2>
+                            <p class="mb-0 mt-2 h5 text-muted">جدیدترین محصولات تخفیف خورده را اینجا میتوانید اینجا
+                                ببینید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="slider-title-link">
+                        <a href="" class="main-color-one-color font-16"> مشاهده همه <i
+                                class="bi bi-caret-left-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-parent">
+            <div class="swiper" id="product-slider">
+
+                <div class="swiper-wrapper ">
+                    {% for product in products %}
+                    {% if product.off_active == True %}
+
+                    <div class="swiper-slide">
+                        <div class="product-box">
+                            <a href="{% url to_products product.slug %}">
+                                <div class="product-box-image">
+                                    <img src="{{product.get_main_image}}" alt="">
+                                </div>
+                                <div class="product-box-title">
+                                    <h5 class="text-overflow-2">{{ product.name }}</h5>
+                                </div>
+                                <div class="product-box-price">
+                                    <div class="product-box-price-discount">
+                                        <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
+                                        <del>{{product.price|intcomma}}</del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{ product.sales_price|intcomma }}</h5>
+                                        <p class="mb-0 text-muted">تومان</p>
+                                    </div>
+                                </div>
+                                <div class="product-box-hover">
+                                    <nav class="navbar navbar-expand justify-content-center">
+                                        <ul class="navbar-nav align-items-center">
+                                            <li class="nav-item"><a href=""
+                                                                    class="nav-item product-box-hover-item me-3">مشاهده
+                                                محصول</a></li>
+                                            <li class="nav-item"><a href=""
+                                                                    class="nav-item product-box-hover-item product-box-hover-item-btn me-1"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    data-bs-title="افزودن به سبد خرید"><i
+                                                    class="bi bi-basket"></i></a></li>
+                                            <li class="nav-item"><a href=""
+                                                                    class="nav-item product-box-hover-item product-box-hover-item-btn"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    data-bs-title="افزودن به علاقه ها"><i
+                                                    class="bi bi-heart"></i></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+                    
+
+                </div>
+
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button class="amazing-offer-btn" data-scroll-to="#banners"></button>
+        </div>
+
+    </div>
+</div>
+
+<!-- end product boxs -->
+
+<!-- start advert banner -->
+
+<div class="advert-banner">
+    <div class="container-fluid">
+        <div class="row g-3 align-items-center">
+            {% for banner in small_banners %}
+            <div class="col-lg-6">
+                <div class="advert-banner-item img-tilt" data-tilt>
+                    <a href="{% url 'shop:featured_products' banner.source %}">
+                        <img src="{{banner.image.url}}" alt="">
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- end advert banner -->
+
+<!-- start product slider -->
+
+<div class="product-slider free-swiper-two free-sw no-bg site-slider py-40">
+    <div class="container-fluid position-relative">
+
+        <div class="slider-title">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="slider-title-desc">
+                        <div class="slider-title-icon">
+                            <div class="slider-title-icon-parent">
+                                <div>
+                                    <span><i class="bi bi-caret-right-fill"></i></span>
+                                    <h6>تازه‌ها</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-title-title">
+                            <h2 class="h1">محصولات <span class="main-color-one-color title-font">جدید</span></h2>
+                            <p class="mb-0 mt-2 h5 text-muted">جدیدترین محصولات فروشگاه را اینجا میتوانید اینجا
+                                ببینید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="slider-title-link">
+                        <a href="" class="main-color-one-color font-16"> مشاهده همه <i class="bi bi-caret-left-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper mt-4 product-slider-swiper">
+
+            <div class="swiper-wrapper ">
+                {% for product in most_viewed_products %}
+                <div class="swiper-slide">
+                    <div class="product-box">
+                        <a href="{% url to_products product.slug %}">
+                            <div class="product-box-image">
+                                <img src="{{product.get_main_image}}" alt="">
+                            </div>
+                            <div class="product-box-title">
+                                <a href="{% url to_products product.slug %}"><h5 class="text-overflow-2">{{ product.name }}</h5></a>
+                            </div>
+                            {% if product.off_active == True %}
+                                <div class="product-box-price">
+                                    <div class="product-box-price-discount">
+                                        <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
+                                        <del>{{ product.price|intcomma }}</del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.sales_price|intcomma}}</h5>
+                                        <p class="mb-0 text-muted">تومان</p>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="product-box-price">
+                                    <div class="product-box-price-discount">
+                                        <del></del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.price|intcomma}}</h5>
+                                        <p class="mb-0 text-muted">تومان</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            <div class="product-box-hover">
+                                <nav class="navbar navbar-expand justify-content-center">
+                                    <ul class="navbar-nav align-items-center">
+                                        <li class="nav-item"><a href="{% url to_products product.slug %}"
+                                                                class="nav-item product-box-hover-item me-3">مشاهده
+                                            محصول</a></li>
+                                        <!-- <li class="nav-item"><a href=""
+                                                                class="nav-item product-box-hover-item product-box-hover-item-btn me-1"
+                                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                data-bs-title="افزودن به سبد خرید"><i
+                                                class="bi bi-basket"></i></a></li> -->
+                                        <li class="nav-item"><a href="{% url 'shop:add_to_favorites' product_id=product.id ref='index' %}"
+                                                                class="nav-item product-box-hover-item product-box-hover-item-btn"
+                                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                data-bs-title="افزودن به علاقه ها"><i
+                                                class="bi bi-heart"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- end product slider -->
+
+<!-- start advert banner -->
+
+<div class="advert-banner d-sm-block d-none">
+    <div class="container-fluid">
+        <div class="row g-3 align-items-center">
+            {% for banner in big_banners %}
+            <div class="col-12">
+                <div class="advert-banner-item img-tilt" data-tilt>
+                    <a href="{% url 'shop:featured_products' banner.source %}">
+                        <img src="{{banner.image.url}}" alt="">
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- end advert banner -->
+
+<!-- blog -->
+
+<div class="blog-slider py-20">
+    <div class="container-fluid">
+        <div class="slider-title">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="slider-title-desc">
+                        <div class="slider-title-icon">
+                            <div class="slider-title-icon-parent bg-white">
+                                <div>
+                                    <span><i class="bi bi-caret-right-fill"></i></span>
+                                    <h6>مطالب وبلاگ</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-title-title">
+                            <h2 class="h1"><span class="title-font main-color-one-color">مقالات</span> وبلاگ</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="slider-title-link">
+                        <a href="{% url 'shop:post_list' %}" class="main-color-one-color font-16"> مشاهده همه <i
+                                class="bi bi-caret-left-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-slider-items mt-3">
+            <div class="row gy-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="row gy-5">
+                        {% for post in posts|slice:"0:2" %}
+                        <div class="col-md-6">
+                            <div class="blog-slider-item-stand">
+                                <a href="">
+                                    <span class="blog-slider-overlay"></span>
+                                    <div class="blog-slider-item-stand-image">
+                                        <a href="{% url 'shop:post_detail' post.slug %}"><img src="{{ post.get_thumbnail }}" alt=""></a>
+                                    </div>
+                                    <div class="blog-slider-item-stand-text">
+                                        <div class="blog-slider-item-stand-title">
+                                            <span class="badge badge-pill main-color-two-bg mb-2">{{ post.category.name }}</span>
+                                            <a href="{% url 'shop:post_detail' post.slug %}"><h6 class="font-16 title-font text-overflow-1 text-white">{{ post.title }}</h6></a>
+                                            <p class="text-overflow-2 text-white mb-0 mt-2">{{ post.meta_description }}</p>
+                                            <div class="blog-slider-item-info d-flex align-items-center justify-content-between">
+                                                <div class="blog-slider-item-info-item me-2 text-white">
+                                                    <i class="bi bi-clock me-1"></i>
+                                                    <span class="text-white">{{ post.shamsi_created_date }}</span>
+                                                </div>
+                                                <div class="blog-slider-item-info-item text-white">
+                                                    <i class="bi bi-eye me-1"></i>
+                                                    <a href="{% url 'shop:post_detail' post.slug %}"></a><span class="text-white">مطالعه بیشتر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    {% for post in posts|slice:"2:4" %}
+                    <div class="blog-slider-item-row">
+                        <a href="">
+                            <div class="row gy-3 align-items-center">
+                                <div class="col-sm-4">
+                                    <div class="blog-slider-item-row-image">
+                                        <a href="{% url 'shop:post_detail' post.slug %}"><img src="{{ post.get_thumbnail }}" alt=""></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="blog-slider-item-stand-text">
+                                        <div class="blog-slider-item-stand-title">
+                                            <a href="{% url 'shop:post_detail' post.slug %}"><h6 class="font-16 title-font text-overflow-1 main-color-one-color">{{ post.title }}</h6></a>
+                                            <p class="text-overflow-2 my-2">{{ post.meta_description }}</p>
+                                            <div class="blog-slider-item-info d-flex align-items-center">
+                                                <div class="blog-slider-item-info-item me-3">
+                                                    <i class="bi bi-clock me-1"></i>
+                                                    <span>{{ post.shamsi_created_date }}</span>
+                                                </div>
+                                                <div class="blog-slider-item-info-item">
+                                                    <i class="bi bi-eye me-1"></i>
+                                                    <a href="{% url 'shop:post_detail' post.slug %}"><span>مطالعه بیشتر</span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+</body>
+
+</html>
+
+{% endblock %}

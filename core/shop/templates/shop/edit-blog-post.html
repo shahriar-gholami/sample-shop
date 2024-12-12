@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}ویرایش پست{% endblock %}
+
+{% block content %}
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+            <div class="main-container container-fluid">
+                <div class="page-header">
+                    <h1 class="page-title">ویرایش پست</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% 'shop:owner_dashboard' %}">پنل فروشندگی</a></li>
+                            <li class="breadcrumb-item"><a href="{% 'shop:edit_blog_post' post.slug %}">ویرایش پست</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">ویرایش پست</div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="card-body">
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">عنوان پست :</label>
+                                        <div class="col-md-9">
+                                            <input name="title" class="form-control" value="{{ post.title }}" type="text">
+                                        </div>
+                                    </div>
+                                   
+                                    
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">منتشر شده :</label>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label class="custom-control custom-checkbox mb-0">
+                                                    <input class="custom-control-input" name="published"
+                                                        type="checkbox" value="True">
+                                                    <span class="custom-control-label">اگر پست منتشر شده است این تیک را بزنید.</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>  
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">دسته‌بندی :</label>
+                                        <div class="col-md-9">
+                                        <select class="form-control form-select" value="{{post.category.name}}"
+                                                name="category">
+                                                {% for category in blog_categories %}
+                                                <option value="{{category.id}}">{{category.name}}</option>
+                                                {% endfor %}
+                                            <option selected value="{{post.category.id}}">{{post.category}}</option>
+                                        </select>
+                                        </div>
+                                    </div>                                
+
+                                    <div class="row">
+                                        <label class="col-md-3 form-label mb-4">متن پست :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea id="description" class="content" name="body">{{post.body}}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="row">
+                                        <label class="col-md-3 form-label mb-4">تگ‌های محصول :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea class="form-control" rows="6" name="tags">‌تگ‌های محوصل خود را وارد نمایید. تگ‌ها را با فشردن دکمه Enter از هم جدا نمایید.</textarea>
+                                        </div>
+                                    </div> -->
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-3"></div>
+                                        <div class="container-login100-form-btn">
+                                            <button type="submit" class="login100-form-btn btn-primary">بروزرسانی</button>    
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">تصویر شاخص پست</h3>
+                            </div>
+                            <form method="post" action="{% url 'shop:update_post_thumbnail' post.id %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label mt-0" for="formFile">آپلود تصویر شاخص پست</label>
+                                            <input name="thumbnail" class="form-control" id="formFile" type="file">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="card-body">
+                                <img alt="" class="br-5" src="{{post.get_thumbnail}}" height="85px">   
+                            </div>
+
+
+                            <div class="card-footer text-end">
+                                            <button type="submit" class="btn btn-primary my-1" href="javascript:void(0)">آپلود تصویر</button>
+                            </div>
+                            </form>
+                        </div>
+
+                        
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">ویرایش متاتگ‌ها</h3>
+                            </div>
+                            <div class="card-body">
+                                <form method="post" action="{% url 'shop:edit_blog_post_meta_tags' post.slug %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputname">Meta Description</label>
+                                            <input class="form-control" name="meta_description" rows="6" id="exampleInputname" value="{{post.meta_description}}"
+                                                    type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputname1">Meta Keywords</label>
+                                            <input class="form-control" name="meta_keywords" id="exampleInputname1" value="{{post.meta_keywords}}"
+                                                    type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputname1">Open Graph Title</label>
+                                            <input class="form-control" name="meta_og_title" id="exampleInputname1" value="{{post.meta_og_title}}"
+                                                    type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputname1">Open Graph Description</label>
+                                            <input class="form-control" name="meta_og_description" id="exampleInputname1" value="{{post.meta_og_description}}"
+                                                    type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputname1">Twitter Card Tilte</label>
+                                            <input class="form-control" name="meta_tc_title" id="exampleInputname1" value="{{post.meta_tc_title}}"
+                                                    type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputname1">Twitter Card Description</label>
+                                            <input class="form-control" name="meta_tc_description" id="exampleInputname1" value="{{post.meta_tc_description}}"
+                                                    type="text">
+                                        </div>
+                                    </div>
+                                </div>                          
+                                
+                            </div>
+                            <div class="card-footer text-end">
+                                <button type="submit" class="btn btn-success my-1" href="javascript:void(0)">بروزرسانی متاتگ‌ها</button>
+                            </div>
+                            </form>
+                        </div>
+                            
+                            
+                            
+                            
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/wysiwyag/jquery.richtext.js' %} "></script>
+<script src="{% static 'assets/plugins/wysiwyag/wysiwyag.js' %} "></script>
+{% endblock %}
+
+
+

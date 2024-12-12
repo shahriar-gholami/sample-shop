@@ -1,0 +1,74 @@
+{% extends "base_3.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}جزییات سفارش{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="ui-box-item slider-parent ui-box-white">
+            <div class="ui-box-item-desc p-4">
+                <div class="orders">
+                    <div class="order-item p-4">
+                        <p>
+                            {{order.delivery_description|safe}}
+                        </p>
+                    </div>
+                    <div class="col-sm-4 ps-4">
+                        <form method="post" action="{% url 'shop:apply_coupon' order.id %}">
+                        {% csrf_token %}
+                            <div class="comment-item">
+                                <input type="text" name="code" class="form-control" id="floatingInputoldPasswd" placeholder="رمز عبور قبلی خود را وارد کنید ...">
+                                <label for="floatingInputoldPasswd" class="form-label label-float fw-bold">کد تخفیف</label>
+                                <input type="submit" value="اعمال کد تخفیف" class="btn main-color-one-bg px-5 w-100-in-400 pt-2 mt-2">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="action mt-3 d-flex">
+            <a href="{% url 'shop:order_payment' order.id %}" class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill">پرداخت</a> 
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
+
+
+
+
+
+

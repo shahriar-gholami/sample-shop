@@ -1,0 +1,290 @@
+{% extends "base_3.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}حساب کاربری{% endblock %}
+{% block content %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="font-14 text-muted-two">خانه</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'shop:customer_dashboard' %}" class="font-14 text-muted-two">حساب کاربری</a></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="custom-filter d-lg-none d-block">
+            <button class="btn btn-filter-float border-0 main-color-two-bg shadow-box px-4 rounded-3 position-fixed" style="z-index: 999;bottom:80px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                <i class="bi bi-list font-20 fw-bold text-white"></i>
+                <span class="d-block font-14 text-white">منو</span>
+            </button>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title">منو</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="panel-nav-logo">
+                        <a href="" class="text-center d-block mb-3">
+                            <img src="{{ store.get_logo_image }}" alt="" class="img-fluid" width="100">
+                        </a>
+                    </div>
+                    <div class="penel-nav">
+                        <div class="panel-nav-nav">
+                            <nav class="navbar profile-box-nav">
+                                <ul class="navbar-nav flex-column">
+                                    {% if request.user.phone_number == store.get_owner_phone_number %}
+                                    <li class="nav-item"><a href="{% url 'shop:owner_dashboard' %}" class="nav-link">
+                                        <i class="bi bi-arrow-right-square"></i>داشبورد فروشندگی</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="nav-item active"><a href="{% url 'shop:customer_dashboard' %}" class="nav-link">
+                                        <i class="bi bi-house-door"></i>پروفایل</a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'shop:customer_dashboard_orders' %}" class="nav-link">
+                                        <i class="bi bi-cart-check"></i>سفارش های من </a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'shop:customer_dashboard_favorites' %}" class="nav-link">
+                                        <i class="bi bi-heart"></i>محصولات مورد علاقه</a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'shop:customer_dashboard_comments' %}" class="nav-link">
+                                        <i class="bi bi-chat-dots"></i>نظرات من</a>
+                                    </li>
+                                    <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-arrow-right-square"></i>خروج از حساب کاربری</a>
+                                    </li>
+                                    <!-- <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-pin-map"></i>آدرس های من</a>
+                                    </li>
+                                    <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-bell"></i>پیام ها و اطلاعیه ها</a>
+                                    </li>
+                                    <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-question-circle"></i>درخواست پشتیبانی</a>
+                                    </li>
+                                    <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-gift"></i>کد های تخفیف من</a>
+                                    </li>
+                                    <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-arrow-right-square"></i>خروج از حساب کاربری</a>
+                                    </li> -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel position-relative">
+            <div class="row gy-4">
+                <div class="col-lg-3 d-lg-block d-none">
+                    <div class="panel-nav-logo">
+                        <a href="" class="text-center d-block mb-3">
+                            <img src="{{ store.get_logo_image }}" alt="" class="img-fluid" width="100px">
+                        </a>
+                    </div>
+                    <div class="penel-nav">
+                        <div class="panel-nav-nav">
+                            <nav class="navbar profile-box-nav">
+                                <ul class="navbar-nav flex-column">
+                                    {% if request.user.phone_number in store.get_owner_phone_number %}
+                                    <li class="nav-item"><a href="{% url 'shop:owner_dashboard' %}" class="nav-link">
+                                        <i class="bi bi-arrow-right-square"></i>داشبورد فروشندگی</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="nav-item active"><a href="{% url 'shop:customer_dashboard' %}" class="nav-link">
+                                        <i class="bi bi-house-door"></i>پروفایل</a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'shop:customer_dashboard_orders' %}" class="nav-link">
+                                        <i class="bi bi-cart-check"></i>سفارش های من </a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'shop:customer_dashboard_favorites' %}" class="nav-link">
+                                        <i class="bi bi-heart"></i>محصولات مورد علاقه</a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'shop:customer_dashboard_comments' %}" class="nav-link">
+                                        <i class="bi bi-chat-dots"></i>نظرات من</a>
+                                    </li>
+                                    <li class="nav-item"><a href="" class="nav-link">
+                                        <i class="bi bi-arrow-right-square"></i>خروج از حساب کاربری</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="position-sticky top-0">
+
+
+                                <!--  start panel meta  -->
+
+        <div class="panel-meta my-xl-5 mb-5 mt-4">
+            <div class="row g-3 mt-5">
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon">
+                                <a href="{% url 'shop:customer_dashboard_orders' %}"><i class="bi bi bi-bag-check"></i></a>
+                            </div>
+                            <div class="panel-meta-title d-flex flex-column ms-3">
+                                <a href="{% url 'shop:customer_dashboard_orders' %}"><h5 class="h5">سفارشات</h5></a>
+                                <span>{{customer.get_orders_count}} سفارش</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon" style="background-color: #c1a37f;">
+                                <a href="{% url 'shop:customer_dashboard_favorites' %}"><i class="bi bi bi-heart-fill"></i></a>
+                            </div>
+                            <div class="panel-meta-title ms-3 d-flex flex-column">
+                                <a href="{% url 'shop:customer_dashboard_favorites' %}"><h5 class="h5">محصولات مورد علاقه</h5></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon bg-info">
+                                <a href="{% url 'shop:customer_dashboard_comments' %}"><i class="bi bi-send"></i></a>
+                            </div>
+                            <div class="panel-meta-title ms-3 d-flex flex-column">
+                                <a href="{% url 'shop:customer_dashboard_comments' %}"><h5 class="h5">نظرات</h5></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon bg-secondary">
+                                <a href="{% url 'shop:customer_dashboard_info'  %}"><i class="bi bi-bank"></i></a>
+                            </div>
+                            <div class="panel-meta-title ms-3 d-flex flex-column">
+                                <a href="{% url 'shop:customer_dashboard_info' %}"><h5 class="h5">کیف پول</h5></a>
+                                <span>{{ customer.wallet_balance|intcomma }} تومان</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--  end panel meta  -->
+
+                        <div class="slider-title mt-4">
+                            <div class="slider-title-desc">
+                                <div class="slider-title-title pb-4">
+                                    <h2 class="h1"><span class="title-font main-color-one-color">ویرایش</span> پروفایل </h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="penel-form">
+                            <div class="content-box">
+                                <div class="container-fluid">
+                                    <form method="post" action="{% url 'shop:customer_dashboard_info' %}">
+                                        {% csrf_token %}
+                                        <div class="row g-4">
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="comment-item mb-3">
+                                                        <input name="full_name" type="text" class="form-control" value="{{ customer.full_name }}" id="floatingInputLName" placeholder="نام خانوادگی خود را وارد کنید ...">
+                                                        <label for="floatingInputLName" class="form-label label-float fw-bold">نام و نام خانوادگی <span class="text-danger">*</span></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                <div class="comment-item mb-3">
+                                                    <input name="phone_number" type="text" value="{{customer.phone_number}}" class="form-control" id="floatingInputName" placeholder="شماره تماس خود را وارد کنید...">
+                                                    <label for="floatingInputName" class="form-label label-float fw-bold font-16">شماره تماس<span class="text-danger">*</span></label>
+                                                </div>
+                                                </div>
+                                            <div class="col-12">
+                                                <div class="comment-item mb-3">
+                                                    <input type="email" name="email" value="{{ customer.email }}" class="form-control" id="floatingInputStreet" placeholder="ایمیل خود را وارد کنید ...">
+                                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">ایمیل</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="comment-item mb-3">
+                                                    <input type="text" name="city" value="{{ customer.city }}" class="form-control" id="floatingInputStreet" placeholder="شهر خود را وارد کنید ...">
+                                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">شهر</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="comment-item mb-3">
+                                                    <input type="text" name="zip_code" value="{{ customer.zip_code }}" class="form-control" id="floatingInputStreet" placeholder="کد پستی خود را وارد کنید ...">
+                                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">کد پستی</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="comment-item mb-3">
+                                                    <input type="text" name="address" value="{{ customer.address }}" class="form-control" id="floatingInputStreet" placeholder="آدرس پستی خود را وارد کنید ...">
+                                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">آدرس</label>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill">
+                                                        ویرایش
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end content -->
+
+
+    
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

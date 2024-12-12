@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}افزودن محصول{% endblock %}
+
+{% block content %}
+
+    
+    <!--app-content open-->
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">مخزن تصاویر</h1>
+                    <p class="text-danger">{{message}}</p>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">صفحات</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">مخزن تصاویر</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="panel panel-primary">
+                                    <div class="tab-menu-heading tab-menu-heading-boxed">
+                                        <div class="tabs-menu-boxed">
+                                            <!-- Tabs -->
+                                            <ul class="nav panel-tabs fs-14">
+                                                <li><a class="active" data-bs-toggle="tab"
+                                                       href="#activetabs">تصاویر آپلود شده</a></li>
+                                                <li><a data-bs-toggle="tab" href="#linktabs">تصاویر مخزن پیکوسایت</a></li>
+                                                <li><a data-bs-toggle="tab" href="#linktabs2">آپلود تصویر جدید</a></li>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body tabs-menu-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="activetabs">
+                                                
+                                                
+                                                <div class="row row-sm">
+                                                    <div class="col-lg-12 col-xl-12">
+                                                        <div class="row row-sm">
+                                                            {% for image in uploaded_images %}
+                                                            {% if image.image.url != None %}
+                                                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-xxl-2">
+                                                                    <div class="card overflow-hidden">
+                                                                        <a href="{% url 'shop:apply_from_image_bank' image_class index 'uploaded_image' image.id %}"><img
+                                                                                alt="img" class="file-manager-list w-100"
+                                                                                src="{{ image.image.url }}"></a>
+                                                                        <div class="card-footer">
+                                                                            <div class="d-flex">
+                                                                                <div class="">
+                                                                                    <h5 class="mb-0 fw-semibold text-break">{{image.alt_name}}</h5>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Row -->
+                                                </div>
+                                                <!-- End Row -->
+                                            </div>
+                                            <div class="tab-pane" id="linktabs">
+                                                
+                                                <div class="row row-sm">
+                                                    <div class="col-lg-12 col-xl-12">
+                                                        <div class="row row-sm">
+                                                            {% for image in picosite_bank %}
+                                                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-xxl-2">
+                                                                    <div class="card overflow-hidden">
+                                                                        <a href="{% url 'shop:apply_from_image_bank' image_class index 'picosite_image' image.id %}"><img
+                                                                                alt="img" class="file-manager-list w-100"
+                                                                                src="{% static 'assets/images/media/files/03.jpg' %}"></a>
+                                                                        <div class="card-footer">
+                                                                            <div class="d-flex">
+                                                                                <div class="">
+                                                                                    <h5 class="mb-0 fw-semibold text-break">{{image.alt_name}}</h5>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Row -->
+                                                </div>
+                                                <!-- End Row -->
+
+                                            </div>
+                                            <div class="tab-pane" id="linktabs2">
+                                                <div class="row row-sm">
+                                                    <div class="col-lg-12 col-xl-12">
+                                                        <div class="row row-sm">
+                                                            <div class="card-body text-center">
+                                                                <form method="post" class="card" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <input name="image" class="form-control mb-4" id="formFileMultiple" multiple type="file" >
+                                                                    <button type="submit" class="login100-form-btn btn-primary">آپلود تصویر</button> 
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ROW-1 CLOSED -->
+            </div>
+            <!-- CONTAINER CLOSED -->
+        </div>
+    </div>
+{% endblock %}
+
+
+

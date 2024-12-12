@@ -1,0 +1,1338 @@
+{% extends "base_4.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}صفحه نخست{% endblock %}
+{% block content %}
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+ 
+ <!--============ start main slider ==============-->
+ 
+ <section class="main-slider">
+     <div class="container-fluid">
+         <div class="row gy-4">
+             <div class="col-xl-9 col-lg-8">
+                 <div class="home-slider shadow-box">
+                     <div class="slider__layer slider__layer--top"></div>
+                     <div class="slider__layer slider__layer--bottom"></div>
+                     <div class="swiper homeSlider" id="">
+                         <div class="swiper-wrapper">
+                            {% for slide in slides %}
+                            <div class="swiper-slide" style="object-fit: fill;">
+                                <a href="{% url 'shop:featured_products' slide.source %}">
+                                    <img src="{{slide.image.url}}" class="img-fluid" alt="" style="object-fit: inherit;">
+                                </a>
+                            </div>
+                            {% endfor %}
+                         </div>
+                         <div class="swiper-button-next d-lg-flex d-none"></div>
+                         <div class="swiper-button-prev d-lg-flex d-none"></div>
+                         <div class="swiper-pagination-bg">
+                             <div>
+                                 <svg fill="none" height="75" viewBox="0 0 231 75" width="231"
+                                      xmlns="http://www.w3.org/2000/svg">
+                                     <path clip-rule="evenodd" d="M0 0C31.5006 0.949537 50.52 17.872 56.1955 26.4544L55.986 25.8011L82.4924 58.631C99.3032 79.4521 131.038 79.4521 147.849 58.6309L174.356 25.8011L174.146 26.4544C179.822 17.872 198.844 0.949537 230.349 0H0Z"
+                                           fill="#FCFCFC"
+                                           fill-rule="evenodd"></path>
+                                 </svg>
+                             </div>
+                             <div class="swiper-pagination"></div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-xl-3 col-lg-4">
+                 <div class="swiper suggetMoment">
+                     <div class="swiper-wrapper position-relative">
+                        {% for product in products %}
+                            {% if product.off_active %}
+                            <div class="swiper-slide">
+                                <div class="product-box text-center">
+                                    <div class="product-timer">
+                                        <div class="timer-label">
+                                            <span>40% تخفیف</span>
+                                        </div>
+                                        <div class="timer">
+                                            <div class='countdown' data-date="2027-01-01" data-time="18:30">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <img alt="" class="img-fluid"
+                                            src="{{product.get_main_image}}">
+                                    </div>
+                                    <div class="product-title">
+                                        <div class="title">
+                                            <a href="{% url 'shop:product_detail' product.slug %}"><p class="title-font font-14 text-center">{{ product.name }}</p></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-action flex-column mt-3">
+                                        {% if product.off_active == True %}
+                                    {% if product.ref_class != None %}
+                                        <div >
+                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                                    {{ product.get_class_price|intcomma }}</p>
+                                                <h6 class="font-25 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                    تومان</h6>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div >
+                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                                    {{ product.price|intcomma }}</p>
+                                                <h6 class="font-25 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                    تومان</h6>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    {% if product.ref_class != None %}
+                                        <div >
+                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                
+                                                <h6 class="font-25 title-font new-price main-color-one-color">{{product.get_class_price|intcomma}}
+                                                    تومان</h6>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div >
+                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                
+                                                <h6 class="font-25 title-font new-price main-color-one-color">{{product.price|intcomma}}
+                                                    تومان</h6>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                        <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                            <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="{% url 'shop:product_detail' product.slug %}">
+                                                مشاهده
+                                                <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                            </a>
+                                            <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="{% url 'shop:add_to_favorites' product_id=product.id ref='index' %}">
+                                                <i class="bi bi-heart fs-5 text-white"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                         
+                     </div>
+                     <div class="d-flex justify-content-center">
+                         <div class="swiper-progress-bar">
+                             <span class="slide_progress-bar"></span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end main slider ==============-->
+ 
+ <!--============ start feature ==============-->
+ 
+ <section class="site-feature d-lg-block d-none">
+     <div class="container-fluid">
+         <div class="row py-3 pt-0 shadow-box rounded-3 row-cols-5 g-3 bg-white">
+             <div class="col border-end">
+                 <div class="feature-item ">
+                     <div class="feature-icon">
+                         <img src="{% static 'assets4/image/feature/history.png' %}" alt="" class="img-fluid">
+                     </div>
+                     <div class="feature-desc ms-lg-3 text-center">
+                         <h6>بازگشـت وجـه
+                         </h6>
+                         <p class="text-muted my-2 d-none d-xl-block">در صورت عدم رضایت</p>
+                     </div>
+                 </div>
+             </div>
+             <div class="col border-end">
+                 <div class="feature-item ">
+                     <div class="feature-icon">
+                         <img src="{% static 'assets4/image/feature/credit-card.png' %}" alt="" class="img-fluid">
+                     </div>
+                     <div class="feature-desc ms-lg-3 text-center">
+                         <h6>تضمین قیمت
+                         </h6>
+                         <p class="text-muted my-2 d-none d-xl-block">کمترین قیمت بازار
+                         </p>
+                     </div>
+                 </div>
+             </div>
+             <div class="col border-end">
+                 <div class="feature-item ">
+                     <div class="feature-icon">
+                         <img src="{% static 'assets4/image/feature/fast.png' %}" alt="" class="img-fluid">
+                     </div>
+                     <div class="feature-desc ms-lg-3 text-center">
+                         <h6>ارسـال سـریع
+                         </h6>
+                         <p class="text-muted my-2 d-none d-xl-block">امن و مطمئن</p>
+                     </div>
+                 </div>
+             </div>
+             <div class="col border-end">
+                 <div class="feature-item ">
+                     <div class="feature-icon">
+                         <img src="{% static 'assets4/image/feature/headphone.png' %}" alt="" class="img-fluid">
+                     </div>
+                     <div class="feature-desc ms-lg-3 text-center">
+                         <h6>پشتیبانی عالی
+                         </h6>
+                         <p class="text-muted my-2 d-none d-xl-block">در صورت عدم رضایت</p>
+                     </div>
+                 </div>
+             </div>
+             <div class="col">
+                 <div class="feature-item ">
+                     <div class="feature-icon">
+                         <img src="{% static 'assets4/image/feature/badge.png' %}" alt="" class="img-fluid">
+                     </div>
+                     <div class="feature-desc ms-lg-3 text-center">
+                         <h6>اصالت کالا
+                         </h6>
+                         <p class="text-muted my-2 d-none d-xl-block">امن و مطمئن</p>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end feature ==============-->
+ 
+ <!--============ start category ==============-->
+ 
+ <section class="category-card">
+     <div class="container-fluid">
+         <div class="product-slider-box-title">
+             <div class="row align-items-center">
+                 <div class="col-lg-8 col-6">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">دسته</span>
+                         <span>بندی</span>
+                     </h4>
+                 </div>
+                 <div class="col-lg-4 col-6">
+                     <div class="text-end">
+                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="row g-4">
+            {% for f_cat in featured_categories.categories.all %}
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <a href="{% url 'shop:category_products' f_cat.slug %}">
+                        <div class="category-card-item running-top">
+                            <div class="category-card-item-image">
+                                <img src="{{f_cat.get_image_url}}" alt="{{ f_cat.name }}">
+                            </div>
+                            <div class="category-card-item-title">
+                                <h3 class="fw-bold text-overflow-1 h6">
+                                    
+                                    <span class="text-dark">{{f_cat.name}}</span>
+                                </h3>
+                                <span class="d-inline-block mt-2">مشاهده <i class="bi bi-arrow-left ms-1"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end category ==============-->
+ 
+ <!--============ start amazing ==============-->
+ 
+ <section class="amazing my-25 py-40 shadow-box">
+     <div class="container-fluid">
+         <div class="swiper free-mode" id="amazing">
+             <div class="swiper-wrapper align-items-center">
+                 <div class="swiper-slide ml-0">
+                     <div class="d-flex justify-content-center align-items-center flex-column">
+                         <img src="{% static 'assets4/image/amazingv2.png' %}" class="img-fluid amazing-image" alt="">
+                         <a href="" class="mt-2 text-white">مشاهده همه <i class="bi bi-arrow-left-short"></i></a>
+                     </div>
+                 </div>
+                 {% for product in products %}
+                 {% if product.off_active == True %}
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{{product.get_main_image}}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">{{product.name}}
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                        {% if product.off_active == True %}
+                            {% if product.ref_class != None %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                            {{ product.get_class_price|intcomma }}</p>
+                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                            {{ product.price|intcomma }}</p>
+                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% if product.ref_class != None %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        
+                                        <h6 class="font-18 title-font new-price">{{product.get_class_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                            <div >
+                                <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                    
+                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma}}
+                                        تومان</h6>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="{% url 'shop:product_detail' product.slug %}">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="{% url 'shop:add_to_favorites' product_id=product.id ref='index' %}">
+                                     <i class="bi bi-heart fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 {% endif %}
+                 {% endfor %}
+                 
+                 
+             </div>
+             <div class="swiper-pagination"></div>
+             <div class="swiper-button-next d-sm-flex d-none"></div>
+             <div class="swiper-button-prev d-sm-flex d-none"></div>
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end amazing ==============-->
+ 
+ <!--============ start banner ==============-->
+ 
+ <section class="banner">
+     <div class="container-fluid">
+         <div class="row gy-4">
+             <div class="col-md-4">
+                 <div class="banner-item running-top">
+                     <a href="">
+                         <img src="{% static 'assets4/image/banner/banner-1.webp' %}" class="w-100 rounded-3" alt="">
+                     </a>
+                 </div>
+             </div>
+             <div class="col-md-4">
+                 <div class="banner-item running-top">
+                     <a href="">
+                         <img src="{% static 'assets4/image/banner/banner-2.webp' %}" class="w-100 rounded-3" alt="">
+                     </a>
+                 </div>
+             </div>
+             <div class="col-md-4">
+                 <div class="banner-item running-top">
+                     <a href="">
+                         <img src="{% static 'assets4/image/banner/banner-3.webp' %}" class="w-100 rounded-3" alt="">
+                     </a>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end banner ==============-->
+ 
+ <!--============ start product slider ==============-->
+ 
+ <section class="product-slider  site-slider">
+     <div class="container-fluid">
+         <div class="product-slider-box-title">
+             <div class="row align-items-center">
+                 <div class="col-lg-8 col-6">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">جدیدترین</span>
+                         <span>محصولات</span>
+                     </h4>
+                 </div>
+                 <div class="col-lg-4 col-6">
+                     <div class="text-end">
+                         <a href="{% url 'shop:product_list' %}" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="swiper pro-slider">
+             <div class="swiper-wrapper align-items-center">
+                {% for product in products %}
+                <a href="{% url 'shop:product_detail' product.slug %}">
+                    <div class="swiper-slide">
+                     <div class="product-box text-center">
+                         <div class="product-image text-center">
+                             <img alt="" class="img-fluid"
+                                  src="{{ product.get_main_image }}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">{{ product.name }}</p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                            {% if product.off_active == True %}
+                            {% if product.ref_class != None %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                            {{ product.get_class_price|intcomma }}</p>
+                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                            {{ product.price|intcomma }}</p>
+                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% if product.ref_class != None %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        
+                                        <h6 class="font-18 title-font new-price">{{product.get_class_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                            <div >
+                                <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                    
+                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma}}
+                                        تومان</h6>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="{% url 'shop:product_detail' product.slug %}">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="{% url 'shop:add_to_favorites' product_id=product.id ref='index' %}">
+                                     <i class="bi bi-heart fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div></a>
+                 {% endfor %}
+             </div>
+             <div class="swiper-button-next"></div>
+             <div class="swiper-button-prev"></div>
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end product slider ==============-->
+ 
+ <!--============ start quick select ==============-->
+ 
+ <!-- <section class="quick-select">
+     <div class="container-fluid">
+         <div class="row gy-5">
+             <div class="col-lg-6">
+                 <div class="product-slider-box-title">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">گوشی بر اساس</span>
+                         <span>قیمت</span>
+                     </h4>
+                 </div>
+                 <div class="quick-select-item">
+                     <div class="row mt-3 align-items-center g-3">
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select">
+                                     <h6 class="fw-normal">گوشی ساده و ارزان</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">20</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">30</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">100</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-lg-6">
+                 <div class="product-slider-box-title">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">لپتاپ بر اساس</span>
+                         <span>قیمت</span>
+                     </h4>
+                 </div>
+                 <div class="quick-select-item">
+                     <div class="row mt-3 align-items-center g-3">
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select bs-bg-blue-100">
+                                     <h6 class="fw-normal">لپتاپ استوک</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select bs-bg-teal-100">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select bs-bg-red-100">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select bs-bg-yellow-100">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">20</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select bs-bg-indigo-100">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">30</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="col-lg-4 col-sm-6">
+                             <a href="">
+                                 <div class="quick-select-item-select bs-bg-purple-100">
+                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">100</span> میلیون</h6>
+                                 </div>
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section> -->
+ 
+ <!--============ end quick select ==============-->
+ 
+ <!--============ start banner ==============-->
+ 
+ <section class="banner">
+     <div class="container-fluid">
+         <div class="row">
+            {% for banner in big_banners %}
+             <div class="col-lg-12">
+                 <div class="banner-item running-top">
+                     <a href="{% url 'shop:featured_products' banner.source %}">
+                         <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
+                     </a>
+                 </div>
+             </div>
+             {% endfor %}
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end banner ==============-->
+ 
+ <!--============ start product slider ==============-->
+ 
+ <!-- <section class="product-slider  site-slider">
+     <div class="container-fluid">
+         <div class="product-slider-box-title">
+             <div class="row align-items-center">
+                 <div class="col-lg-8 col-6">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">محصولات</span>
+                         <span>جدید</span>
+                     </h4>
+                 </div>
+                 <div class="col-lg-4 col-6">
+                     <div class="text-end">
+                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="swiper pro-slider">
+             <div class="swiper-wrapper align-items-center">
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/laptop-1.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/laptop-2.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/laptop-3.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/wach2.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/television2.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/product-image1.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="swiper-slide">
+                     <div class="product-box">
+                         <div class="product-image">
+                             <img alt="" class="img-fluid"
+                                  src="{% static 'assets4/image/product/product-image5.jpg' %}">
+                         </div>
+                         <div class="product-title">
+                             <div class="title">
+                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
+                                 </p>
+                             </div>
+                         </div>
+                         <div class="product-action flex-column mt-3">
+                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
+                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
+                                 <p class="old-price">6,500,000 </p>
+                             </div>
+                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
+                                     مشاهده
+                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
+                                 </a>
+                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
+                                     <i class="bi bi-plus fs-5 text-white"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="swiper-button-next"></div>
+             <div class="swiper-button-prev"></div>
+         </div>
+     </div>
+ </section>
+  -->
+ <!--============ end product slider ==============-->
+ 
+ <!--============ start offer ==============-->
+ 
+ <!-- <section class="offers">
+     <div class="container-fluid">
+         <div class="offer slider-parent">
+             <div class="row">
+                 <div class="col-lg-8">
+                     <div  class="swiper" id="offerItem">
+                         <div class="swiper-wrapper">
+                             <div class="swiper-slide">
+                                 <div class="offer-item">
+                                     <div class="row">
+                                         <div class="col-md-5">
+                                             <div class="offer-discount">
+                                                 <span>٪48 تخفیف</span>
+                                             </div>
+                                             <div class="offer-img">
+                                                 <img src="{% static 'assets4/image/product/television3.jpg' %}" alt=""
+                                                      class="img-fluid">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-7">
+                                             <div class="offer-content">
+                                                 <div class="offer-title d-md-inline-block d-none">
+                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
+                                                 </div>
+                                                 <div class="offer-desc">
+                                                     <h4>
+                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                                     </h4>
+                                                     <div class="offer-desc-price">
+                                                         <span class="old">2,000,000 تومان</span>
+                                                         <span class="new">1,300,000 تومان</span>
+                                                     </div>
+                                                 </div>
+                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
+                                                 </div>
+ 
+                                                 <div class="offer-btn">
+                                                     <a href=""><i class="bi bi-basket me-1"></i>
+                                                         بریم واسه
+                                                         خرید!</a>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="swiper-slide">
+                                 <div class="offer-item">
+                                     <div class="row">
+                                         <div class="col-md-5">
+                                             <div class="offer-discount">
+                                                 <span>٪13 تخفیف</span>
+                                             </div>
+                                             <div class="offer-img">
+                                                 <img src="{% static 'assets4/image/product/wach3.jpg' %}" alt=""
+                                                      class="img-fluid">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-7">
+                                             <div class="offer-content">
+                                                 <div class="offer-title d-md-inline-block d-none">
+                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
+                                                 </div>
+                                                 <div class="offer-desc">
+                                                     <h4>
+                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                                     </h4>
+                                                     <div class="offer-desc-price">
+                                                         <span class="old">2,000,000 تومان</span>
+                                                         <span class="new">1,300,000 تومان</span>
+                                                     </div>
+                                                 </div>
+                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
+                                                 </div>
+ 
+                                                 <div class="offer-btn">
+                                                     <a href=""><i class="bi bi-basket me-1"></i>
+                                                         بریم واسه
+                                                         خرید!</a>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="swiper-slide">
+                                 <div class="offer-item">
+                                     <div class="row">
+                                         <div class="col-md-5">
+                                             <div class="offer-discount">
+                                                 <span>٪8 تخفیف</span>
+                                             </div>
+                                             <div class="offer-img">
+                                                 <img src="{% static 'assets4/image/product/product-image5.jpg' %}" alt=""
+                                                      class="img-fluid">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-7">
+                                             <div class="offer-content">
+                                                 <div class="offer-title d-md-inline-block d-none">
+                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
+                                                 </div>
+                                                 <div class="offer-desc">
+                                                     <h4>
+                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                                     </h4>
+                                                     <div class="offer-desc-price">
+                                                         <span class="old">2,000,000 تومان</span>
+                                                         <span class="new">1,300,000 تومان</span>
+                                                     </div>
+                                                 </div>
+                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
+                                                 </div>
+ 
+                                                 <div class="offer-btn">
+                                                     <a href=""><i class="bi bi-basket me-1"></i>
+                                                         بریم واسه
+                                                         خرید!</a>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="swiper-slide">
+                                 <div class="offer-item">
+                                     <div class="row">
+                                         <div class="col-md-5">
+                                             <div class="offer-discount">
+                                                 <span>٪32 تخفیف</span>
+                                             </div>
+                                             <div class="offer-img">
+                                                 <img src="{% static 'assets4/image/product/laptop1.jpg' %}" alt=""
+                                                      class="img-fluid">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-7">
+                                             <div class="offer-content">
+                                                 <div class="offer-title d-md-inline-block d-none">
+                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
+                                                 </div>
+                                                 <div class="offer-desc">
+                                                     <h4>
+                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                                     </h4>
+                                                     <div class="offer-desc-price">
+                                                         <span class="old">2,000,000 تومان</span>
+                                                         <span class="new">1,300,000 تومان</span>
+                                                     </div>
+                                                 </div>
+                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
+                                                 </div>
+ 
+                                                 <div class="offer-btn">
+                                                     <a href=""><i class="bi bi-basket me-1"></i>
+                                                         بریم واسه
+                                                         خرید!</a>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="swiper-slide">
+                                 <div class="offer-item">
+                                     <div class="row">
+                                         <div class="col-md-5">
+                                             <div class="offer-discount">
+                                                 <span>٪50 تخفیف</span>
+                                             </div>
+                                             <div class="offer-img">
+                                                 <img src="{% static 'assets4/image/product/laptop4.jpg' %}" alt=""
+                                                      class="img-fluid">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-7">
+                                             <div class="offer-content">
+                                                 <div class="offer-title d-md-inline-block d-none">
+                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
+                                                 </div>
+                                                 <div class="offer-desc">
+                                                     <h4>
+                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                                     </h4>
+                                                     <div class="offer-desc-price">
+                                                         <span class="old">2,000,000 تومان</span>
+                                                         <span class="new">1,300,000 تومان</span>
+                                                     </div>
+                                                 </div>
+                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
+                                                 </div>
+ 
+                                                 <div class="offer-btn">
+                                                     <a href=""><i class="bi bi-basket me-1"></i>
+                                                         بریم واسه
+                                                         خرید!</a>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="swiper-slide">
+                                 <div class="offer-item">
+                                     <div class="row">
+                                         <div class="col-md-5">
+                                             <div class="offer-discount">
+                                                 <span>٪48 تخفیف</span>
+                                             </div>
+                                             <div class="offer-img">
+                                                 <img src="{% static 'assets4/image/product/television2.jpg' %}" alt=""
+                                                      class="img-fluid">
+                                             </div>
+                                         </div>
+                                         <div class="col-md-7">
+                                             <div class="offer-content">
+                                                 <div class="offer-title d-md-inline-block d-none">
+                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
+                                                 </div>
+                                                 <div class="offer-desc">
+                                                     <h4>
+                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                                     </h4>
+                                                     <div class="offer-desc-price">
+                                                         <span class="old">2,000,000 تومان</span>
+                                                         <span class="new">1,300,000 تومان</span>
+                                                     </div>
+                                                 </div>
+                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
+                                                 </div>
+                                                 <div class="offer-btn">
+                                                     <a href=""><i class="bi bi-basket me-1"></i>
+                                                         بریم واسه
+                                                         خرید!</a>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="swiper-pagination d-lg-none d-block"></div>
+                     </div>
+                 </div>
+                 <div class="col-lg-4 d-lg-block d-none">
+                     <div class="offer-item-link">
+                         <div class="swiper" id="offerItemLink">
+                             <div class="swiper-wrapper">
+                                 <div class="swiper-slide">
+                                     <div class="offer-item-link-item shadow-sm">
+                                         <h6>
+                                             ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
+                                         </h6>
+                                     </div>
+                                 </div>
+                                 <div class="swiper-slide">
+                                     <div class="offer-item-link-item shadow-sm">
+                                         <h6>گوشی موبایل شیائومی مدل Redmi 12C دو سیم کارت ظرفیت 128 گیگابایت و
+                                             رم 6 گیگابایت - گلوبال</h6>
+                                     </div>
+                                 </div>
+                                 <div class="swiper-slide">
+                                     <div class="offer-item-link-item shadow-sm">
+                                         <h6>گوشی موبایل شیائومی مدل Redmi Note 12 4G دو سیم کارت ظرفیت 256
+                                             گیگابایت و رم 8 گیگابایت - گلوبال</h6>
+                                     </div>
+                                 </div>
+                                 <div class="swiper-slide">
+                                     <div class="offer-item-link-item shadow-sm">
+                                         <h6>گوشی موبایل سامسونگ مدل Galaxy A14 دو سیم کارت ظرفیت 64 گیگابایت و
+                                             رم 4 گیگابایت - ویتنام</h6>
+                                     </div>
+                                 </div>
+                                 <div class="swiper-slide">
+                                     <div class="offer-item-link-item shadow-sm">
+                                         <h6>گوشی موبایل سامسونگ مدل Galaxy A14 دو سیم کارت ظرفیت 128 گیگابایت و
+                                             رم 4 گیگابایت - ویتنام</h6>
+                                     </div>
+                                 </div>
+                                 <div class="swiper-slide">
+                                     <div class="offer-item-link-item shadow-sm">
+                                         <h6>ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی</h6>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section> -->
+ 
+ <!--============ end offer ==============-->
+ 
+ <!--============ start new product ==============-->
+ 
+ <section class="product-row">
+     <div class="container-fluid position-relative">
+         <div class="product-slider-box-title">
+             <div class="row align-items-center">
+                 <div class="col-lg-8 col-6">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">جدیدترین</span>
+                         <span>محصولات</span>
+                     </h4>
+                 </div>
+                 <div class="col-lg-4 col-6">
+                     <div class="text-end">
+                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="product-row-parent">
+            <div class="row g-4">
+            {% for product in store.get_special_tags_products %}
+                <div class="col-xxl-3 col-lg-4 col-sm-6">
+                    <div class="product-row-item running-top">
+                        <a href="">
+                            <div class="row align-items-center">
+                                <div class="col-4">
+                                    <img src="{{product.get_main_image}}" alt="">
+                                </div>
+                                <div class="col-8">
+                                    <h3 class="text-overflow-1 title-font font-14">{{ product.name }}</h3>
+                                    
+                                    {% if product.off_active == True %}
+                                        {% if product.ref_class != None %}
+                                            <div >
+                                                <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
+                                                    <p class="mb-0 old-price font-10 text-muted-two text-decoration-line-through me-3">
+                                                        {{ product.get_class_price|intcomma }}</p>
+                                                    <p class="title-font fs-10 new-price">{{product.sales_price|intcomma}}
+                                                        تومان</p>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div >
+                                                <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
+                                                    <p class="mb-0 old-price font-10 text-muted-two text-decoration-line-through me-3">
+                                                        {{ product.price|intcomma }}</p>
+                                                    <p class="title-font fs-10 new-price">{{product.sales_price|intcomma}}
+                                                        تومان</p>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if product.ref_class != None %}
+                                            <div >
+                                                <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
+                                                    
+                                                    <p class="title-font fs-10 new-price">{{product.get_class_price|intcomma}}
+                                                        تومان</p>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                        <div >
+                                            <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
+                                                
+                                                <h6 class="title-font fs-10 new-price">{{product.price|intcomma}}
+                                                    تومان</h6>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    <div class="cart-canvas-foot d-flex align-items-center justify-content-end">
+                                        <div class="cart-canvas-add">
+                                            <button class="btn text-white"><i class="bi bi-basket"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+         </div>
+         <div class="Dottedsquare"></div>
+     </div>
+ </section>
+ 
+ <!--============ end new prodcut ==============-->
+ 
+ <!--============ start banner ==============-->
+ 
+ <section class="banner">
+     <div class="container-fluid">
+         <div class="row gy-4">
+            {% for banner in small_banners %}
+             <div class="col-sm-6">
+                 <div class="banner-item running-top">
+                     <a href="{% url 'shop:featured_products' banner.source %}">
+                         <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
+                     </a>
+                 </div>
+             </div>
+             {% endfor %}
+             
+         </div>
+     </div>
+ </section>
+ 
+ <!--============ end banner ==============-->
+ 
+ <!--============ start blog slider ==============-->
+ 
+ <section class="blog-slider site-slider py-30">
+     <div class="container-fluid position-relative">
+         <div class="product-slider-box-title">
+             <div class="row align-items-center">
+                 <div class="col-lg-8 col-6">
+                     <h4 class="title-font product-slider-box-title-title dot">
+                         <span class="main-color-one-color">آخرین مطالب</span>
+                         <span>وبلاگ</span>
+                     </h4>
+                 </div>
+                 <div class="col-lg-4 col-6">
+                     <div class="text-end">
+                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="swiper pro-slider blog-slider-sw">
+             <div class="swiper-wrapper">
+                
+                 <div class="swiper-slide">
+                     <a href="">
+                         <div class="blog-item">
+                             <div class="blog-item-image">
+                                 <img src="{% static 'assets4/image/blog/blog-1.png' %}" alt="">
+                             </div>
+                             <div class="blog-item-desc">
+                                 <div class="blog-item-title">
+                                     <h6 class="text-overflow-1">رونمایی از پرچمدار جدید سامسونگ </h6>
+                                 </div>
+                                 <div class="blog-item-date">
+                                     <h6 class="f-800">30</h6>
+                                     <span class="d-block">بهمن</span>
+                                     <span>1402</span>
+                                 </div>
+                             </div>
+                         </div>
+                     </a>
+                 </div>
+             </div>
+             <div class="swiper-button-next"></div>
+             <div class="swiper-button-prev"></div>
+         </div>
+ 
+     </div>
+ </section>
+ 
+ <!--============ end blog slider ==============-->
+ 
+
+{% endblock %}

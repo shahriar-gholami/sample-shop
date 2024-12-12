@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}فروشگاه{% endblock %}
+
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">فروشگاه</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">خانه</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">فروشگاه</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row row-cards ">
+                <div class="col-xl-3 col-lg-4 br-7">
+                    <div class="row">
+
+                        {% if active_filters %}
+                        <div class="col-md-12 col-xl-12">
+                            <div class="card card-collapsed-true">
+                                <div class="card-header">
+                                    <h3 class="card-title">فیلترهای فعال</h3>
+                                    <div class="card-options">
+                                        <a class="card-options-collapse" data-bs-toggle="card-collapse"
+                                           href="javascript:void(0)"><i class="fe fe-chevron-up"></i></a>
+                                    </div>
+                                </div>
+                                <div class="card-body "> 
+                                    {% for active_filter in active_filters %}
+                                    <div aria-label="Basic example" class="btn-group file-attach m-1" role="group">
+                                        <button class="btn btn-pill btn-outline-primary" type="button">{{active_filter.filter.name}} : {{active_filter.value.value}}
+                                        </button>
+                                        <a href="{% url 'shop:clear_active_filter'  active_filter.filter.id active_filter.value.id %}" aria-label="Close" class="btn btn-pill btn-close btn-outline-primary"
+                                                type="button">
+                                            <span aria-hidden="true">×</span>
+                                    </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card">
+                                <form method="post" action="{% url 'shop:product_list'  %}">
+                                    {% csrf_token %}
+                                    <div class="card-header">
+                                        <div class="card-title">دسته‌بندی</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <select name="category" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                                {% if main_selected_category != None %}
+                                                <option value= "{{ main_selected_category.id }}" class="text-white">{{ main_selected_category.name }}</option>
+                                                {% else %}
+                                                <option value="0" class="text-white">انتخاب</option>
+                                                {% endif %}
+                                                {% for category in categories %}
+                                                    <li><option value="{{ category.id }}">{{ category.name }}</option></li>
+                                                {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="card-title">برند</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <select name="brand" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                            {% if main_selected_brand != None %}
+                                                <option value= "{{ main_selected_brand.id }}" class="text-white">{{ main_selected_brand.name }}</option>
+                                                {% else %}
+                                                <option value="0" class="text-white">انتخاب</option>
+                                                {% endif %}    
+                                            {% for brand in brands %}
+                                                <option value="{{brand.id}}">{{brand.name}}</option>
+                                                {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="card-title">بازه قیمت</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <select name="price_range" class="form-control form-select select2" id="select-beast"
+                                                name="beast">
+                                                {% if main_selected_price_range != None %}
+                                                <option value= "{{ main_selected_price_range.id }}" class="text-white">{{ main_selected_price_range.min_value|intcomma }} تا {{ main_selected_price_range.max_value|intcomma }} تومان</option>
+                                                {% else %}
+                                                <option value="0" class="text-white">انتخاب</option>
+                                                {% endif %}
+                                                {% for price_range in price_ranges %}
+                                                    <li>
+                                                        <option value="{{ price_range.id }}">{{ price_range }}</option>                                       
+                                                    </li>
+                                                {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- <div class="card-header">
+                                        <div class="card-title">اندازه</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <select name="size" class="filter-multi" multiple="multiple">
+                                            {% for size in sizes %}
+                                            <option value="{{size.id}}">{{size.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        
+                                    </div> -->
+                                    <div class="col-xl-12 col-lg-12">
+                                        <button type="submit" class="login100-form-btn btn-primary">فیلتر محصولات</button>  
+                                    </div>
+                                    <div class="form-footer mt-2"><br></div>
+                                </form>
+                            </div>
+                        </div>
+                        {% if category %}
+                        {% for filter in filters %}
+                        {% for form in my_forms %}
+                        {% if filter.category == category and form.name == filter.name %}
+                        <div class="col-md-12 col-xl-12">
+                            <div class="card card-collapsed">
+                                <div class="card-header">
+                                    <h3 class="card-title">{{filter.name}}</h3>
+                                    <div class="card-options">
+                                        <a class="card-options-collapse" data-bs-toggle="card-collapse"
+                                           href="javascript:void(0)"><i class="fe fe-chevron-up"></i></a>
+                                    </div>
+                                </div>
+                                <div class="card-body "> 
+                                    <form method="post" action="{% url 'shop:feature_filter'  category.slug form.name %}">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button class="btn btn-primary btn-sm mb-3 btn-block" type="submit">اعمال فیلتر</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                        {% endif %}
+                    
+                    </div>
+                </div>
+                <!-- COL-END -->
+                <div class="col-xl-9 col-lg-8 ">
+                    <div class="tab-content">
+                        <div class="tab-pane active bg-primary-transparent card-transparent p-5" id="tab-11">
+                            <div class="row">
+                                {% for product in products %}
+                                <div class="col-md-6 col-xl-3 col-sm-6">
+                                    <div class="card ">
+                                        <div class="product-grid6 ">
+                                            <div class="product-image6 p-2">
+                                                <ul class="icons">
+                                                    <li>
+                                                        <a class="btn btn-primary" href="{% url 'shop:product_detail'  product.slug %}" target="_blank">
+                                                            <i class="fe fe-eye"> </i> </a>
+                                                    </li>
+                                                    
+                                                    <li><a class="btn btn-danger" href="{% url 'shop:add_to_favorites' product_id=product.id ref='products' %}"><i
+                                                            class="fe fe-heart"></i></a></li>
+                                                </ul>
+                                                <a href="{% url 'shop:product_detail'  product.slug %}" target="_blank">
+                                                    <img alt="img"
+                                                         class="img-fluid br-7 w-100" src="{{product.get_main_image}}">
+                                                </a>
+                                            </div>
+                                            <div class="card-body pt-0">
+                                                <div class="product-content text-center">
+                                                    <h1 class="title fw-bold fs-16"><a
+                                                            href="{% url 'shop:product_detail'  product.slug %}" target="_blank">{{ product.name }}</a>
+                                                    </h1>
+                                                    <div class="mb-2 text-warning">
+                                                        <i class="fa fa-star text-warning"></i>
+                                                        <i class="fa fa-star text-warning"></i>
+                                                        <i class="fa fa-star text-warning"></i>
+                                                        <i class="fa fa-star-half-o text-warning"></i>
+                                                        <i class="fa fa-star-o text-warning"></i>
+                                                    </div>
+                                                    {% if product.off_active == True %}
+                                                    <div class="price">{{product.sales_price|intcomma}} تومان
+                                                         <p class="text-danger">
+                                                            <del>{{ product.price|intcomma }} تومان</del>
+                                                        </p>
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="price">{{ product.price|intcomma }} تومان
+                                                        <p class="text-white">{{ product.price|intcomma }} تومان</p>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <a class="btn btn-primary mb-1" href="{% url 'shop:product_detail'  product.slug %}" target="_blank"><i
+                                                    class="fe fe-shopping-cart mx-2"></i>جزییات محصول</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-5">
+                                <div class="float-end">
+                                    <ul class="pagination ">
+                                        {% if products.has_previous %}
+                                        <li class="page-item page-prev">
+                                            <a class="page-link" href="?page=1">اولین</a>
+                                        </li>
+                                        <li class="page-item page-prev">
+                                            <a class="page-link" href="?page={{ products.previous_page_number }}" tabindex="-1">قبلی</a>
+                                        </li>
+                                        {% endif %}
+                                        <li class="page-item active"><a class="page-link"
+                                                                        href="javascript:void(0)">{{ products.number }}</a></li>
+                                        {% if products.has_next %}
+                                        <li class="page-item page-next">
+                                            <a class="page-link" href="?page={{ products.next_page_number }}">بعدی</a>
+                                        </li>
+                                        <li class="page-item page-next">
+                                            <a class="page-link" href="?page={{ products.paginator.num_pages }}">آخرین</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-footer mt-4"><br></div>
+                    </div>
+                    <!-- COL-END -->
+                </div>
+                <!-- ROW-1 CLOSED -->
+            </div>
+            <!-- ROW-1 END -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+{% endblock %}

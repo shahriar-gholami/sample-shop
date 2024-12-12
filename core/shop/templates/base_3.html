@@ -1,0 +1,521 @@
+{% load static %}
+{% load humanize %}
+
+
+<!doctype html>
+<html class="no-js" lang="Fa_IR" dir="rtl">
+
+<head>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LRSH37XQV"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-3LRSH37XQV');
+    </script>
+
+
+    {% block meta %}
+    <!-- META DATA -->
+
+
+    {% endblock %}
+
+    <!-- FAVICON -->
+    <link href="{{ store.get_logo_image }}" rel="shortcut icon" type="image/x-icon"/>
+
+    <!-- TITLE -->
+    <title>{% block title %}Sticky Sidebars{% endblock %}</title>
+
+   
+
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest"> -->
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="{% static 'assets3/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/font/bootstrap-icon/bootstrap-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/js/plugin/swiper/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/js/plugin/countdown/countdown.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/js/plugin/rasta-contact/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/js/plugin/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'assets3/css/responsive.css' %}">
+
+    <meta name="theme-color" content="#f4f5f9">
+</head>
+
+<body>
+
+<!-- start header code -->
+
+<header class="header">
+    <div class="container-fluid">
+        <div class="row gy-3 align-items-center">
+            <div class="col-xl-3 col-6">
+                <div class="header-logo">
+                    <div class="image">
+                        <a href="{% url 'shop:index'   %}">
+                            <img class="rounded" src="{{ store.get_logo_image }}" class="img-fluid" alt="" style="height: 60pt; width: 60pt;">
+                        </a>
+                    </div>
+                    <div class="description d-md-block d-none">
+                        <h6 class="font-20 title-font">{{ store.name }}</h6>
+                        <p class="mb-0 mt-1 text-muted">فروشگاهی برای همه سلیقه ها</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 d-xl-block d-none">
+                <div class="header-form">
+                    <form method="get" action="{% url 'shop:product_search'  %}">
+                        <input name="q" type="text" class="form-control input-search" placeholder="جستجوی محصول">
+                        <button type="submit" class="btn input-btn-search"><i class="bi bi-search"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-xl-4 col-6">
+                <div class="header-btn">
+                    <div class="header-cart d-lg-block d-none">
+                        <a href="{% if request.user.is_authenticated %}{% url 'shop:cart_view' cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" role="button" aria-controls="offcanvasCart"
+                           class="btn main-color-one-bg">
+                            <i class="bi bi-basket-fill"></i>
+                            <span>سبد خرید</span>
+                            <span id="cartCounter" class="cart-counter">{{cart_items_count}}</span>
+                        </a>
+                    </div>
+                    <div class="header-btn-login d-lg-block d-none">
+                        <a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard' %}{% else %}{% url 'shop:customer_authentication' %}{% endif %}" class="btn"><i class="bi bi-person-fill"></i>{% if request.user.is_authenticated %}{{request.user.full_name}}{% else %} ورود / ثبت نام{% endif %}</a>
+                    </div>
+                    <div class="header-btn-login-responsive d-lg-none d-block">
+                        <a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard' %}{% else %}{% url 'shop:customer_authentication' %}{% endif %}" class="btn"><i class="bi bi-person-fill fs-2"></i></a>
+                    </div>
+
+                    <div class="header-btn-favorite">
+                        <a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_favorites'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="btn"><i class="bi bi-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1 col-2 d-xl-none d-block">
+                <div class="responsive-menu d-xl-none d-block">
+                    <button class="btn border-0 p-0 btn-responsive-menu" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#responsiveMenu" aria-controls="responsive menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                             class="bi bi-list" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </button>
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="responsiveMenu"
+                         aria-labelledby="responsive menu">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel">{{store.name}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <a href="" class="text-center d-block mb-3">
+                                <img class="rounded" src="{{ store.get_logo_image }}" alt="" class="img-fluid" width="200" height="65">
+                            </a>
+                            <ul class="rm-item-menu navbar-nav">
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:index'  %}">خانه</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:product_list'  %}">فروشگاه</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="">دسته‌بندی‌ها</a>
+                                    <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                    <ul class="navbar-nav h-0">
+                                    {% for t_category in top_categories.all %}
+                                        {% if t_category.get_sub_categories.all.first != None %}
+                                            {% if t_category.is_sub != True %}
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a>
+                                                <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                                <ul class="navbar-nav h-0 bg-ul-f7">
+                                                    <li class="nav-item"><a class="nav-link" href="{% url 'shop:category_products'  t_category.slug %}">همه محصولات این دسته</a>
+                                                    </li>
+                                                    {% for sub_category in t_category.get_sub_categories.all %}
+                                                    <li class="nav-item"><a class="nav-link" href="{% url 'shop:category_products'  sub_category.slug %}">{{sub_category.name}}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            {% endif %}
+                                        {% else %}
+                                        {% if t_category.is_sub == False %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a></li>
+                                        {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="">ویژه‌ها</a>
+                                    <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                    <ul class="navbar-nav h-0">
+                                    {% for tag in special_tags %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:special_tag_products'  tag.name %}">{{ tag.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="">برند‌ها</a>
+                                    <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                    <ul class="navbar-nav h-0">
+                                    {% for brand in store.get_brands %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:special_brand_products'  brand.name %}">{{ brand.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:about'  %}">درباره ما</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:contact'  %}">تماس با ما</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:post_list'  %}">وبلاگ</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:policies'  %}">قوانین و مقررات</a>
+                                </li>
+                                <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:faq_list'  %}">سوالات متداول</a>
+                                </li>
+                                
+                             
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-11 col-10 d-xl-none d-block">
+                <div class="d-flex">
+                    <div class="header-form w-100">
+                        <form method="get" action="{% url 'shop:product_search'  %}">
+                            <input name="q" type="search" class="form-control input-search" placeholder="جستجوی محصول">
+                            <button type="submit" class="btn input-btn-search"><i class="bi bi-search"></i></button>
+                        </form>
+                    </div>
+                    <div class="text-end ms-lg-4 ms-2">
+                        <a  href="{% if request.user.is_authenticated %}{% url 'shop:cart_view'  cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" role="button"
+                           class="btn border-0 main-color-green"><i class="bi bi-basket text-white"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- start mega menu -->
+
+<div class="mega-menu-parent position-sticky top-0 d-xl-block d-none">
+    <div class="container-fluid">
+        <div class="header-top-menu">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="header-top-menu-right">
+                        <div class="top-menu-menu">
+                            <ul class="navbar-nav align-items-center">
+                                <li class="position-relative m-0"></li>
+                                
+                                <!-- <li class="nav-item"><a href="" class="nav-link header-top-menu-link-a  ">مگا
+                                    لیست منو
+                                    <i class="bi bi-tablet"></i></a>
+                                    <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;background-size: 400px !important;">
+                                        <li><a href="" class="title">بـرند</a></li>
+                                        <li><a href="">سامـسونگ</a></li>
+                                        <li><a href="">اپـل</a></li>
+                                        <li><a href="">شیـائومی</a></li>
+                                        <li><a href="">ال جی</a></li>
+                                        <li><a href="">وان پـلاس</a></li>
+                                        <li><a href="">جی ال ایـکس</a></li>
+                                        <li><a href="">هـو آوی</a></li>
+                                        <li><a href="">بلک بـری</a></li>
+                                        <li><a href="">توشـیبا</a></li>
+                                        <li><a href="">دایـناکورد</a></li>
+                                        <li><a href="" class="title">براساس رده بندی </a>
+                                        </li>
+                                        <li><a href="">دکـمه ای</a></li>
+                                        <li><a href="">لـمسـی</a></li>
+                                        <li><a href="">نـظـامی</a></li>
+                                        <li><a href="">ضـد آب</a></li>
+                                        <li><a href="">مسـافرتی</a></li>
+                                        <li><a href="">خـارنی</a></li>
+                                        <li><a href="" class="title">براساس کشور </a></li>
+                                        <li><a href="">ایران</a></li>
+                                        <li><a href="">ژاپن</a></li>
+                                        <li><a href="">فرانسه</a></li>
+                                        <li><a href="">کره جنوبی</a></li>
+                                        <li><a href="">آمریکا</a></li>
+                                        <li><a href="">سوئد</a></li>
+                                        <li><a href="">تایوان</a></li>
+                                        <li><a href="" class="title">براساس رنگ</a></li>
+                                        <li><a href="">قرمز</a></li>
+                                        <li><a href="">قهوه ای</a></li>
+                                        <li><a href="">سبز</a></li>
+                                        <li><a href="">بنفش</a></li>
+                                        <li><a href="">نارنجی</a></li>
+                                        <li><a href="">نیلی</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item"><a href="" class="nav-link  header-top-menu-link-a ">منو
+                                    ساده<i class="bi bi-menu-app"></i></a>
+                                    <ul class="level-one">
+                                        <li><a href="">منو شماره 1</a></li>
+                                        <li><a href="">منو شماره 2</a></li>
+                                        <li class="position-relative"><a href="">منو شماره 3 <i
+                                                class="bi bi-chevron-left"></i></a>
+                                            <ul class="level-two">
+                                                <li><a href="">زیر منو شماره 1</a></li>
+                                                <li><a href="">2 زیر منو شماره </a></li>
+                                                <li><a href="">3 زیر منو شماره </a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="">منو شماره 4</a></li>
+                                        <li><a href="">منو شماره 5</a></li>
+                                        <li><a href="">منو شماره 6</a></li>
+                                    </ul>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">دسته‌بندی‌ها<i class="bi bi-columns-gap"></i></a>
+                                    <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                                        {% for t_category in top_categories.all %}
+                                            {% if t_category.is_sub == False %}
+                                            <li><a class="title" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a></li>
+                                                {% if t_category.get_sub_categories.all.first != None %}
+                                                    {% for sub_category in t_category.get_sub_categories.all %}
+                                                    <li><a href="{% url 'shop:category_products'  sub_category.slug %}">{{sub_category.name}}</a></li>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">ویژه‌ها<i class="bi bi-award"></i></a>
+                                    <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                                        {% for tag in special_tags %}
+                                            <li><a class="title" href="{% url 'shop:special_tag_products' tag.name %}">{{tag.name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">برندها<i class="bi bi-suit-spade"></i></a>
+                                    <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
+                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                                        {% for brand in store.get_brands %}
+                                            <li><a class="title" href="{% url 'shop:special_brand_products' brand.name %}">{{brand.name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li class="nav-item"><a href="{% url 'shop:contact'  %}" class="nav-link header-top-menu-link-a  ">تماس با ما<i class="bi bi-phone"></i></a></li>
+                                <li class="nav-item"><a href="{% url 'shop:about'  %}" class="nav-link header-top-menu-link-a  ">درباره ما<i class="bi bi-person-check"></i></a></li>
+                                <li class="nav-item"><a href="{% url 'shop:policies'  %}" class="nav-link header-top-menu-link-a  ">قوانین و مقررات<i class="bi bi-shield"></i></a></li>
+                                <li class="nav-item"><a href="{% url 'shop:post_list'  %}" class="nav-link header-top-menu-link-a  ">وبلاگ<i class="bi bi-book"></i></a></li>
+                                <li class="nav-item"><a href="{% url 'shop:faq_list'  %}" class="nav-link header-top-menu-link-a  ">سوالات متداول<i class="bi bi-question"></i></a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-5">
+                    <div class="header-top-menu-left">
+                        <div class="row align-items-center">
+                            
+                            <div class="col-lg-12 col-xl-6">
+                                <div class="header-top-menu-socail">
+                                    {% if store.instagram != None %}<a href=""><i class="bi bi-instagram"></i></a>{% endif %}
+                                    {% if store.youtube != None %}<a href=""><i class="bi bi-youtube"></i></a>{% endif %}
+                                    {% if store.linkedin != None %}<a href=""><i class="bi bi-linkedin"></i></a>{% endif %}
+                                    {% if store.telegram != None %}<a href=""><i class="bi bi-telegram"></i></a>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end mega menu -->
+
+
+<!-- end header code -->
+
+
+{% block content %}{% endblock %}
+
+
+<!-- start footer -->
+
+<footer class="footer py-30">
+    <div class="container-fluid">
+        <div class="row gy-4">
+            <div class="col-lg-2">
+                <div class="footer-logo text-center">
+                    <img class="rounded" src="{{ store.get_logo_image }}" alt="{{store.name}} logo" style="width: 100px;">
+                </div>
+                <div class="footer-reutrned">
+                    <h4 class="text-center">مرجوعی با احترام <br> پذیرفته میشود</h4>
+                    <a href="#"><i class="bi bi-arrow-down-up"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="footer-main">
+                    <div class="footer-main-desc">
+                        <p class="text-muted text-justify font-16">{{store.about_description|safe}}</p>
+                    </div>
+                </div>
+                <div class="footer-main-address py-3">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-sm-6">
+                            <div class="footer-main-address-address d-flex align-items-center">
+                                <div class="footer-main-address-icon me-2">
+                                    <img src="{% static 'assets3/img/pin.png' %}" alt="" width="70">
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <div class="mb-3">
+                                        <span class="badge font-12 main-color-one-bg text-white rounded-pill">دفتر مرکزی</span>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 font-16"><span class="fw-bold h5 title-font">{{store.city}} -</span>{{store.address|safe}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="footer-main-address-email">
+                                <div class="text-sm-end text-start">
+                                    <span class="badge bg-dark text-white font-13 mb-3 rounded-pill">ایمیل پشتیبانی</span>
+                                </div>
+                                <div class="text-sm-end text-start">
+                                    <a href=":mailto:admin@admin.com" class="font-14">{{store.email}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-main-links">
+                    <div class="row gy-4">
+                        <div class="col-md-4 col-6">
+                            <ul class="navbar-nav">
+                                <li class="nav-item"><a href="{% url 'shop:policies'  %}" class="nav-link">سیاست‌ها و رویه‌های ارسال</a></li>
+                                <li class="nav-item"><a href="{% url 'shop:faq_list'  %}" class="nav-link">سوالات متداول</a></li>
+                                <li class="nav-item"><a href="{% url 'shop:post_list'  %}" class="nav-link">وبلاگ</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <ul class="navbar-nav">
+                                <li class="nav-item"><a href="{% url 'shop:index'  %}" class="nav-link">خانه</a></li>
+                                <li class="nav-item"><a href="{% url 'shop:contact'  %}" class="nav-link">تماس با ما</a></li>
+                                <li class="nav-item"><a href="{% url 'shop:about'  %}" class="nav-link">درباره ما</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="footer-main-links-enamad">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="text-center">
+                                            <a href="">
+                                                <!-- <img src="{% static 'assets3/img/enamad.png' %}" alt=""> -->
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-center">
+                                                {% if store.enamad_code != 'none' %}
+                                                    {{store.enamad_code|safe}}
+                                                {% else %}
+                                                    <img class="rounded" alt="logo" src="https://marketplace-bucket.storage.iran.liara.space/test%20enamad.png" style="width: 120px; height: 120px">
+                                                {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copy-right">
+                    <p class="font-16 my-4">کلی حقوق این سایت متعلق به <span class="fw-bold">{{store.name}}</span> می باشد</p>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="footer-contact">
+                    <div class="footer-contact-link text-center">
+                        <a href="#" role="button" onclick="topFunction()"><i class="bi bi-chevron-up"></i></a>
+                    </div>
+                    <div class="footer-contact-desc text-center">
+                        <h5 class="text-white">7 روز هفته 24 ساعته <br> پاسخگوی شما هستیم</h5>
+                    </div>
+                    <div class="footer-contact-desc-call text-center mt-3">
+                        <a href="">
+                            <h4 style="direction: ltr" class="text-white h3">{{store.phone_number}}</h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <nav class="navbar navbar-expand justify-content-center">
+                        {% if store.instagram != None %}<a href=""><i class="bi bi-instagram"></i></a>{% endif %}
+                        {% if store.youtube != None %}<a href=""><i class="bi bi-youtube"></i></a>{% endif %}
+                        {% if store.linkedin != None %}<a href=""><i class="bi bi-linkedin"></i></a>{% endif %}
+                        {% if store.telegram != None %}<a href=""><i class="bi bi-telegram"></i></a>{% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- end footer -->
+
+<!-- mobile menu -->
+
+<div class="mobile-footer d-lg-none d-flex">
+    <div class="parent">
+        <div class="item" onclick="topFunction()">
+            <i class="bi bi-chevron-up font-20"></i>
+        </div>
+        <div class="item">
+            <a href="{% url 'shop:index'  %}">
+                <i class="bi bi-house font-20"></i>
+            </a>
+        </div>
+        <div class="item item-float">
+            <a href="{% if request.user.is_authenticated %}{% url 'shop:cart_view'  cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}"   role="button"
+               aria-controls="offcanvasCart">
+                <i class="bi bi-bag font-20"></i>
+            </a>
+        </div>
+        <div class="item ">
+            <a href="tel:98{{ store.phone_number|slice:"1:11"}}">
+                <i class="bi bi-headset"></i>
+            </a>
+        </div>
+        <div class="item">
+            <a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard' %}{% else %}{% url 'shop:customer_authentication' %}{% endif %}">
+                <i class="bi bi-person"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- end mobile menu -->
+
+<script src="{% static 'assets3/js/vendor/modernizr-3.11.2.min.js' %}"></script>
+<script src="{% static 'assets3/js/vendor/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'assets3/js/vendor/bootstrap.bundle-5.3.2.min.js' %}"></script>
+<script src="{% static 'assets3/js/plugin/swiper/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'assets3/js/plugin/countdown/countdown.js' %}"></script>
+<script src="{% static 'assets3/js/plugin/vanilla-tilt/vanilla-tilt.min.js' %}"></script>
+<script src="{% static 'assets3/js/plugin/rasta-contact/script.js' %}"></script>
+<script src="{% static 'assets3/js/plugin/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+<script src="{% static 'assets3/js/plugins.js' %}"></script>
+<script src="{% static 'assets3/js/main.js' %}"></script>
+
+</body>
+
+</html>

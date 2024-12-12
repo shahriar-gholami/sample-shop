@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}مدیریت سفارشات{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">داشبورد فروشندگی</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:owner_dashboard' %}">پنل فروشندگی</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">مدیریت سفارشات</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- Row -->
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="position-lg-relative w-100" id="scroll-stickybar">
+                        <div class="card">
+                            <div class="list-group list-group-transparent mb-0 mail-inbox pb-3">
+                                <div class="mt-4 mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:index'  %}">مشاهده فروشگاه</a>
+                                </div>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard'  %}">
+                                    <span class="icons"><i class="fa fa-bars"></i></span>داشبورد
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4 {% if store.has_notif == True %}text-danger{% endif %}"
+                                href="{% url 'shop:owner_dashboard_announcements'  %}">
+                                    <span class="icons"><i class="fa fa-fa fa-bell {% if store.has_notif == True %}text-danger{% endif %}"></i></span> اطلاعیه‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center active mx-4"
+                                   href="{% url 'shop:owner_dashboard_orders'  %}">
+                                    <span class="icons"><i class="fa fa-shopping-bag"></i></span>سفارشات                                
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_products'  %}">
+                                    <span class="icons"><i class="fa fa-cubes"></i></span> محصولات 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_categories'  %}">
+                                    <span class="icons"><i class="fa fa-th-large"></i></span> دسته‌بندی‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_tag' %}">
+                                    <span class="icons"><i class="fa fa-tags"></i></span> برچسب‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_filters'  %}">
+                                    <span class="icons"><i class="fa fa-filter"></i></span> فیلترها 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_edit_home'  %}">
+                                    <span class="icons"><i class="fa fa-home"></i></span> نمای صفحه خانه
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_customers'  %}">
+                                    <span class="icons"><i class="fa fa-user"></i></span> مشتریان
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_messages'  %}">
+                                    <span class="icons"><i class="fa fa-envelope"></i></span> پیام‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_comments'  %}">
+                                    <span class="icons"><i class="fa fa-comment"></i></span> دیدگاه‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_delivery'  %}">
+                                    <span class="icons"><i class="fa fa-truck"></i></span> رویه‌های ارسال
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_coupons'  %}">
+                                    <span class="icons"><i class="fa fa-usd"></i></span> کوپن‌های تخفیف
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_store_update'  %}">
+                                    <span class="icons"><i class="fa fa-gear"></i></span> تنظیمات فروشگاه
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_blog'  %}">
+                                    <span class="icons"><i class="fa fa-th"></i></span> وبلاگ
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_blog_category'  %}">
+                                    <span class="icons"><i class="fa fa-th-list"></i></span> دسته‌بندی‌های پست‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:faq_create'  %}">
+                                    <span class="icons"><i class="fa fa-question"></i></span> سوالات متداول
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_policies'  %}">
+                                    <span class="icons"><i class="fa fa-info-circle"></i></span> قوانین و مقررات
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:owner_dashboard_finance'  %}">
+                                    <span class="icons"><i class="fa fa-money"></i></span> مالی
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                href="{% url 'shop:owner_dashboard_tutorials'  %}">
+                                <span class="icons"><i class="fa fa-laptop"></i></span> آموزشی
+                            </a>
+                            <a class="list-group-item d-flex align-items-center mx-4"
+                               href="{% url 'shop:owner_dashboard_ticket_list'  %}">
+                                <span class="icons"><i class="fa fa-comments"></i></span> تیکت‌ها
+                            </a>
+                            <a class="list-group-item d-flex align-items-center mx-4"
+                               href="{% url 'shop:owner_dashboard_meta'  %}">
+                                <span class="icons"><i class="fa fa-fa fa-google"></i></span> متاتگ‌ها
+                            </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">لیست سفارشات</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered text-nowrap border-bottom table-vcenter" id="example3">
+                                            <thead>
+                                            <tr>
+                                                <th>نام</th>
+                                                <th>اقلام سفارش</th>
+                                                <th>مجموع مبلغ</th>
+                                                <th>تاریخ سفارش</th>
+                                                <th>جزییات سفارش</th>
+                                                <th>بروزرسانی وضعیت</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for order in orders %}
+                                            <tr>
+                                                <td>{{order.customer.full_name}}</td>
+                                                <td>{% for item in order.items.all %}
+                                                        {{item.variety.product.name}}{% if item.variety.name != 'default variety' %}- {{item.variety.name}}{% endif %}-{{item.quantity}} عدد<br>
+                                                    {% endfor %}
+                                                </td>
+                                                <td>{{order.get_final_payment|intcomma}}</td>
+                                                <td>{{order.created_date|date:"Y/m/d"}}</td>
+                                                <td><a class="btn btn-success mt-2 mb-2" href="{% url 'shop:owner_dashboard_order_detail'  order.id %}">جزییات سفارش</a></td>
+                                                <td>
+                                                    <div class="btn-group mt-2 mb-2">
+                                                        <button class="btn btn-outline-success" type="button">{{order.status.latest_status}}</button>
+                                                        <button class="btn btn-outline-success dropdown-toggle px-1"
+                                                                data-bs-toggle="dropdown"
+                                                                type="button">
+                                                            <span class="caret"></span>
+                                                            <span class="sr-only">باز کردن دارپ داون</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu" role="menu">
+                                                           
+                                                            <li><a href="{% url 'shop:update_order_status'  order.id 2 %}">پرداخت نشده</a></li>
+                                                            <li><a href="{% url 'shop:update_order_status'  order.id 1 %}">پرداخت شده</a></li>
+                                                            <li><a href="{% url 'shop:update_order_status'  order.id 3 %}">ارسال شده</a></li>
+                                                           
+                                                        </ul>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                            {% endfor %}
+                                            
+                                            </tbody>
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Row -->
+
+                </div>
+            </div>
+            <!-- ROW-1 CLOSED -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+
+    </div>
+</div>
+<!--app-content closed-->
+    
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/js/autofill-table.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/buttons.bootstrap5.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jszip.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/pdfmake/pdfmake.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/pdfmake/vfs_fonts.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/buttons.colVis.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/responsive.bootstrap5.min.js' %}"></script>
+<script src="{% static 'assets/js/table-data.js' %}"></script>
+{% endblock %}

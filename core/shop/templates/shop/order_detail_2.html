@@ -1,0 +1,227 @@
+{% extends "base_2.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}جزئیات سفارش{% endblock %}
+
+{% block content %}
+
+
+
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="font-14 text-muted-two">فروشگاه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">جزئیات سفارش</a></li>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="payment_navigtions">
+            <div class="checkout-headers">
+                <nav class="navbar navbar-expand">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a href="" class="nav-link">
+                                <span>1</span>
+                                <p>سبد خرید</p>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="" class="nav-link">
+                                <span>2</span>
+                                <p>صورتحساب</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <span>3</span>
+                                <p>جزییات پرداخت</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <h2 class="title-font main-color-one-color mt-4 h4">سبد خرید شما <span class="main-color-three-color">({{cart.items.count}} محصول)</span>
+            </h2>
+        </div>
+
+    </div>
+
+    <div class="container-fluid">
+        <div class="cart-product">
+            <div class="row gy-4">
+                <div class="col-12">
+                    <div class="cart-product-item">
+                        <div class="content-box">
+                            <div class="container-fluid">
+                                <div class="responsive-table">
+                                    <table class="table table-bordered site-tbl">
+                                        <thead>
+                                        <tr>
+                                            <th class="h5 text-center" colspan="2">محصول</th>
+                                            <th class="h5 text-center">عنوان</th>
+                                            <th class="h5 text-center">تعداد</th>
+                                            <th class="h5 text-center">قیمت</th>
+                                            <th class="h5 text-center">مجموع</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order.items.all %}
+                                            
+                                            <tr>
+                                                <td colspan="2" class="text-center align-middle">
+                                                    <a href="{% url 'shop:product_detail' item.variety.product.slug %}"><img src="{{item.variety.product.get_main_image}}" width="80" class="rounded-3" alt=""></a>
+                                                </td>
+                                                <td class="align-middle">
+                                                    
+                                                    <h5 class="fw-light">{{item.variety.product.name}}</h5>
+                                                    
+                                                    <div class="d-flex flex-lg-row flex-column mt-4 justify-content-start  align-items-lg-center align-items-start">
+                                                        
+                                                        
+                                                        <div class="item d-flex align-items-center">
+                                                            <div class="icon"><i class="bi bi-palette2"></i></div>
+                                                            <div class="saller-name mx-2">تنوع:</div>
+                                                            <div class="saller-name text-muted">
+                                                                <div class="product-meta-color-items mt-0" style="line-height: 1">
+                                                                {{item.variety.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                                                </td>
+                                                <td class="text-center align-middle"><h6 class="title-font main-color-one-color h2 mb-0">{{item.quantity}}</h6></td>
+                                                <td class="text-center align-middle">
+                                                    <h5 class="title-font main-color-one-color h2 mb-0">{{item.variety.product.get_active_price|intcomma}}<span class="mb-0 text-muted-two font-14 fw-lighter"> تومان</span></h5>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <h5 class="title-font main-color-one-color h2 mb-0">{{item.get_item_price|intcomma}}<span class="mb-0 text-muted-two font-14 fw-lighter"> تومان</span></h5>
+                                                </td>
+                                                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row gy-4">
+                        <div class="col-xl-9">
+                            <div class="content-box">
+                                <div class="container-fluid">
+
+                                    <div class="alert alert-danger rounded-0">
+                                        با توجه به محدود بودن موجودی کالاها، افزودن کالا به سبد خرید به معنی رزرو آن
+                                        نیست. جهت نهایی کردن خرید پیش از اتمام موجودی، همین حالا سبد خود را ثبت و خرید
+                                        را تکمیل کنید.
+                                    </div>
+
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xl-3">
+                            <div class="content-box">
+                                <div class="container-fluid">
+                                    <div class="item">
+                                        <div class="factor">
+                                            <form action="{% url 'shop:apply_coupon' order.id %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label class="label-float fw-bold">کد تخفیف <span class="text-danger">*</span></label>
+                                                <input name="code" class="form-control form-label label-float" id="exampleInputname" placeholder="کد تخفیف خود را وارد نمایید"
+                                                       type="text">
+                                            </div>
+                                            <button type="submit" class="btn-flat dark text-center lg w-100">اعمال کد تخفیف</button>
+                                            <label class="col-md-9 form-label">{{message}}</label>
+                                            </form>
+                                            <div class="form-group mt-4">
+                                                <form method="post" action="{% url 'shop:apply_delivery' order.id %}">
+                                                {% csrf_token %}
+                                                <label class="label-float fw-bold">شیوه ارسال <span class="text-danger">*</span></label>
+            
+                                                <select name="delivery" id="floatingInputOstan" class="form-control form-label label-float">
+                                                    <option label="انتخاب"></option>
+                                                    {% for delivery in delivery_methods %}
+                                                    <option value="{{delivery.id}}">{{delivery.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button type="submit" class="btn-flat dark text-center lg w-100">اعمال شیوه ارسال</button>
+                                                <p>{% if order.delivery_method != None %}انتخاب شیوه ارسال فعلی: {{order.delivery_method.name}} + {{order.delivery_method.price}} تومان {%endif%}</p>
+                                                <p class="text-danger">{{message2}}</p>
+                                                </form>
+                                            </div>
+                                            <div class="d-flex factor-item mb-3 align-items-center justify-content-between">
+                                                <h5 class="mb-0 h6">جمع کل:</h5>
+                                                
+                                                <p class="mb-0 font-17">{{order.get_final_payment|intcomma }} تومان</p>
+                                            </div>
+
+                                            <div class="action mt-3 d-flex align-items-center justify-content-center">
+                                                <a href="{% url 'shop:order_payment' order.id %}"
+                                                   class="btn-flat dark text-center lg w-100">تایید سفارش</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- end content -->
+
+{% endblock %}
+

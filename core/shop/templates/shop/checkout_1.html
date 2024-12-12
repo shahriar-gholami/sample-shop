@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}تسویه حساب{% endblock %}
+
+{% block content %}
+
+
+
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">تسویه حساب</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">فروشگاه</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">تسویه حساب</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                
+                    <div class="col-xl-8 col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">اطلاعات صورت حساب</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">نام <span class="text-red">*</span></label>
+                                            <input name="name" class="form-control" placeholder="نام" type="text">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">نام خانوادگی <span
+                                                    class="text-red">*</span></label>
+                                            <input name="familly_name" class="form-control" placeholder="نام خانوادگی" type="text">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">شماره تماس <span
+                                                    class="text-red">*</span></label>
+                                            <input name="phone_number" class="form-control" placeholder="شماره تماس" type="text">
+                                            
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">آدرس ایمیل <span
+                                                    class="text-red">*</span></label>
+                                            <input name="email" class="form-control" placeholder="ایمیل" type="email">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">استان<span
+                                                    class="text-red">*</span></label>
+                                            <input name="state" class="form-control" placeholder="استان" type="text">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">شهر <span
+                                                    class="text-red">*</span></label>
+                                            <input name="city" class="form-control" placeholder="شهر" type="text">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">کد پستی <span
+                                                    class="text-red">*</span></label>
+                                            <input name="zip_code" class="form-control" placeholder="کد پستی" type="text">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">آدرس کامل<span
+                                                    class="text-red">*</span></label>
+                                            <input name="address" class="form-control" rows="3" placeholder="آدرس کامل" type="text">
+                                            
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"> - {{ name_message }}</p>
+                                    <p class="text-danger"> - {{ familly_name_message }}</p>
+                                    <p class="text-danger"> - {{ phone_number_message }}</p>
+                                    <p class="text-danger"> - {{ email_message }}</p>
+                                    <p class="text-danger"> - {{ state_message }}</p>
+                                    <p class="text-danger"> - {{ city_message }}</p>
+                                    <p class="text-danger"> - {{ city_message }}</p>
+                                    <p class="text-danger"> - {{ city_message }}</p>
+                                    <p class="text-danger"> - {{ zip_code_message }}</p>
+                                    <p class="text-danger"> - {{ address_message }}</p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                    </div>
+                    <div class="col-xl-4 col-md-12">
+                        
+                        <div class="card cart">
+                            <div class="card-header">
+                                <h3 class="card-title">اطلاعات صورت حساب</h3>
+                            </div>
+                            <div class="card-body">
+                                
+                                <ul class="list-group border br-7 mt-5">
+                                    <li class="list-group-item border-0">
+                                        مجموع هزینه کالاها
+                                        <span class="h6 fw-bold mb-0 float-end">{{order.get_raw_cost}} تومان</span>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        میزان تخفیف
+                                        <span class="h6 fw-bold mb-0 float-end">{{order.get_discount}} تومان</span>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        ارسال: {{order.delivery_method.name}}
+                                        <span class="h6 fw-bold mb-0 float-end">{{order.delivery_method.price}} تومان</span>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        مجموع قابل پرداخت:
+                                        <span class="h4 fw-bold mb-0 float-end">{{order.get_final_payment}} تومان</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-footer text-end">
+                                <input class="btn btn-primary" id='click-payment' type='submit' value='پرداخت'>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                </form>
+                <!-- ROW-1 CLOSED -->
+            </div>
+            <!-- CONTAINER CLOSED -->
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

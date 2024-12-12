@@ -1,0 +1,392 @@
+{% extends "base_2.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}جزییات سفارش{% endblock %}
+
+{% block content %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="font-14 text-muted-two">فروشگاه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">جزئیات سفارش</a></li>
+
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<div class="content">
+    <div class="container-fluid">
+
+        <!-- start dashboard menu desktop  -->
+
+        <!-- <div class="content-box d-xl-block d-none">
+            <div class="container-fluid">
+                <div class="panel-menu">
+                    <nav class="navbar navbar-expand justify-content-center">
+                        <ul class="navbar-nav">
+                            <li class="nav-item active"><a href="" class="nav-link">
+                                <i class="bi bi-house-door"></i>پروفایل</a>
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link">
+                                <i class="bi bi-cart-check"></i>سفارش های من <span
+                                    class="badge bg-danger rounded-0">5</span></a>
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link">
+                                <i class="bi bi-pin-map"></i>آدرس های من</a>
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link">
+                                <i class="bi bi-bell"></i>پیام ها و اطلاعیه ها</a>
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link">
+                                <i class="bi bi-chat-dots"></i>نظرات من</a>
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link">
+                                <i class="bi bi-question-circle"></i>درخواست پشتیبانی</a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle nav-item" href="#" role="button" data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <i class="bi bi-heart"></i>محصولات مورد علاقه
+                                    </a>
+                                    <ul class="dropdown-menu flex-column">
+                                        <li class="px-0"><a class="dropdown-item text-start" href="#">مورد علاقه ها</a>
+                                        </li>
+                                        <li class="px-0"><a class="dropdown-item text-start" href="#">آخرین بازدید
+                                            ها</a></li>
+                                        <li class="px-0"><a class="dropdown-item text-start" href="#">لایک شده</a></li>
+                                    </ul>
+                                </div>
+
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link">
+                                <i class="bi bi-gift"></i>کد های تخفیف من</a>
+                            </li>
+                            <li class="nav-item"><a href="" class="nav-link text-danger">
+                                <i class="bi bi-arrow-right-square"></i>خروج از حساب کاربری</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- end dashboard menu desktop  -->
+
+        <!--   start dashboard menu mobile  -->
+
+        <!-- <div class="custom-filter d-xl-none d-block">
+            <button class="btn btn-filter-float border-0 main-color-one-bg shadow-box px-4 rounded-3 position-fixed"
+                    style="z-index: 999;bottom:80px;" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                <i class="bi bi-funnel font-20 fw-bold text-white"></i>
+                <span class="d-block font-14 text-white">منو</span>
+            </button>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasRight"
+                 aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasRightLabel1">منو</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="panel-nav-nav ">
+                        <ul class="rm-item-menu navbar-nav">
+                            <li class="nav-item"><a href="index.html" class="nav-link"><i
+                                    class="bi bi-house me-2 fs-5"></i><span>پروفایل </span> </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-cart-check fs-5 me-2"></i> سفارش
+                                    های من
+                                    <span class="badge bg-danger rounded-0">5</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-pin-map fs-5 me-2"></i> آدرس های
+                                    من
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-bell fs-5 me-2"></i> پیام ها و
+                                    اطلاعیه ها
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-chat-dots fs-5 me-2"></i>نظرات من
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-question-circle fs-5 me-2"></i>درخواست
+                                    پشتیانی
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-heart fs-5 me-2"></i><span>محصولات مورد علاقه</span></a>
+                                <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                <ul class="navbar-nav h-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="">منو شماره 1</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="">منو شماره 2</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="">منو شماره 3</a>
+                                        <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                        <ul class="navbar-nav h-0 bg-ul-f7">
+                                            <li class="nav-item"><a href="" class="nav-link">منو شماره 1</a></li>
+                                            <li class="nav-item"><a href="" class="nav-link">منو شماره 2</a>
+                                            </li>
+                                            <li class="nav-item"><a href="" class="nav-link">منو شماره 3</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link"><i class="bi bi-gift fs-5 me-2"></i>کد های تخفیف
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link text-danger"><i
+                                        class="bi bi-arrow-right-square fs-5 me-2 text-danger"></i>خروج از حساب کاربری
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="panel-meta my-xl-5 mb-5">
+            <div class="row g-3">
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon">
+                                <a href="{% url 'shop:customer_dashboard_orders' %}"><i class="bi bi bi-bag-check"></i></a>
+                            </div>
+                            <div class="panel-meta-title d-flex flex-column ms-3">
+                                <a href="{% url 'shop:customer_dashboard_orders' %}"><h5 class="h5">سفارشات</h5></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon" style="background-color: #c1a37f;">
+                                <a href="{% url 'shop:customer_dashboard_favorites' %}"><i class="bi bi bi-heart-fill"></i></a>
+                            </div>
+                            <div class="panel-meta-title ms-3 d-flex flex-column">
+                                <a href="{% url 'shop:customer_dashboard_favorites' %}"><h5 class="h5">محصولات مورد علاقه</h5></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon bg-info">
+                                <a href="{% url 'shop:customer_dashboard_comments' %}"><i class="bi bi-send"></i></a>
+                            </div>
+                            <div class="panel-meta-title ms-3 d-flex flex-column">
+                                <a href="{% url 'shop:customer_dashboard_comments' %}"><h5 class="h5">نظرات</h5></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="">
+                        <div class="panel-meta-item d-flex align-items-center">
+                            <div class="panel-meta-item-icon bg-secondary">
+                                <a href="{% url 'shop:customer_dashboard_info' %}"><i class="bi bi-info"></i></a>
+                            </div>
+                            <div class="panel-meta-title ms-3 d-flex flex-column">
+                                <a href="{% url 'shop:customer_dashboard_info' %}"><h5 class="h5">اطلاعات حساب</h5></a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--   end dashboard menu mobile   -->
+
+
+        <div class="section-title my-5">
+            <div class="section-title-title">
+                <h2 class="title-font main-color-one-color h1">جزییات <span
+                        class="main-color-three-color">سفارش </span>
+                </h2>
+                <div class="Dottedsquare"></div>
+            </div>
+        </div>
+
+        <!-- start  shoping proccess     -->
+
+        <div class="shoping-proccess slider-parent">
+            <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
+                <div class="step {% if order.status.latest_status == 'پرداخت شده' or order.status.latest_status == 'ارسال شده' %}completed{% endif %}">
+                    <div class="step-icon-wrap">
+                        <div class="step-icon"><i class="bi bi-cart-check fs-2"></i></div>
+                    </div>
+                    <h4 class="step-title">سفارش تایید شده</h4>
+                </div>
+                <div class="step {% if order.status.latest_status == 'پرداخت شده' or order.status.latest_status == 'ارسال شده' %}completed{% endif %}"">
+                    <div class="step-icon-wrap">
+                        <div class="step-icon"><i class="bi bi-gear fs-2"></i></div>
+                    </div>
+                    <h4 class="step-title">پردازش سفارش</h4>
+                </div>
+                <div class="step {% if order.status.latest_status == 'ارسال شده' %}completed{% endif %}"">
+                    <div class="step-icon-wrap">
+                        <div class="step-icon"><i class="bi bi-bus-front fs-2"></i></div>
+                    </div>
+                    <h4 class="step-title">ارسال شده</h4>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- end  shoping proccess    -->
+
+        <!--    start order item    -->
+
+        <div class="orders-item">
+            <div class="ui-boxs">
+                <div class="ui-box">
+                    <div class="ui-box-item slider-parent ui-box-white">
+
+                        <div class="ui-box-item-desc p-0">
+                            <div class="orders">
+                                <div class="order-item">
+                                    <div class="order-item-detail">
+                                        <ul class="nav">
+                                            <li class="nav-item">
+                                                <span class="text-mute">کد پیگیری سفارش</span>
+                                                <strong>{{order.id}}</strong>
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">تاریخ ثبت سفارش</span>
+                                                <strong>{{order.shamsi_created_date}}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="order-item-detail" style="padding-top: 20px;">
+                                        <ul class="nav">
+                                            <li class="nav-item">
+                                                <span class="text-mute">سفارش دهنده</span>
+                                                <strong>{{order.customer.full_name}}</strong>
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">شماره موبایل </span>
+                                                <strong>{{order.customer.phone_number}}</strong>
+                                            </li>
+                                            <li class="nav-item w-100">
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">آدرس</span>
+                                                <strong>{{order.reciever_address}}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="order-item-detail" style="padding-top: 20px;">
+                                        <ul class="nav">
+                                            <li class="nav-item">
+                                                <span class="text-mute">مبلغ نهایی سفارش</span>
+                                                <strong>{{order.get_final_payment}} تومان</strong>
+                                            </li>
+                                            <li class="nav-item">
+                                                <strong>پرداخت اینترنتی</strong>
+                                            </li>
+                                            <li class="nav-item w-100">
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">کد تخفیف</span>
+                                                <strong>{{order.get_discount}} تومان</strong>
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">
+                                                  شیوه ارسال
+                                                </span>
+                                                <strong>{{order.delivery_method.name}}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="order-item-detail" style="padding-top: 20px;">
+                                        <p>اقلام</p>
+                                        <ul class="nav">
+                                            
+                                            
+                                            {% for item in order.items.all %}
+                                                        <li class="nav-item">
+                                                            {{item.variety.product.name}}{% if item.variety.name != 'default variety' %}- {{item.variety.name}}{% endif %}
+                                                            <br>
+                                                            {{item.quantity}} عدد
+                                                        </li>
+                                                        <hr>
+                                                    {% endfor %}
+                                                                                    
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--    end order item    -->
+
+    </div>
+</div>
+
+<!-- end content -->
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
+
+
+
+
+
+

@@ -1,0 +1,514 @@
+{% extends "base_2.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}فروشگاه{% endblock %}
+
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index'  %}" class="font-14 text-muted-two">خانه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">فروشگاه</a></li>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<div class="content">
+    <div class="container-fluid">
+
+        <!-- start filter in mobile -->
+        <div class="custom-filter d-lg-none d-block">
+            <button class="btn btn-filter-float border-0 main-color-two-bg shadow-box px-3 rounded-3 position-fixed"
+                    style="z-index: 999;bottom:80px;" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                <i class="bi bi-funnel font-20 fw-bold text-white"></i>
+                <span class="d-block font-14 text-white">فیلتر</span>
+            </button>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasRight"
+                 aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasRightLabel1">فیلتر ها</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="filter-items position-sticky shadow-none top-0">
+                        <div class="container-fluid">
+                            <!-- <div class="filter-item">
+                                <h5 class="filter-item-title">فیلتر های اعمال شده</h5>
+                                <div class="filter-item-content">
+                                    <a href="" class="btn-flat dark px-2 py-1 me-1 font-14 mb-2">
+                                        <i class="bi bi-x text-danger"></i> دورس جدید</a>
+                                    <a href="" class="btn-flat dark me-1 px-2 py-1 font-14 mb-2">
+                                        <i class="bi bi-x text-danger"></i> شال حریر</a>
+                                </div>
+                            </div> -->
+                            {% if active_filters %}
+                            <div class="filter-item">
+                                <h5 class="filter-item-title">فیلتر های اعمال شده</h5>
+                                <div class="filter-item-content">
+                                    {% for active_filter in active_filters %}
+                                    <a href="{% url 'shop:clear_active_filter'  active_filter.filter.id active_filter.value.id %}" class="btn-flat dark px-2 py-1 me-1 font-14 mb-2">
+                                        <i class="bi bi-x text-danger"></i>{{active_filter.filter.name}} : {{active_filter.value.value}}</a>
+                                        {% endfor %}
+                                    </div>
+                            </div>
+                            {% endif %}
+                            <div class="filter-item w-100">
+                                <form method="post" action="{% url 'shop:product_list'  %}">
+                                {% csrf_token %}
+                                <h5 class="filter-item-title">دسته بندی ها</h5>
+                                <div class="filter-item-content w-100">
+                                    <div class="align-items-center justify-content-between flex-wrap mb-3 w-100">      
+                                        <div class="col-md-12">
+                                            <div class="comment-item w-100" for="floatingInputOstan">
+                                                <label class="label-float fw-bold">دسته‌ها <span class="text-danger">*</span></label>
+                                                <select name="category" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                                    {% if main_selected_category != None %}
+                                                        <option value= "{{ main_selected_category.id }}" class="text-white">{{ main_selected_category.name }}</option>
+                                                    {% else %}
+                                                        <option value="0" class="text-white">انتخاب</option>
+                                                    {% endif %}
+                                                    {% for category in categories %}
+                                                        <li><option value="{{ category.id }}">{{ category.name }}</option></li>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="filter-item-title">برندها</h5>
+                                <div class="filter-item-content">
+                                    <div class="align-items-center justify-content-between flex-wrap mb-3">
+                                        
+                                        <div class="col-md-12">
+                                            <div class="comment-item" for="floatingInputOstan">
+                                                <label class="label-float fw-bold">برندها <span class="text-danger">*</span></label>
+            
+                                                <select name="brand" id="floatingInputOstan" class="form-select">
+                                                    {% if main_selected_brand != None %}
+                                                        <option value= "{{ main_selected_brand.id }}" class="text-white">{{ main_selected_brand.name }}</option>
+                                                    {% else %}
+                                                        <option value="0" class="text-white">انتخاب</option>
+                                                    {% endif %}    
+                                                    {% for brand in brands %}
+                                                        <option value="{{brand.id}}">{{brand.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="filter-item-title">بازه قیمتی</h5>
+                                <div class="filter-item-content">
+                                    <div class="align-items-center justify-content-between flex-wrap mb-3">
+                                        
+                                        <div class="col-md-12">
+                                            <div class="comment-item" for="floatingInputOstan">
+                                                <label class="label-float fw-bold">بازه قیمتی <span class="text-danger">*</span></label>
+            
+                                                <select name="price_range" id="floatingInputOstan" class="form-select">
+                                                    {% if main_selected_price_range != None %}
+                                                        <option value= "{{ main_selected_price_range.id }}" class="text-white">{{ main_selected_price_range.min_value|intcomma }} تا {{ main_selected_price_range.max_value|intcomma }} تومان</option>
+                                                    {% else %}
+                                                        <option value="0" class="text-white">انتخاب</option>
+                                                    {% endif %}
+                                                    {% for price_range in price_ranges %}
+                                                        <li>
+                                                            <option value="{{ price_range.id }}">{{ price_range }}</option>                                       
+                                                        </li>
+                                                    {% endfor %}
+                                                </select>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>     
+                                <button type="submit" class="btn-outline-site">اعمال فیلتر</button>
+                                </form>
+                            </div>
+                            {% if category %}
+                            {% for filter in filters %}
+                            {% for form in my_forms %}
+                            {% if filter.category == category and form.name == filter.name %}
+                            <div class="filter-item w-100">
+                                <div class="filter-item">
+                                    <h5 class="filter-item-title">{{filter.name}}</h5>
+                                    <div class="filter-item-content">
+                                        
+                                        <form method="post" action="{% url 'shop:feature_filter'  category.slug form.name %}">
+                                            {% csrf_token %}
+                                            {{ form.as_p }}
+                                            <button type="submit" class="btn-outline-site mt-2">اعمال فیلتر</button>
+                                        </form>
+                                    </div>
+                                </div>     
+                                
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- end filter mobile -->
+
+        <div class="row gy-3">
+            <div class="col-lg-3 d-lg-block d-none">
+                <div class="filter-items position-sticky top-0">
+                    <div class="container-fluid">
+                        <!-- <div class="filter-item">
+                            <h5 class="filter-item-title">فیلتر های اعمال شده</h5>
+                            <div class="filter-item-content">
+                                <a href="" class="btn-flat dark px-2 py-1 me-1 font-14 mb-2">
+                                    <i class="bi bi-x text-danger"></i> دورس جدید</a>
+                                <a href="" class="btn-flat dark me-1 px-2 py-1 font-14 mb-2">
+                                    <i class="bi bi-x text-danger"></i> شال حریر</a>
+                            </div>
+                        </div> -->
+                        {% if active_filters %}
+                        <div class="filter-item">
+                            <h5 class="filter-item-title">فیلتر های اعمال شده</h5>
+                            <div class="filter-item-content">
+                                {% for active_filter in active_filters %}
+                                <a href="{% url 'shop:clear_active_filter'  active_filter.filter.id active_filter.value.id %}" class="btn-flat dark px-2 py-1 me-1 font-14 mb-2">
+                                    <i class="bi bi-x text-danger"></i>{{active_filter.filter.name}} : {{active_filter.value.value}}</a>
+                                    {% endfor %}
+                                </div>
+                        </div>
+                        {% endif %}
+                        <div class="filter-item">
+                            <form method="post" action="{% url 'shop:product_list'  %}">
+                            {% csrf_token %}
+                            <h5 class="filter-item-title">دسته بندی ها</h5>
+                                <div class="filter-item-content w-100">
+                                    <div class="align-items-center justify-content-between flex-wrap mb-3 w-100">      
+                                        <div class="col-md-12">
+                                            <div class="comment-item w-100" for="floatingInputOstan">
+                                                <label class="label-float fw-bold">دسته‌ها <span class="text-danger">*</span></label>
+                                                <select name="category" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                                    {% if main_selected_category != None %}
+                                                        <option value= "{{ main_selected_category.id }}" class="text-white">{{ main_selected_category.name }}</option>
+                                                    {% else %}
+                                                        <option value="0" class="text-white">انتخاب</option>
+                                                    {% endif %}
+                                                    {% for category in categories %}
+                                                        <li><option value="{{ category.id }}">{{ category.name }}</option></li>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="filter-item-title">برندها</h5>
+                                <div class="filter-item-content">
+                                    <div class="align-items-center justify-content-between flex-wrap mb-3">
+                                        
+                                        <div class="col-md-12">
+                                            <div class="comment-item" for="floatingInputOstan">
+                                                <label class="label-float fw-bold">برندها <span class="text-danger">*</span></label>
+            
+                                                <select name="brand" id="floatingInputOstan" class="form-select">
+                                                    {% if main_selected_brand != None %}
+                                                        <option value= "{{ main_selected_brand.id }}" class="text-white">{{ main_selected_brand.name }}</option>
+                                                    {% else %}
+                                                        <option value="0" class="text-white">انتخاب</option>
+                                                    {% endif %}    
+                                                    {% for brand in brands %}
+                                                        <option value="{{brand.id}}">{{brand.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="filter-item-title">بازه قیمتی</h5>
+                                <div class="filter-item-content">
+                                    <div class="align-items-center justify-content-between flex-wrap mb-3">
+                                        
+                                        <div class="col-md-12">
+                                            <div class="comment-item" for="floatingInputOstan">
+                                                <label class="label-float fw-bold">بازه قیمتی <span class="text-danger">*</span></label>
+            
+                                                <select name="price_range" id="floatingInputOstan" class="form-select">
+                                                    {% if main_selected_price_range != None %}
+                                                        <option value= "{{ main_selected_price_range.id }}" class="text-white">{{ main_selected_price_range.min_value|intcomma }} تا {{ main_selected_price_range.max_value|intcomma }} تومان</option>
+                                                    {% else %}
+                                                        <option value="0" class="text-white">انتخاب</option>
+                                                    {% endif %}
+                                                    {% for price_range in price_ranges %}
+                                                        <li>
+                                                            <option value="{{ price_range.id }}">{{ price_range }}</option>                                       
+                                                        </li>
+                                                    {% endfor %}
+                                                </select>
+            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>      
+                            <button type="submit" class="btn-outline-site">اعمال فیلتر</button>
+                            </form>
+                        </div>
+                        {% if category %}
+                            {% for filter in filters %}
+                            {% for form in my_forms %}
+                            {% if filter.category == category and form.name == filter.name %}
+                            <div class="filter-item w-100">
+                                <div class="filter-item">
+                                    <h5 class="filter-item-title">{{filter.name}}</h5>
+                                    <div class="filter-item-content">
+                                        
+                                        <form method="post" action="{% url 'shop:feature_filter'  category.slug form.name %}">
+                                            {% csrf_token %}
+                                            {{ form.as_p }}
+                                            <button type="submit" class="btn-outline-site mt-2">اعمال فیلتر</button>
+                                        </form>
+                                    </div>
+                                </div>     
+                                
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <!-- <div class="category-sort mb-3">
+                    <div class="content-box">
+                        <div class="container-fluid">
+                            <div class="box_filter d-lg-block d-none">
+                                <ul class="list-inline text-start mb-0">
+                                    <li class="list-inline-item title-font ms-0">مرتب سازی بر اساس :</li>
+                                    <li class="list-inline-item"><a href="#">گران ترین</a></li>
+                                    <li class="list-inline-item"><a class="active_custom" href="#">ارزان ترین</a>
+                                    </li>
+                                    <li class="list-inline-item"><a href="#">پروفروش ترین</a></li>
+                                    <li class="list-inline-item"><a href="#">داغ ترین</a></li>
+                                    <li class="list-inline-item"><a href="#">محبوب ترین</a></li>
+                                </ul>
+                            </div>
+                            <div class="d-lg-none d-block">
+                                <form action="">
+                                    <h5 class="mb-3">مرتب سازی بر اساس</h5>
+                                    <select name="" id="" class="form-select">
+                                        <option value="">گران ترین</option>
+                                        <option value="">ارزان ترین</option>
+                                        <option value="">پرفروش ترین</option>
+                                        <option value="">داغ ترین</option>
+                                        <option value="">محبوب ترین</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="category-items">
+                    <div class="row g-3">
+                        {% for product in products %}
+                        <div class="col-lg-4">
+                            <div class="product-box">
+                                <div>
+                                    <a href="{% url 'shop:product_detail'  product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}" loading="lazy" alt="{{product.name}}" ></a>
+                                    
+                                    <!-- <div class="color-box">
+                                        <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                            <span class="color hint--top" style="background-color: #487eb0;"></span>
+                                        </div>
+                                        <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                            <span class="color hint--top" style="background-color: #353b48;"></span>
+                                        </div>
+                                        <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                            <span class="color hint--top" style="background-color: #7f8fa6;"></span>
+                                        </div>
+                                    </div> -->
+                                    <div class="product-box-price-discount">
+                                        {% if product.off_active == True %}<span class="d-block badge main-color-three-bg text-white font-14 rounded-0">حراج</span>{% endif %}
+                                    </div>
+                                    <span class="product-box-image-overlay"></span>
+                                </div>
+                                <div class="product-box-title">
+                                    <a href="{% url 'shop:product_detail'  product.slug %}">
+                                        <h5 class="text-overflow-2">{{product.name}}</h5>
+                                    </a>
+                                </div>
+                                <!-- <div class="product-box-size pro-var-responsive">
+                                    <ul>
+                                        <li><a class="active" href="">40</a></li>
+                                        <li><a href="">41</a></li>
+                                        <li><a href="">42</a></li>
+                                        <li><a href="">43</a></li>
+                                    </ul>
+                                </div> -->
+                                <div class="product-box-price">
+
+                                    {% if product.off_active == True %}
+                                    <div class="product-box-offer-discount">
+                                        <del>{{product.price|intcomma}} </del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-one-color h2 mb-0">{{product.sales_price|intcomma}} <span
+                                                class="mb-0 text-muted-two">تومان</span></h5>
+
+                                    </div>
+                                    {% else %}
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-one-color h2 mb-0">{{product.price|intcomma}} <span
+                                                class="mb-0 text-muted-two">تومان</span></h5>
+
+                                    </div>
+                                    {% endif %}
+                                    <!-- <div class="product-box-offer-discount">
+                                        <del>2,000,000</del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-one-color h2 mb-0">799,000 <span
+                                                class="mb-0 text-muted-two">تومان</span></h5>
+
+                                    </div> -->
+                                </div>
+                                <div class="product-box-action">
+                                    <a class="btn rounded-0 main-color-three-bg border-0 w-100" href="{% url 'shop:product_detail'  product.slug %}">جزئیات محصول</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="col-12">
+                            <div class="my-paginate my-4">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination flex-wrap justify-content-center">
+                                        {% if products.has_previous %}
+                                        
+                                        <li class="page-item page-prev">
+                                            <a class="page-link" href="?page=1">اولین</a>
+                                        </li>
+                                        <li class="page-item page-prev">
+                                            <a class="page-link" href="?page={{ products.previous_page_number }}" tabindex="-1">قبلی</a>
+                                        </li>
+                                        {% endif %}
+                                        <li class="page-item active"><a class="page-link"
+                                                                        href="javascript:void(0)">{{ products.number }}</a></li>
+                                        
+                                        {% if products.has_next %}
+                                        <li class="page-item page-next">
+                                            <a class="page-link" href="?page={{ products.next_page_number }}">بعدی</a>
+                                        </li>
+                                        <li class="page-item page-next">
+                                            <a class="page-link" href="?page={{ products.paginator.num_pages }}">آخرین</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-12">
+                <div class="content-box" >
+                    <div class="container-fluid">
+                        <div class="product-desc-content">
+                            <input class="read-more-state" id="readMore3" type="checkbox">
+                            <div class="read-more-wrap">
+                                <h6 class="font-22 mb-2 title-font title-line-bottom">دسته بندی پوشاک</h6>
+
+                                <p>
+                                    اگر به دنبال تهیه یک هدفون بی‌سیم گیمینگ هستید، هدفون
+                                    بلوتوثی مدل K55
+                                    به‌عنوان
+                                    یکی از جدیدترین گزینه‌های موجود در بازار ارزش بررسی را
+                                    دارد. این مدل با
+                                    ابعادی
+                                    کوچک تولید شده است. ابعاد و وزن کم آن، جابه‌جایی این
+                                    وسیله و استفاده
+                                    طولانی‌مدت
+                                    از آن را آسان می‌کند و باعث خستگی گوش‌ها نخواهد شد. این
+                                    مدل برای اتصال
+                                    به
+                                    دستگاه‌ به بلوتوث نسخه 5.0 مجهز شده است و در مدت زمان
+                                    اندکی، اتصال با
+                                    گوشی
+                                    موبایل اندروید یا ios شما برقرار خواهد شد. هدفون بی سیم
+                                    K55 دارای یک
+                                    میکروفون با
+                                    کیفیت است و ...
+                                </p>
+
+                                <div class="read-more-target">
+                                    <p>
+                                        و این ویژگی، آن را برای مکالمه مناسب می‌سازد. از ویژگی‌های
+                                        اصلی این محصول محفظه نگهدارنده یا همان کیس آن است. این کیس
+                                        قابلیت شارژ هدفون را دارد. برای شارژ آن کافی است از درگاه
+                                        USB-C تعبیه شده بر روی کیس و کابل شارژ درون بسته‌بندی
+                                        استفاده کنید. گفتنی است باتری 400 میلی‌آمپر ساعتی این هدفون
+                                        در حدود 4-6 ساعت مکالمه و 4-6 ساعت پخش موسیقی را پاسخ‌گو
+                                        خواهد بود.
+                                    </p>
+                                </div>
+                            </div>
+                            <label class="read-more-trigger" for="readMore3"></label>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<!-- end content -->
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+{% endblock %}

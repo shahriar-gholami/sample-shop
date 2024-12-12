@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{% if product.meta_description == '' %}{{product.get_default_meta_description|safe}}{% else %}{{ product.meta_description|safe }}{% endif %}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{% if product.meta_keywords == '' %}{{product.get_default_meta_og_title}}{% else %}{{product.meta_keywords}}{% endif %}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{% if product.meta_og_title == '' %}{{product.get_default_meta_og_title}}{% else %}{{product.meta_og_title}}{% endif %}">
+<meta property="og:description" content="{% if product.meta_og_description == '' %}{{product.get_default_meta_description|safe}}{% else %}{{product.meta_og_description|safe}}{% endif %}">
+<meta property="og:image" content="{{product.get_thumbnail}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{% if product.meta_tc_title == '' %}{{product.get_default_meta_tc_title}}{% else %}{{product.meta_tc_title}}{% endif %}">
+<meta name="twitter:description" content="{% if product.meta_tc_description == '' %}{{product.get_default_meta_tc_description|safe}}{% else %}{{product.meta_tc_description|safe}}{% endif %}">
+<meta name="twitter:image" content="{{product.get_thumbnail}}">
+{% endblock %}
+
+{% block title %}{{product.name}}{% endblock %}
+
+{% block content %}
+
+<!-- product_detail.html -->
+
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">جزئیات محصول</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">فروشگاه</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">{{product.name}}</li>
+                        
+                            
+                        
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row row-sm">
+                                <div class="col-xl-4 col-lg-12 col-md-12">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="carousel slide" data-bs-ride="carousel" id="carousel-controls">
+                                                <div class="carousel-inner">
+                                                    <div class="carousel-item active">
+                                                        
+                                                        <img alt="" class="d-block w-100 br-5"
+                                                             data-bs-holder-rendered="true" src="{{product.get_main_image}}">
+                                                             
+                                                    </div>
+                                                    {% if product.get_gallery != None %}
+                                                        {% for image in product.get_gallery %}
+                                                        {% if product.get_main_image != image.image.url %}
+                                                        <div class="carousel-item">
+                                                            <img alt="" class="d-block w-100 br-5"
+                                                                data-bs-holder-rendered="true" src="{{image.image.url}}">
+                                                        </div>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                    <div class="carousel-item">
+                                                        <img alt="" class="d-block w-100 br-5"
+                                                            data-bs-holder-rendered="true" src="https://marketplace-bucket.storage.iran.liara.space/shop/default-product-image.png">
+                                                    </div>
+                                                    {% endif %}
+                                                    
+                                                </div>
+                                                <a class="carousel-control-prev" data-bs-slide="prev" href="#carousel-controls"
+                                                   role="button">
+                                                    <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                                                    <span class="sr-only">قبلی</span>
+                                                </a>
+                                                <a class="carousel-control-next" data-bs-slide="next" href="#carousel-controls"
+                                                   role="button">
+                                                    <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                                                    <span class="sr-only">بعدی</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="details col-xl-4 col-lg-12 col-md-12 mt-4 mt-xl-0">
+                                    <div class="mt-2 mb-4">
+                                        <h3 class="mb-3 fw-bold">{{product.name}}</h3>
+                                        
+                                        <!-- <p class="text-muted float-start me-3">
+                                            <span class="fa fa-star text-warning"></span>
+                                            <span class="fa fa-star text-warning"></span>
+                                            <span class="fa fa-star text-warning"></span>
+                                            <span class="fa fa-star-half-o text-warning"></span>
+                                            <span class="fa fa-star-o text-warning"></span>
+                                            <span><a class="fa fa-heart-o " href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"></a></span>
+                                        </p>
+                                        <p class="text-muted mb-4">( 40 نظر مشتری) </p> -->
+                                        <h4 class="mt-4 fw-bold fs-18"><b> ویژگی‌ها</b></h4>
+                                            {% for line in product.get_brief_features %}    
+                                            <p class="nav item"><strong> {{line|safe}}</strong></p>
+                                            {% endfor %}
+                                        <a class="btn btn-outline-danger mt-4" href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"><i
+                                            class="fe fe-heart me-2"></i>افزودن به علاقمندی‌ها</a>
+                                    </div>
+                                    <div class="tags">
+                                        <h5>برچسب‌ها</h5>
+                                        {% for tag in product.tags.all %}
+                                        <a class="tag" href="{% url 'shop:filter_tag_products'  tag.slug %}">{{ tag.name }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="details col-xl-4 col-lg-12 col-md-12 mt-4 mt-xl-0 bg-primary-transparent p-5">
+                                    <div class="mt-2 mb-4">
+                                        
+                                        {% if product.off_active == True %}
+                                        <div class="price fs-23 fw-bold">قیمت: {{product.sales_price|intcomma}} تومان<span class="ms-4"><del>{{ product.price|intcomma }}</del></span>
+                                        </div>
+                                        {% else %}
+                                        <div class="price fs-23 fw-bold">قیمت: {{ product.price|intcomma }} تومان<span></span>
+                                        </div>
+                                        {% endif %}
+                                        <hr>
+                                        <form method="post" action="{% url 'shop:add_to_cart'  product.id %}">
+                                        {% csrf_token %}
+                                        <div class=" mt-4 mb-5"><span
+                                            class="fw-bold me-2">وضعیت موجودی :</span><span
+                                            class="fw-bold text-success">موجود</span></div>
+                                            {% if product.get_product_varieties.count > 1 %}
+                                            <div class="row row-sm">
+                                                <div class="col">
+                                                    <div class="mb-2 me-2 sizes">
+                                                        <span class="fw-bold me-4">تنوع:</span>
+                                                        <div class="row mb-4">
+                                                            <div class="col-md-4 mt-3">
+                                                                <select name="size" class="form-control form-select select2" id="select-beast">
+                                                                {% for variety in varieties %}
+                                                                {% if variety.name != 'default variety' %}
+                                                                    <li>
+                                                                        <option value="{{ variety.id }}">{{ variety.name }}</option>                                       
+                                                                    </li>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        <div class="row row-sm">
+                                            <div class="col">
+                                                <div class="mb-2 me-2 sizes">
+                                                    <span class="fw-bold me-4">تعداد:</span>
+                                                    <div class="input-group input-indec input-indec1 w-30 w-sm-60 mt-3">
+                                                        
+                                                            <span class="input-group-btn">
+                                                                <button class="minus btn btn-white btn-number bg-white btn-icon br-7"
+                                                                        type="button">
+                                                                    <i class="mdi mdi-minus fw-bold fs-16"></i>
+                                                                </button>
+                                                            </span>
+                                                        <input class="form-control text-center qty bg-primary-transparent" name="count"
+                                                               type="text" value="1">
+                                                        <span class="input-group-btn">
+                                                                <button class="quantity-right-plus btn btn-white btn-number btn-icon br-7 add"
+                                                                        type="button">
+                                                                    <i class="mdi mdi-plus fw-bold fs-16"></i>
+                                                                </button>
+                                                            </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <button type="submit" class="col-md-6 mt-3 login100-form-btn btn-primary">افزودن به سبد خرید</button> 
+                                        <div>
+                                            <p class="text-danger">{{message}}</p>
+                                        </div>
+                                        </form>   
+                                                <!-- <div class="row mt-4">
+                                                    <div class="col-xl-4">
+                                                        <div class="customer-services">
+                                                            <div class="icon-content">
+                                                                <span><i class="bi bi-truck"></i></span>
+                                                                <p> شیوه‌های ارسال آسان </p> 
+                                                            </div>
+                                                            <p>{{services.delivery}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-4">
+                                                        <div class="customer-services">
+                                                            <div class="icon-content">
+                                                                <span><i class="bi bi-arrow-repeat"></i></span>
+                                                                <p> تضمین اصالت و سلامت </p> 
+                                                            </div>
+                                                            <p>{{services.originality}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-4">
+                                                        <div class="customer-services">
+                                                            <div class="icon-content">
+                                                                <span><i class="bi bi-credit-card-2-front"></i></span>
+                                                                <p> پرداخت آسان و مطمئن </p> 
+                                                            </div>
+                                                            <p>{{services.payments}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-md-12">
+                    <div class="card productdesc">
+                        <div class="card-body">
+                            <div class="panel panel-primary">
+                                <div class=" tab-menu-heading">
+                                    <div class="tabs-menu1">
+                                        <!-- Tabs -->
+                                        <ul class="nav panel-tabs">
+                                            <li><a class="active" data-bs-toggle="tab" href="#tab5">مشخصات</a>
+                                            </li>
+                                            <li><a data-bs-toggle="tab" href="#tab6">ویژگی‌ها</a></li>
+                                            <li><a data-bs-toggle="tab" href="#tab7">نظرات مشتریان</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="panel-body tabs-menu-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active text-justify" id="tab5">
+                                            <h4 class="mb-5 mt-3 fw-bold">توضیحات :</h4>
+                                            <p class="text ">{{product.description|safe}}</p>
+                                            
+                                            
+                                        </div>
+                                        <div class="tab-pane" id="tab6">
+                                            <h4 class="mb-5 mt-3 fw-bold">ویژگی‌ها :</h4>
+                                            
+                                                <p class="text text-justify">{{product.get_features_table|safe}}</p>
+                                            
+                                        </div>
+                                        <div class="tab-pane" id="tab7">
+                                            <h4 class="mb-3 mt-3 fw-bold">نظرات :</h4>
+                                            <div class="card-body">
+                                                {% for comment in comments %}
+                                                {% if comment.approved == True %}
+                                                <div class="media mb-5">
+                                                    <div class="me-3">
+                                                        <a href="javascript:void(0)"> <img
+                                                                alt="64x64" class="media-object rounded-circle thumb-sm"
+                                                                src="https://marketplace-bucket.storage.iran.liara.space/Default_pfp.svg.png"> </a>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h5 class="mt-0 mb-0">{{comment.sender.full_name}}</h5>
+                                                        <p class="font-13 text-muted">{{comment.body}}</p>
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-md-12">
+                    
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="card">
+                        
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">افزودن نظر</div>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'shop:comment_create'  product.id %}" class="form-horizontal  m-t-20">
+                            {% csrf_token %}
+                                
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <input name="email" class="form-control" placeholder="ایمیل*" required=""
+                                               type="email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <textarea name="body" class="form-control" rows="5">نظر شما*</textarea>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <button type="submit" class="btn btn-primary btn-rounded  waves-effect waves-light"
+                                       href="javascript:void(0)">ثبت</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                
+                {% for product in product.get_related_products %}
+                <div class="col-md-6 col-xl-2 col-sm-6">
+                    <div class="card">
+                        <div class="product-grid6">
+                            <div class="product-image6 p-2">
+                                <ul class="icons">
+                                    <li>
+                                        <a class="btn btn-primary" href="{% url 'shop:product_detail'  product.slug %}">
+                                            <i class="fe fe-eye"> </i> </a>
+                                    </li>
+                                    
+                                    <li><a class="btn btn-danger" href="{% url 'shop:add_to_favorites' product_id=product.id ref='products' %}"><i
+                                            class="fe fe-heart"></i></a></li>
+                                </ul>
+                                <a href="{% url 'shop:product_detail'  product.slug %}">
+                                    <img alt="img"
+                                         class="img-fluid br-7 w-100" src="{{product.get_main_image}}">
+                                </a>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="product-content text-center">
+                                    <h1 class="title fw-bold fs-16"><a
+                                            href="{% url 'shop:product_detail'  product.slug %}">{{ product.name }}</a>
+                                    </h1>
+                                    <div class="mb-2 text-warning">
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star text-warning"></i>
+                                        <i class="fa fa-star-half-o text-warning"></i>
+                                        <i class="fa fa-star-o text-warning"></i>
+                                    </div>
+                                    <div class="price">
+                                        
+                                        {% if product.off_active == True %}
+                                                    <div class="price">{{product.sales_price|intcomma}} تومان
+                                                         <p class="text-danger">
+                                                            <del>{{ product.price|intcomma }} تومان</del>
+                                                        </p>
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="price">{{ product.price|intcomma }} تومان
+                                                        <p class="text-white">{{ product.price|intcomma }} تومان</p>
+                                                    </div>
+                                                    {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a class="btn btn-primary mb-1" href="{% url 'shop:product_detail'  product.slug %}"><i
+                                        class="fe fe-shopping-cart mx-2"></i>جزییات محصول</a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                        
+            </div>
+            <!-- ROW-1 CLOSED -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/js/handlecounter.js' %}"></script>
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- TypeHead js -->
+<script src="{% static 'assets/plugins/bootstrap5-typehead/autocomplete.js' %}"></script>
+{% endblock %}

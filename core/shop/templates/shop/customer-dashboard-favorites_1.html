@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}حساب کاربری{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">لیست علاقمندی‌ها</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">فروشگاه</a></li>
+                        <li aria-current="page" class="{% url 'shop:customer_dashboard' %}">حساب کاربری</li>
+                        <li aria-current="page" class="{% url 'shop:customer_dashboard_favorites' %}">علاقمندی‌ها</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- Row -->
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="position-lg-relative w-100" id="scroll-stickybar">
+                        <div class="card">
+                            <div class="list-group list-group-transparent mb-0 mail-inbox pb-3">
+                                <div class="mt-4 mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:index' %}">{{customer.full_name}} عزیز خوش‌آمدید</a>
+                                </div>
+                                {% if request.user.phone_number == store.get_owner_phone_number %}
+                                    <div class="mx-4 mb-4 text-center">
+                                    <a class="btn btn-primary btn-lg d-grid" href="{% url 'shop:owner_dashboard' %}" class="nav-link">داشبورد فروشندگی</a>
+                                    </div>
+                                {% endif %}
+                                <a class="list-group-item d-flex align-items-center  mx-4"
+                                   href="{% url 'shop:customer_dashboard' %}">
+                                    <span class="icons"><i class="fa fa-bars"></i></span>داشبورد
+                                </a>
+                                <a class="list-group-item d-flex align-items-center  mx-4"
+                                   href="{% url 'shop:customer_dashboard_orders' %}">
+                                    <span class="icons"><i class="fa fa-shopping-bag"></i></span>سفارشات                                
+                                </a>
+                                <a class="list-group-item d-flex align-items-center active mx-4"
+                                   href="{% url 'shop:customer_dashboard_favorites' %}">
+                                    <span class="icons"><i class="fa fa-heart-o"></i></span> لیست علاقمندی‌ها 
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:customer_dashboard_info' %}">
+                                    <span class="icons"><i class="fa fa-user-o"></i></span> اطلاعات کاربری
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="{% url 'shop:customer_dashboard_comments' %}">
+                                    <span class="icons"><i class="fa fa-comment-o"></i></span> دیدگاه‌ها
+                                </a>
+                                <!-- <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="javascript:void(0)">
+                                    <span class="icons"><i class="fa fa-envelope-o"></i></span> پیام‌ها
+                                </a>
+                                <a class="list-group-item d-flex align-items-center mx-4"
+                                   href="javascript:void(0)">
+                                    <span class="icons"><i class="fa fa-power-off"></i></span> خروج
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9">
+                    <div class="row">
+                        {% for product in products %}
+                        <div class="col-md-6 col-xl-3 col-sm-6">
+                            <div class="card">
+                                <div class="product-grid6">
+                                    <div class="product-image6 p-2">
+                                        <ul class="icons">
+                                            <li>
+                                                <a class="btn btn-primary" href="{% url 'shop:product_detail' product.slug %}">
+                                                    <i class="fe fe-eye"> </i> </a>
+                                            </li>
+                                            
+                                            <li><a class="btn btn-danger" href="{% url 'shop:add_to_favorites' product_id=product.id ref='fav_list' %}"><i
+                                                    class="fe fe-x"></i></a></li>
+                                        </ul>
+                                        <a href="{% url to_products product.slug %}">
+                                            <img alt="img"
+                                                 class="img-fluid br-7 w-100" src="{{product.get_main_image}}">
+                                        </a>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div class="product-content text-center">
+                                            <h1 class="title fw-bold fs-16"><a
+                                                    href="{% url to_products product.slug %}">{{ product.name }}</a>
+                                            </h1>
+                                            <div class="mb-2 text-warning">
+                                                <i class="fa fa-star text-warning"></i>
+                                                <i class="fa fa-star text-warning"></i>
+                                                <i class="fa fa-star text-warning"></i>
+                                                <i class="fa fa-star-half-o text-warning"></i>
+                                                <i class="fa fa-star-o text-warning"></i>
+                                            </div>
+                                            {% if product.off_active == True %}
+                                                    <div class="price">{{product.sales_price|intcomma}} تومان<span class="ms-4">{{ product.price|intcomma }}</span>
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="price">{{ product.price|intcomma }} تومان<span></span>
+                                                    </div>
+                                                    {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <a class="btn btn-primary mb-1" href="{% url 'shop:product_detail' product.slug %}"><i
+                                                class="fe fe-shopping-cart mx-2"></i>جزییات محصول</a>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                    </div>
+
+                </div>
+            </div>
+            <!-- ROW-1 CLOSED -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+
+    </div>
+</div>
+<!--app-content closed-->
+    
+{% endblock %}

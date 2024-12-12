@@ -1,0 +1,221 @@
+{% extends "base_2.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+
+{% block title %}وبلاگ{% endblock %}
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="font-14 text-muted-two">خانه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">وبلاگ</a></li>
+
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<div class="content">
+    <div class="container-fluid">
+
+        <!-- <div class="blog-menu mb-5 d-lg-block d-none">
+            <div class="content-box py-2">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <div class="blog-menu-items">
+                                <nav class="navbar navbar-expand">
+                                    <ul class="navbar-nav">
+                                        {% for category in blog_categories %}
+                                        <li class="nav-item"><a href="" class="nav-link border-animate fromRight">{{ category.name }}</a></li>
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="header-search-no-float">
+                                <form action="">
+                                    <input class="header-search-txt" placeholder="جستجو در وبلاگ" type="text">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="blog-menu-responsive d-lg-none d-block mb-5">
+            <div class="content-box">
+                <div class="container-fluid">
+
+                    <div class="blog-menu-responsive-menu responsive-menu d-flex flex-column">
+
+                        <div class="header-search-no-float w-100 mb-4">
+                            <form action="">
+                                <input class="header-search-txt" placeholder="جستجو در وبلاگ" type="text">
+                            </form>
+                        </div>
+
+                        <ul class="rm-item-menu navbar-nav">
+                            <li class="nav-item bg-ul-f7"><a href="index.html" class="nav-link">ویدیو معرفی محصول</a>
+                            </li>
+                            <li class="nav-item bg-ul-f7">
+                                <a href="" class="nav-link">آموزش</a>
+                            </li>
+                            <li class="nav-item bg-ul-f7">
+                                <a href="" class="nav-link">خلاقیت</a>
+                                <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                <ul class="navbar-nav h-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="">منو شماره 1</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="">منو شماره 2</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="">منو شماره 3</a>
+                                        <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
+                                        <ul class="navbar-nav h-0 bg-ul-f7">
+                                            <li class="nav-item"><a href="" class="nav-link">منو شماره 1</a></li>
+                                            <li class="nav-item"><a href="" class="nav-link">منو شماره 2</a>
+                                            </li>
+                                            <li class="nav-item"><a href="" class="nav-link">منو شماره 3</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item bg-ul-f7">
+                                <a href="" class="nav-link">تکنولوژی</a>
+                            </li>
+                            <li class="nav-item bg-ul-f7">
+                                <a href="" class="nav-link">کریپتو گرافی</a>
+                            </li>
+                            <li class="nav-item bg-ul-f7">
+                                <a href="" class="nav-link">رمز نگاری</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="blog-items">
+
+            <div class="section-title-title mb-4 ">
+                <h2 class="title-font main-color-one-color h1">آخرین مطالب <span class="main-color-three-color">وبلاگ</span>
+                </h2>
+                <div class="Dottedsquare"></div>
+            </div>
+
+            <div class="row g-4 mt-1">
+
+                {% for post in posts %}
+                <div class="col-lg-4">
+                    <div class="blog-item">
+                        <div class="blog-item-parent">
+                            <div class="blog-item-image">
+                                <a href="{% url 'shop:post_detail'  post.slug %}"><img src="{{post.get_thumbnail}}" alt=""></a>
+                            </div>
+                            <div class="blog-item-desc">
+                                <div class="blog-item-desc-parent">
+                                    <div class="blog-item-title">
+                                        <a href="{% url 'shop:post_detail'  post.slug %}"><h5 class="title-font text-overflow-2">{{post.title}}</h5></a>
+                                        <p class="mb-0 text-overflow-2">
+                                            {{ post.body|truncatewords:20 }}
+                                        </p>
+                                    </div>
+                                    <div class="blog-item-link">
+                                        <a href="{% url 'shop:post_detail'  post.slug %}">
+                                            <span>خواندن ادامه</span>
+                                            <i class="bi bi-arrow-left"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="blog-item-date">
+                                    <div class="blog-item-date-date">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <span>{{post.shamsi_created_date}}</span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+                
+                
+                <!-- <div class="col-12">
+                    <div class="my-paginate my-4">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination flex-wrap justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link rounded-3" href="#">قبلی</a>
+                                </li>
+                                <li class="page-item"><a class="page-link rounded-3" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link rounded-3" href="#">2</a></li>
+                                <li class="page-item active"><a class="page-link rounded-3" href="#">3</a>
+                                </li>
+                                <li class="page-item"><a class="page-link rounded-3" href="#">...</a></li>
+                                <li class="page-item"><a class="page-link rounded-3" href="#">14</a></li>
+                                <li class="page-item"><a class="page-link rounded-3" href="#">15</a></li>
+                                <li class="page-item"><a class="page-link rounded-3" href="#">16</a></li>
+                                <li class="page-item">
+                                    <a class="page-link rounded-3" href="#">بعدی</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end content -->
+
+{% endblock %}

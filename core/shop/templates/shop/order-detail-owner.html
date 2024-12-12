@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}جزییات سفارش{% endblock %}
+
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+
+        <!-- CONTAINER -->
+        <div class="main-container container-fluid">
+
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">جزییات سفارش</h1>
+                <div>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shop:owner_dashboard' %}">پنل فروشندگی</a></li>
+                        <li aria-current="page" class="breadcrumb-item active">جزییات سفارش</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!-- ROW-1 OPEN -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+                    <div class="card cart">
+                        <div class="card-header">
+                            <h3 class="card-title">جزییات سفارش</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-vcenter">
+                                    <thead>
+                                    <tr class="border-top">
+                                        <th>محصول</th>
+                                        <th>عنوان</th>
+                                        <th>قیمت</th>
+                                        <th>مقدار</th>
+                                        <th>مجموع</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order.items.all %}
+                                        
+                                        
+                                            <tr>
+                                                <td>
+                                                    <div class="text-center">
+                                                        <img alt="" class="cart-img text-center"
+                                                            src="{{item.variety.product.get_main_image}}">
+                                                    </div>
+                                                </td>
+                                                <td>{{item.variety.product.name}} {% if item.variety.name != 'default variety' %}- {{item.variety.name}}{% endif %}</td>
+                                                <td class="fw-bold">{{item.variety.product.get_active_price|intcomma}}</td>
+                                                <td
+                                                    class="fw-bold">{{item.quantity}}
+                                                </td>
+                                                <td>{{item.get_item_price|intcomma}} تومان</td>
+                                                
+                                            </tr>
+                                        {% endfor %}
+
+                                        <tr>
+                                            <td><h6>مشتری: {{order.customer.full_name}}</h6></td>   
+                                            <td><h6>تاریخ سفارش: {{order.shamsi_created_date}}</h6></td>   
+                                            <td><h6>استفاده از کد تخفیف: {% if order.used_coupon == True %}بله{% else %}خیر{% endif %}</h6></td>
+                                            <td><h6>مبلغ تخفیف: {% if order.used_coupon == True %}{{order.get_discount}} تومان{% else %}0{% endif %}</h6></td>
+                                            <td><h6>روش ارسال: {% if order.delivery_method != None %}{{order.delivery_method}}{% else %}انتخاب نشده{% endif %}</h6></td>   
+                                        </tr>
+                                        <tr>
+                                            <td><h6>نام و نام خانوادگی گیرنده: {{order.reciever_name}}</h6></td>   
+                                            <td><h6>شماره تماس گیرنده: {{order.reciever_phone_number}}</h6></td>   
+                                            <td><h6>استان و شهر گیرنده: {{ order.reciever_state }} - {{ order.reciever_city }}</h6></td>
+                                            <td><h6>آدرس گیرنده: {{ order.reciever_address }}</h6></td>   
+                                            <td><h6>کدپستی: {{ order.reciever_zip_code }}</h6></td>   
+                                        </tr>
+                                        <tr>
+                                            <td><h6>وضعیت سفارش: {{order.status.latest_status}}</h6></td> 
+                                            <td><h6>جمع کل سفارش: {{order.get_without_cashback_cost|intcomma}} تومان</h6></td>   
+                                            <td><h6>میزان پرداختی از کیف پول: {{order.paid_by_wallet|intcomma}} تومان</h6></td> 
+                                            <td><h6>مبلغ پرداختی از درگاه: {{order.get_final_payment|intcomma}} تومان</h6></td>   
+                                             
+                                        </tr>
+                                        
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                            <a class="login100-form-btn btn-primary mb-4" href="{% url 'shop:owner_dashboard_orders' %}">بازگشت به لیست سفارشات<i
+                                class="fa fa-arrow-left ms-1"></i></a>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!-- ROW-1 CLOSED -->
+        </div>
+        <!-- CONTAINER CLOSED -->
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+
+<!-- attention -->
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+
+{% endblock %}
+
+

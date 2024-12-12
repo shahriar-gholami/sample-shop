@@ -1,0 +1,122 @@
+{% load static %}
+<!doctype html>
+<html dir="rtl" lang="fa-IR">
+
+<head>
+
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="پلتفرم فروشگاه ساز پیکوسایت" name="description">
+    <meta content="limoostudio" name="author">
+    <meta content="بهترین سایت ساز ایرانی با قابلیت‌های فراوان و برنامه‌نویسی اختصاصی، همگام شده با آخرین الگوریتم‌های گوگل"
+          name="keywords">
+
+    <!-- FAVICON -->
+    <link href="{{ store.get_logo_image }}" rel="shortcut icon" type="image/x-icon"/>
+
+    <!-- TITLE -->
+    <title>احراز شماره تماس</title>
+
+    <!-- BOOTSTRAP CSS -->
+    <link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}" id="style" rel="stylesheet"/>
+
+    <!-- STYLE CSS -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/plugins.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/dark-style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/transparent-style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/skin-modes.css' %}" rel="stylesheet"/>
+
+    <!--- FONT-ICONS CSS -->
+    <link href="{% static 'assets/css/icons.css' %}" rel="stylesheet"/>
+
+    <!-- COLOR SKIN CSS -->
+    <link href="{% static 'assets/colors/color1.css' %}" id="theme" media="all" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/switcher/css/switcher.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/switcher/demo.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/fonts/styles-fa-num/iran-yekan.css' %}" id="fonts" rel="stylesheet">
+    <link href="{% static 'assets/css/rtl.css' %}" rel="stylesheet"/>
+</head>
+
+<body class="app sidebar-mini rtl login-img">
+
+<!-- BACKGROUND-IMAGE -->
+<div class="">
+
+   
+
+    <!-- PAGE -->
+    <div class="page">
+        <div class="">
+
+            <!-- CONTAINER OPEN -->
+            <div class="col col-login mx-auto mt-7">
+                <div class="text-center">
+                    <img alt="" class="header-brand-img m-0" src="{{ store.get_logo_image }}" height="85px">
+                </div>
+            </div>
+            <div class="container-login100">
+                <div class="wrap-login100 p-6">
+                    <form method="post" class="login100-form validate-form">
+                        {% csrf_token %}
+                            <span class="login100-form-title">
+									احراز شماره تماس
+								</span>
+                        <div class="wrap-input100 validate-input input-group"
+                             data-bs-validate="ایمیل معتبر لازم است: ex@abc.xyz">
+                            <a class="input-group-text bg-white text-muted" href="javascript:void(0)">
+                                <i aria-hidden="true" class="fe fe-shield"></i>
+                            </a>
+                            <input name="code" class="input100 border-start-0 ms-0 form-control" placeholder="کد احراز شماره تماس"
+                                   type="text">
+                        </div>
+                        
+                        
+                        
+                        <div class="container-login100-form-btn">
+                            <button type="submit" class="login100-form-btn btn-primary">ثبت کد تایید</button>    
+                        </div>
+                        
+                        
+                    </form>
+                </div>
+            </div>
+            <!-- CONTAINER CLOSED -->
+        </div>
+    </div>
+    <!-- END PAGE -->
+
+</div>
+<!-- BACKGROUND-IMAGE CLOSED -->
+
+<!-- JQUERY JS -->
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+
+<!-- BOOTSTRAP JS -->
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- SHOW PASSWORD JS -->
+<script src="{% static 'assets/js/show-password.min.js' %}"></script>
+
+<!-- Perfect SCROLLBAR JS-->
+<script src="{% static 'assets/plugins/p-scroll/perfect-scrollbar.js' %}"></script>
+
+<!-- Color Theme js -->
+<script src="{% static 'assets/js/themeColors.js' %}"></script>
+
+<!-- CUSTOM JS -->
+<script src="{% static 'assets/js/custom.js' %}"></script>
+
+<!-- Custom-switcher -->
+<script src="{% static 'assets/js/custom-swicher.js' %}"></script>
+
+<!-- Switcher js -->
+<script src="{% static 'assets/switcher/js/switcher.js' %}"></script>
+
+</body>
+
+
+</html>

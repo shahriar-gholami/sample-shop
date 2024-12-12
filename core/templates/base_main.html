@@ -1,0 +1,852 @@
+{% load static %}
+<!doctype html>
+<html html dir="rtl" lang="fa-IR" style="--primary-rgb: 20,65,108; --transparent-bg-rgb: 29,28,33;">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LRSH37XQV"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-3LRSH37XQV');
+    </script>
+
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="PicoSite" name="author">
+    
+    
+    {% if post.meta_description != '' and post %}
+    <meta name="description" content="{{post.meta_description}}">
+    {% else %}
+    <meta name="description" content="پیکوسایت بهترین سایت ساز و فروشگاه ساز آنلاین رایگان در ایران. با استفاده از سایت ساز پیکو سایت شما میتوانید در کمتر از دو دقیقه سایت فروشگاهی حرفه ای داشته باشید">
+    {% endif %}
+    
+    {% if post.meta_keywords != '' and post %}
+    <meta name="keywords" content="{{post.meta_keywords}}">
+    {% else %}
+    <meta name="keywords" content="سایت ساز پیکوسایت,فروشگاه ساز پیکوسایت,سایت ساز پیکو سایت,فروشگاه ساز پیکو سایت, سایت ساز رایگان,فروشگاه ساز رایگان">
+    {% endif %}
+    
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://picosite.ir">
+
+    <!-- Open Graph tags -->
+
+    {% if post.meta_og_title != '' and post %}
+    <meta property="og:title" content="{{post.meta_og_title}}">
+    {% else %}
+    <meta property="og:title" content="پیکو سایت فروشگاه ساز اینترنتی رایگان">
+    {% endif %}
+
+    {% if post.meta_og_description != '' and post %}
+    <meta property="og:description" content="{{post.meta_og_description}}">
+    {% else %}
+    <meta property="og:description" content="پیکو سایت یک فروشگاه ساز و سایت ساز رایگان است. شما با استفاده از پیکوسایت میتوانید سایت فروشگاهی خود را در کمتر از دو دقیقه به رایگان راه اندازی کنید.">
+    {% endif %}
+
+    <meta property="og:image" content="https://marketplace-bucket.storage.iran.liara.space/%D9%81%D8%A7%D9%88%D8%A2%DB%8C%DA%A9%D9%88%D9%86%20%D9%BE%DB%8C%DA%A9%D9%88%D8%B3%D8%A7%DB%8C%D8%AA.png" rel="shortcut icon" type="image/x-icon">
+    <meta property="og:url" content="https://picosite.ir">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="Summary Card with Large Image">
+    {% if post.meta_tc_title != '' and post %}
+    <meta name="twitter:title" content="{{post.meta_tc_title}}">
+    {% else %}
+    <meta name="twitter:title" content="پیکوسایت سایت ساز و فروشگاه ساز رایگان">
+    {% endif %}
+
+    {% if post.meta_tc_description != '' and post %}
+    <meta name="twitter:description" content="{{post.meta_tc_description}}">
+    {% else %}
+    <meta name="twitter:description" content="پیکو سایت یک فروشگاه ساز و سایت ساز رایگان است. شما با استفاده از پیکوسایت میتوانید سایت فروشگاهی خود را در کمتر از دو دقیقه به رایگان راه اندازی کنید">
+    {% endif %}
+
+    <meta name="twitter:image" content="https://marketplace-bucket.storage.iran.liara.space/%D8%A7%D8%B3%D9%84%D8%A7%DB%8C%D8%AF%20%D8%A7%D9%88%D9%84%20%D9%BE%DB%8C%DA%A9%D9%88%D8%B3%D8%A7%DB%8C%D8%AA.jpg">
+
+    <!-- FAVICON -->
+    <link href="https://marketplace-bucket.storage.iran.liara.space/%D9%81%D8%A7%D9%88%D8%A2%DB%8C%DA%A9%D9%88%D9%86%20%D9%BE%DB%8C%DA%A9%D9%88%D8%B3%D8%A7%DB%8C%D8%AA.png" rel="shortcut icon" type="image/x-icon"/>
+
+    <!-- TITLE -->
+    <title>{% block title %}Sticky Sidebars{% endblock %}</title>
+
+    <!-- BOOTSTRAP CSS -->
+    <link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}" id="style" rel="stylesheet"/>
+
+    <!-- STYLE CSS -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/plugins.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/dark-style.cs' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/transparent-style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/skin-modes.css' %}" rel="stylesheet"/>
+
+    <!--- FONT-ICONS CSS -->
+    <link href="{% static 'assets/css/icons.css' %}" rel="stylesheet"/>
+
+    <link href="{% static 'assets/css/dark-style.css' %}" rel="stylesheet"/>
+
+    <!-- COLOR SKIN CSS -->
+    <link href="{% static 'assets/colors/color1.css' %}" id="theme" media="all" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/plugins/persian-date-picker/babakhani/persian-datepicker.min.css' %}" rel="stylesheet">
+
+    <!-- INTERNAL Switcher css -->
+    <link href="{% static 'assets/switcher/css/switcher.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/switcher/demo.css' %}" rel="stylesheet"/>
+
+
+    <link href="{% static 'assets/fonts/styles-fa-num/iran-yekan.css' %}" id="fonts" rel="stylesheet">
+    <link href="{% static 'assets/css/rtl.css' %}" rel="stylesheet"/>
+</head>
+
+<body class="app rtl horizontal-hover horizontal light-mode color-header color-menu">
+
+<!-- Switcher -->
+<!-- <div class="switcher-wrapper">
+    <div class="demo_changer">
+        <div class="form_holder sidebar-right1">
+            <div class="row">
+                <div class="predefined_styles">
+                    <div class="swichermainleft">
+                        <h4>حالت پیمایش</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">منوی افقی</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox"
+                                                                   id="myonoffswitch34" name="onoffswitch15"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch34"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">منوی عمودی کلیکی</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch35"
+                                                                   name="onoffswitch15" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch35"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">منوی عمودی با هاور</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch111"
+                                                                   name="onoffswitch15" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch111"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت چپ چین / راست چین</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">حالت چپ چین</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch23" name="onoffswitch7"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch23"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">حالت راست چین</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox" id="myonoffswitch24"
+                                                                   name="onoffswitch7" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch24"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت روشن قالب</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">قالب روشن</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox" id="myonoffswitch1"
+                                                                   name="onoffswitch1" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch1"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">رنگ اصلی در روشن</span>
+                                    <div class="">
+                                        <input class="w-30p h-30 input-color-picker color-primary-light" data-id="bg-color"
+                                               data-id1="bg-hover" data-id2="bg-border" data-id7="transparentcolor"
+                                               id="colorID" name="lightPrimary" oninput="changePrimaryColor()"
+                                               type="color" value="#6c5ffc">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت تیره قالب</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">قالب تیره</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch2" name="onoffswitch1"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch2"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">رنگ اصلی در تیره</span>
+                                    <div class="">
+                                        <input class="w-30p h-30 input-dark-color-picker color-primary-dark"
+                                               data-id="bg-color" data-id1="bg-hover" data-id2="bg-border"
+                                               data-id3="primary" data-id8="transparentcolor" id="darkPrimaryColorID" name="darkPrimary"
+                                               oninput="darkPrimaryColor()" type="color"
+                                               value="#6c5ffc">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت شیشه ای</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">قالب شیشه ای</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitchTransparent"
+                                                                   name="onoffswitch1"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitchTransparent"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">رنگ اصلی در حالت شیشه ای</span>
+                                    <div class="">
+                                        <input class="w-30p h-30 input-transparent-color-picker color-primary-transparent"
+                                               data-id="bg-color" data-id1="bg-hover"
+                                               data-id2="bg-border" data-id3="primary" data-id4="primary"
+                                               data-id9="transparentcolor" id="transparentPrimaryColorID" name="tranparentPrimary"
+                                               oninput="transparentPrimaryColor()" type="color" value="#6c5ffc">
+                                    </div>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">پس زمینه حالت شیشه ای</span>
+                                    <div class="">
+                                        <input class="w-30p h-30 input-transparent-color-picker color-bg-transparent"
+                                               data-id5="body" data-id6="theme" data-id9="transparentcolor"
+                                               id="transparentBgColorID" name="transparentBackground" oninput="transparentBgColor()" type="color"
+                                               value="#6c5ffc">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت پس زمینه شیشه ای</h4>
+                        <div class="skin-body switch_section">
+                            <div class="switch-toggle d-flex">
+                                <span class="me-auto">تصویر زمینه اصلی </span>
+                                <div class="">
+                                    <input class="w-30p h-30 input-transparent-color-picker color-primary-transparent"
+                                           data-id="bg-color" data-id1="bg-hover"
+                                           data-id2="bg-border" data-id3="primary" data-id4="primary"
+                                           data-id9="transparentcolor" id="transparentBgImgPrimaryColorID" name="tranparentPrimary"
+                                           oninput="transparentBgImgPrimaryColor()" type="color" value="#6c5ffc">
+                                </div>
+                            </div>
+                            <div class="switch-toggle d-flex mt-2">
+                                <a class="bg-img1" href="javascript:void(0);" onclick="bgImage(this)"><img
+                                        alt="Bg-Image" id="bgimage1" src="{% static 'assets/images/media/bg-img1.jpg' %}"></a>
+                                <a class="bg-img2" href="javascript:void(0);" onclick="bgImage(this)"><img
+                                        alt="Bg-Image" id="bgimage2" src="{% static 'assets/images/media/bg-img2.jpg' %}"></a>
+                                <a class="bg-img3" href="javascript:void(0);" onclick="bgImage(this)"><img
+                                        alt="Bg-Image" id="bgimage3" src="{% static 'assets/images/media/bg-img3.jpg' %}"></a>
+                                <a class="bg-img4" href="javascript:void(0);" onclick="bgImage(this)"><img
+                                        alt="Bg-Image" id="bgimage4" src="{% static 'assets/images/media/bg-img4.jpg' %}"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت منو</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle lightMenu d-flex">
+                                    <span class="me-auto">منو روشن</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox" id="myonoffswitch3"
+                                                                   name="onoffswitch2" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch3"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle colorMenu d-flex mt-2">
+                                    <span class="me-auto">رنگ منو</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch4" name="onoffswitch2"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch4"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle darkMenu d-flex mt-2">
+                                    <span class="me-auto">منو تیره</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch5" name="onoffswitch2"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch5"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle gradientMenu d-flex mt-2">
+                                    <span class="me-auto">منو گرادیانت</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch19" name="onoffswitch2"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch19"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت سربرگ</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle lightHeader d-flex">
+                                    <span class="me-auto">سربرگ روشن</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox" id="myonoffswitch6"
+                                                                   name="onoffswitch3" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch6"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle  colorHeader d-flex mt-2">
+                                    <span class="me-auto">سربرگ رنگی</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch7" name="onoffswitch3"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch7"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle darkHeader d-flex mt-2">
+                                    <span class="me-auto">سربرگ تیره</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch8" name="onoffswitch3"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch8"></label>
+                                    </p>
+                                </div>
+
+                                <div class="switch-toggle darkHeader d-flex mt-2">
+                                    <span class="me-auto">سربرگ گرادیانت</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch20" name="onoffswitch3"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch20"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>حالت های عرض محتوا</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">تمام عرض</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox" id="myonoffswitch9"
+                                                                   name="onoffswitch4" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch9"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">جعبه ای</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch10" name="onoffswitch4"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch10"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>موقعیت های چیدمان</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">ثابت</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox" id="myonoffswitch11"
+                                                                   name="onoffswitch5" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch11"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">قابل اسکرول</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch12" name="onoffswitch5"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch12"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft leftmenu-styles">
+                        <h4>حالت های منوی کناری</h4>
+                        <div class="skin-body">
+                            <div class="switch_section">
+                                <div class="switch-toggle d-flex">
+                                    <span class="me-auto">منوی پیشفرض</span>
+                                    <p class="onoffswitch2"><input checked class="onoffswitch2-checkbox default-menu" id="myonoffswitch13"
+                                                                   name="onoffswitch6" type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch13"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">آیکن با متن</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch14" name="onoffswitch6"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch14"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">فقط آیکن</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch15" name="onoffswitch6"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch15"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">حالت بسته</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch16" name="onoffswitch6"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch16"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">نمایش زیرمنو با هاور</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch17" name="onoffswitch6"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch17"></label>
+                                    </p>
+                                </div>
+                                <div class="switch-toggle d-flex mt-2">
+                                    <span class="me-auto">نمایش زیرمنو با هاور 2</span>
+                                    <p class="onoffswitch2"><input class="onoffswitch2-checkbox" id="myonoffswitch18" name="onoffswitch6"
+                                                                   type="radio">
+                                        <label class="onoffswitch2-label" for="myonoffswitch18"></label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>فونت قالب </h4>
+                        <div class="skin-body mb-3">
+                            <label class="text-start d-block px-3" for="font-changer"> ( اعداد فارسی ) </label>
+                            <select class="form-control form-select" id="font-changer" name="font-changer">
+                                <option value="iran-yekan">ایران یکان</option>
+                                <option value="iran-sans">ایران سنس</option>
+                                <option value="aviny">آوینی</option>
+                                <option value="azarmehr">آذرمهر</option>
+                                <option value="damavand">دماوند</option>
+                                <option value="dastnevis">دست نویس</option>
+                                <option value="dubai">دوبی</option>
+                                <option value="estedad">استعداد</option>
+                                <option value="helvetica-neue">هلوتیکا</option>
+                                <option value="lalezar">لاله زار</option>
+                                <option value="mikhak">میخک</option>
+                                <option value="myriad">میریاد</option>
+                                <option value="noora">نورا</option>
+                                <option value="palatino-sans">پالاتینو</option>
+                                <option value="pinar">پینار</option>
+                                <option value="dana">دانا</option>
+                                <option value="sahel">ساحل</option>
+                                <option value="shabnam">شبنم</option>
+                                <option value="vanda">واندا</option>
+                                <option value="vazir">وزیر</option>
+                            </select>
+                        </div>
+
+                        <div class="skin-body">
+                            <label class="text-start d-block px-3" for="font-changer-en"> ( اعداد انگلیسی ) </label>
+                            <select class="form-control form-select" id="font-changer-en" name="font-changer">
+                                <option value="iran-yekan">ایران یکان</option>
+                                <option value="iran-sans">ایران سنس</option>
+                                <option value="aviny">آوینی</option>
+                                <option value="azarmehr">آذرمهر</option>
+                                <option value="damavand">دماوند</option>
+                                <option value="dastnevis">دست نویس</option>
+                                <option value="dubai">دوبی</option>
+                                <option value="estedad">استعداد</option>
+                                <option value="helvetica-neue">هلوتیکا</option>
+                                <option value="lalezar">لاله زار</option>
+                                <option value="mikhak">میخک</option>
+                                <option value="myriad">میریاد</option>
+                                <option value="noora">نورا</option>
+                                <option value="palatino-sans">پالاتینو</option>
+                                <option value="pinar">پینار</option>
+                                <option value="dana">دانا</option>
+                                <option value="sahel">ساحل</option>
+                                <option value="shabnam">شبنم</option>
+                                <option value="vanda">واندا</option>
+                                <option value="vazir">وزیر</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="swichermainleft">
+                        <h4>بازنشانی همه تنظیمات</h4>
+                        <div class="skin-body">
+                            <div class="switch_section my-4">
+                                <button class="btn btn-danger btn-block" onclick="localStorage.clear();
+										document.querySelector('html').style = '';
+										names() ;
+                                        resetData() ;" type="button">بازنشانی
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- End Switcher -->
+
+<!-- PAGE -->
+<div class="page">
+
+    <div class="page-main">
+
+        <!-- app-Header -->
+        <div class="app-header header sticky">
+            <div class="container-fluid main-container">
+                <div class="d-flex">
+                    <a class="light-logo-3 " href="{% url 'index' %}">
+                        <img alt="logo" class="header-brand-img desktop-logo" src="https://marketplace-bucket.storage.iran.liara.space/%D9%84%D9%88%DA%AF%D9%88%DB%8C%20%D8%B1%D9%88%D8%B4%D9%86%20%D9%BE%DB%8C%DA%A9%D9%88%D8%B3%D8%A7%DB%8C%D8%AA.png" height="40px"></a>
+                    <!-- sidebar-toggle-->
+                   
+                    <!-- LOGO -->
+                    
+                    <div class="d-flex order-lg-2 ms-auto header-right-icons">
+                        
+                        <div class="dropdown  d-flex shopping-cart">
+                            <a class="btn btn-success float-sm-end" href="{% url 'contact' %}"><i
+                                class="fa fa-phone ms-1"></i>  مشاوره رایگان</a>
+                        </div>
+                        <!-- CART -->
+
+                        <!-- SEARCH -->
+                        <!-- <button aria-controls="navbarSupportedContent-4" aria-expanded="false"
+                                aria-label="Toggle navigation" class="navbar-toggler navresponsive-toggler d-lg-none ms-auto"
+                                data-bs-target="#navbarSupportedContent-4" data-bs-toggle="collapse"
+                                type="button">
+                            <span class="navbar-toggler-icon fe fe-search"></span>
+                        </button> -->
+                        <button class="nav-link icon navbar-toggler navresponsive-toggler d-lg-none ms-auto" data-bs-toggle="sidebar-right"
+                        data-target=".sidebar-right" href="javascript:void(0);" aria-controls="navbarSupportedContent-4" aria-expanded="false"
+                                aria-label="Toggle navigation"
+                                data-bs-target="#navbarSupportedContent-4" data-bs-toggle="collapse"
+                                type="button">
+                            <span class="navbar-toggler-icon fe fe-align-left"></span>
+                        </button>                        
+                        
+                        
+                        <!-- <div class="demo-icon nav-link icon">
+                            <i class="fe fe-settings fa-spin  text_primary"></i>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /app-Header -->
+
+        <!--APP-SIDEBAR-->
+        <div class="sticky">
+            <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+            <div class="app-sidebar">
+
+                <div class="main-sidemenu">
+                    
+                    <ul class="side-menu">
+                        <!-- خانه -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'index' %}"><i
+                                    class="side-menu__icon fe fe-home"></i><span
+                                    class="side-menu__label">خانه</span></a>
+                        </li>
+                       
+                        <!-- تعرفه‌ها -->
+                        <li>
+                            <a class="side-menu__item has-link" href="https://picosite.ir/#prices"><i
+                                    class="side-menu__icon fe fe-dollar-sign"></i><span
+                                    class="side-menu__label text-white">تعرفه‌ها</span></a>
+                        </li>
+                        <!-- دموها و قالب‌ها -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'templates' %}"><i
+                                    class="side-menu__icon fe fe-eye"></i><span
+                                    class="side-menu__label">قالب‌ها و دموها</span></a>
+                        </li>
+                        <!-- تماس با ما -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'contact' %}" ><i
+                                    class="side-menu__icon fe fe-slack"></i><span
+                                    class="side-menu__label">تماس با ما</span></a>
+                        </li>
+                        <!-- درباره ما -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'about' %}"><i
+                                    class="side-menu__icon fe fe-check-circle"></i><span
+                                    class="side-menu__label">درباره‌ی ما</span></a>
+                        </li>
+                        <!-- وبلاگ -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'blog' %}"><i
+                                    class="side-menu__icon fe fe-zap"></i><span
+                                    class="side-menu__label">وبلاگ</span></a>
+                        </li>
+                        <!-- قوانین و مقررات -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'rules_and_policies' %}" ><i
+                                    class="side-menu__icon fe fe-alert-triangle"></i><span
+                                    class="side-menu__label">قوانین و مقررات</span></a>
+                        </li>
+                        <!-- سوالات متداول -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'faq' %}" ><i
+                                    class="side-menu__icon fe fe-zap"></i><span
+                                    class="side-menu__label">پرسش‌های متداول</span></a>
+                        </li>
+                        
+                        
+                    </ul>
+                    
+                </div>
+            </div>
+            <!--/APP-SIDEBAR-->
+        </div>
+
+        <div class="main-content app-content mt-5">
+            <div class="side-app">
+        
+                <!-- CONTAINER -->
+                <div class="main-container container-fluid">
+
+
+
+                    {% block content %}{% endblock %}
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card bg-primary-transparent card-transparent">
+                        
+                        <div class="card-body mt-5">
+                            <form class="form-horizontal" method="post" action="{% url 'subscribe' %}">
+                                {% csrf_token %}
+                                
+                                <div class=" row mb-4">
+                                    <label class="col-md-3 form-label" for="inputEmail3">عضویت در خبرنامه</label>
+                                    <div class="col-md-9">
+                                        <input name ="email"  autocomplete="username" class="form-control border-primary" id="inputEmail3"
+                                                placeholder="ایمیل" type="email">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-0 mt-4 row justify-content-end">
+                                    <div class="col-md-9">
+                                        <button class="btn btn-primary">عضویت</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    
+                        
+                        <div class="card-body mt-2">
+                            <div class="top-footer">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-6 col-md-4 me-4">
+                                        <h6>درباره ما</h6>
+                                        <p class="text-justify">پیکوسایت یک پلتفرم ایجاد فروشگاه اینترنتی است. امروزه مغازه‌ها و بازارچه‌های فیزیکی به سرعت در حال جایگزینی با فروشگاه‌های اینترنتی هستند.
+                                            لذا راه‌اندازی یک سایت فروشگاهی با کیفیت برای فروشندگان ضروری می‌باشد. از آن‌جایی که راه‌اندازی سایت هزینه و چالش‌های بسیاری را به همراه دارد و نیازمند دانش کافی در این زمینه است بسیاری از این موضوع مهم و ضروری صرف نظر می‌کنند.
+                                            پیکوسایت با هدف ساده‌سازی فرایند ایجاد سایت فروشگاهی برای فروشندگان عزیز ایجاد شده است. 
+                                            تمامی فروشندگان با صرف کمترین وقت و هزینه می‌توانند صاحب یک فروشگاه اینترنتی بسیار با کیفیت شوند.
+                                            از طرفی مدیریت وبسایت نیز با استفاده از پلتفرم پیکوسایت بسیار ساده است. با فراهم کردن امکانات اولیه مورد نیاز به صورت رایگان و همراهی در تولید محتوا و مدیریت سایت، پیکوسایت تجربه‌ای عالی برای فروشندگان عزیز خلق می‌کند.
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 col-md-4">
+                                        <h6>صفحات</h6>
+                                        <ul class="list-unstyled mb-4">
+                                            <li><a href="{% url 'index' %}">خانه</a></li>
+                                            <li><a href="{% url 'blog' %}">وبلاگ</a></li>
+                                            <li><a href="{% url 'about' %}">درباره ما</a></li>
+                                            <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                                            <li><a href="{% url 'faq' %}">سوالات متداول</a></li>
+                                            <li><a href="{% url 'rules_and_policies' %}">قوانین و مقررات</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-md-4">
+                                        <h6>اطلاعات تماس</h6>
+                                        <ul class="list-unstyled mb-4">
+                                            <li><a href="javascript:void(0);">شماره تماس: 09910412672</a></li>
+                                            <li><a href="javascript:void(0);">ایمیل: info@picosite.ir</a></li>
+                                            <li><a href="javascript:void(0);">اینستاگرام: @pico_site</a></li>
+                                            <li><a href="javascript:void(0);">آدرس: تهران‌، شهرآرا، خیابان آرشمهر، پلاک8، واحد 6</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-md-4">
+                                        <h6>نشان‌ها</h6>
+                                        <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=468280&Code=Zroiwtw3ceJLHus6GNuAiIFUyAozQ0ui'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=468280&Code=Zroiwtw3ceJLHus6GNuAiIFUyAozQ0ui' alt='' style='cursor:pointer' Code='Zroiwtw3ceJLHus6GNuAiIFUyAozQ0ui'></a>
+                                    </div>
+                                    
+                                    
+                                </div>
+                            </div>
+                            <footer class="main-footer px-0 pb-0 bg-primary-transparent card-transparent">
+                                <div class="row">
+                                    <div class="col-md-12 social text-center">
+                                        <ul class="text-center d-inline-block">
+                                            <li>
+                                                <a class="social-icon" href="https://www.facebook.com/"
+                                                target="_blank"><i class="fa fa-facebook"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon" href="https://twitter.com/"
+                                                target="_blank"><i class="fa fa-twitter"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon" href="javascript:void(0)"><i
+                                                        class="fa fa-rss"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon" href="https://www.youtube.com/"
+                                                target="_blank"><i class="fa fa-youtube"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon" href="https://www.linkedin.com/"
+                                                target="_blank"><i class="fa fa-linkedin"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon" href="https://myaccount.google.com/"
+                                                target="_blank"><i class="fa fa-google-plus"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 mt-3 mt-lg-0 text-center mb-4">
+                                        حق نشر © 1401 <a href="javascript:void(0)"></a>. طراحی شده با <span
+                                            class="fa fa-heart text-danger"></span> توسط <a
+                                            href="javascript:void(0)"> پیکوسایت </a>
+                                        کلیه حقوق محفوظ است.
+                                    </div>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+    
+    
+
+        
+    
+
+    <!-- منوی موبایل -->
+    <div class="sidebar sidebar-right sidebar-animate bg-primary">
+        <div class="panel bg-success card mb-0 shadow-none border-0">
+            <div class="tab-menu-heading border-0 d-flex p-3 bg-success">
+                <div class="card-title mb-0 bg-success" ><i class="fe fe-bell me-2"></i><span
+                        class=" pulse"></span>خوش آمدید
+                </div>
+                <div class="card-options ms-auto">
+                    <a class="sidebar-icon text-end float-end me-3 mb-1" data-bs-toggle="sidebar-right"
+                    data-target=".sidebar-right" href="javascript:void(0);"><i
+                            class="fe fe-x"></i></a>
+                </div>
+            </div>
+            <div class="panel-body tabs-menu-body latest-tasks p-0 border-0 bg-primary">
+
+
+                
+                <div class="main-sidemenu">
+                    
+                    <ul class="side-menu">
+
+                        <!-- خانه -->
+                        <li>
+                            <a class="side-menu__item has-link text-primary bg-hover-primary" href="{% url 'index' %}"><i
+                                    class="side-menu__icon fe fe-home icon-primary"></i><span
+                                    class="side-menu__label text-white">خانه</span></a>
+                        </li>
+                                               
+                        <!-- تعرفه‌ها -->
+                        <li>
+                            <a class="side-menu__item has-link" href="https://picosite.ir/#prices"><i
+                                    class="side-menu__icon fe fe-dollar-sign"></i><span
+                                    class="side-menu__label text-white">تعرفه‌ها</span></a>
+                        </li>
+                        
+                        <!-- دموها و قالب‌ها -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'templates' %}"><i
+                                    class="side-menu__icon fe fe-eye"></i><span
+                                    class="side-menu__label">قالب‌ها و دموها</span></a>
+                        </li>
+                        <!-- تماس با ما -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'contact' %}"><i
+                                    class="side-menu__icon fe fe-slack"></i><span
+                                    class="side-menu__label text-white">تماس با ما</span></a>
+                        </li>
+                        <!-- درباره ما -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'about' %}"><i
+                                    class="side-menu__icon fe fe-check-circle"></i><span
+                                    class="side-menu__label text-white">درباره‌ی ما</span></a>
+                        </li>
+                        <!-- وبلاگ -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'blog' %}"><i
+                                    class="side-menu__icon fe fe-zap"></i><span
+                                    class="side-menu__label text-white">وبلاگ</span></a>
+                        </li>
+                        <!-- قوانین و مقررات -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'rules_and_policies' %}"><i
+                                    class="side-menu__icon fe fe-alert-triangle"></i><span
+                                    class="side-menu__label text-white">قوانین و مقررات</span></a>
+                        </li>
+                        <!-- سوالات متداول -->
+                        <li>
+                            <a class="side-menu__item has-link" href="{% url 'faq' %}"><i
+                                    class="side-menu__icon fe fe-zap"></i><span
+                                    class="side-menu__label text-white">پرسش‌های متداول</span></a>
+                        </li>
+                        
+                        
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/Sidebar-right-->
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/sticky.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/plugins/sidemenu/sidemenu.js' %}"></script>
+<script src="{% static 'assets/plugins/sidebar/sidebar.js' %}"></script>
+<script src="{% static 'assets/js/custom-swicher.js' %}"></script>
+{% block js %}{% endblock %}
+</body>
+</html>
+
+
+
+
+

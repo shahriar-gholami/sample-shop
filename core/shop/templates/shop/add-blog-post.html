@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}افزودن محصول{% endblock %}
+
+{% block content %}
+
+    
+    <!--app-content open-->
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">پست جدید</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">صفحات</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">پست جدید</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">افزودن پست جدید</div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="card-body">
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">عنوان پست :</label>
+                                        <div class="col-md-9">
+                                            <input name="title" class="form-control" placeholder="عنوان پست" type="text">
+                                        </div>
+                                    </div>
+                                   
+                                    
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">منتشر شده :</label>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label class="custom-control custom-checkbox mb-0">
+                                                    <input class="custom-control-input" name="published"
+                                                        type="checkbox" value="option1">
+                                                    <span class="custom-control-label">اگر می‌خواهید پست ضمن ذخیره منتشر هم بشود این تیک را بزنید.</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>  
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">دسته‌بندی :</label>
+                                        <div class="col-md-9">
+                                        <select name="category" class="filter-multi" multiple="multiple">
+                                            {% for category in blog_categories %}
+                                            <option value="{{category.id}}">{{category.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        </div>
+                                    </div>                                
+
+                                    <div class="row">
+                                        <label class="col-md-3 form-label mb-4">متن پست :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea id="description" class="content" name="body">متن پست را وارد نمایید</textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="row">
+                                        <label class="col-md-3 form-label mb-4">تگ‌های محصول :</label>
+                                        <div class="col-md-9 mb-4">
+                                            <textarea class="form-control" rows="6" name="tags">‌تگ‌های محوصل خود را وارد نمایید. تگ‌ها را با فشردن دکمه Enter از هم جدا نمایید.</textarea>
+                                        </div>
+                                    </div> -->
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-3"></div>
+                                        <div class="container-login100-form-btn">
+                                            <button type="submit" class="login100-form-btn btn-primary">ایجاد پست</button>    
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                        
+                    </div>
+                </div>
+                <!-- /ROW-1 CLOSED -->
+            </div>
+            <!-- CONTAINER CLOSED -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/custom.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/wysiwyag/jquery.richtext.js' %} "></script>
+<script src="{% static 'assets/plugins/wysiwyag/wysiwyag.js' %} "></script>
+{% endblock %}
+

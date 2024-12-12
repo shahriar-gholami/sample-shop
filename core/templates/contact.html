@@ -1,0 +1,114 @@
+{% extends "base_main.html" %}
+{% load static %}
+{% block title %}پیکوسایت - تماس با ما{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 class="page-title">تماس با ما</h1>
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">خانه</a></li>
+            <li aria-current="page" class="breadcrumb-item active">تماس با ما</li>
+        </ol>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+
+
+                <div class="row">
+                    <div class="col-xl-6">
+                            <div class="card-header">
+                                <div class="float-start">
+                                    <h3 class="card-title">تماس با</h3>
+                                </div>
+                            </div>
+                            <div class="card-body no-padding ">
+                                <ul class="list-group ">
+                                    <li class="list-group-item d-flex ps-3 mb-2 br-5 ">
+                                        <div class="social social-profile-buttons me-2">
+                                            <a class="social-icon text-primary" href=""><i
+                                                    class="fe fe-mail"></i></a>
+                                        </div>
+                                        <a class="my-auto" href="javascript:void(0)">info@picosite.ir</a>
+                                    </li>
+                                    <li class="list-group-item d-flex ps-3 mb-2 br-5 ">
+                                        <div class="social social-profile-buttons me-2">
+                                            <a class="social-icon text-primary" href=""><i
+                                                    class="fe fe-instagram"></i></a>
+                                        </div>
+                                        <a class="my-auto" href="javascript:void(0)">@pico_site</a>
+                                    </li>
+                                    <li class="list-group-item d-flex ps-3 mb-2 br-5">
+                                        <div class="social social-profile-buttons me-2">
+                                            <a class="social-icon text-primary" href=""><i
+                                                    class="fe fe-phone"></i></a>
+                                        </div>
+                                        <a class="my-auto" href="javascript:void(0)">09910412672</a>
+                                    </li>
+                                    <li class="list-group-item d-flex ps-3 mb-2 br-5">
+                                        <div class="social social-profile-buttons me-2">
+                                            <a class="social-icon text-primary" href="javascript:void(0)"><i
+                                                    class="fe fe-map"></i></a>
+                                        </div>
+                                        <a class="my-auto" href="">تهران، شهرآرا، خیابان آرشمهر، بلوک ششم، پلاک ۸</a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card-header">
+                            <h3 class="card-title">فرم تماس با ما</h3>
+                        </div>
+                        <form method="post" action="{% url 'manager:contact' %}" id="contact-form">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname">نام</label>
+                                        <input name="name" class="form-control border-primary" id="exampleInputname" placeholder="نام"
+                                                type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputname1">نام خانوادگی</label>
+                                        <input name="familly_name" class="form-control border-primary" id="exampleInputname1" placeholder="نام خانوادگی را وارد کنید"
+                                                type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">آدرس ایمیل</label>
+                                <input name="email" class="form-control border-primary" id="exampleInputEmail1" placeholder="آدرس ایمیل"
+                                        type="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputnumber">شماره تماس</label>
+                                <input name="phone" class="form-control border-primary" id="exampleInputnumber" placeholder="شماره تماس"
+                                        type="text">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputnumber">موضوع پیام</label>
+                                <input name="subject" class="form-control border-primary" id="exampleInputnumber" placeholder="موضوع پیام"
+                                        type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">متن پیام</label>
+                                <textarea name="message_text" class="form-control border-primary" rows="6"></textarea>
+                            </div>
+                            
+                                <button type="submit" class="login100-form-btn btn-primary">ارسال پیام</button>    
+                            
+                            
+                        </div>
+                        </form> 
+                        
+                    </div>
+                </div>
+            
+
+
+
+{% endblock %}

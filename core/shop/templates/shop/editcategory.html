@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}ویرایش محصول{% endblock %}
+
+{% block content %}
+
+    
+    <!--app-content open-->
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">ویرایش دسته‌بندی</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">صفحات</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">ویرایش دسته‌بندی</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">ویرایش دسته‌بندی</div>
+                            </div>
+                            <form method="post" action="{% url 'shop:edit_category' category.id %}">
+                                {% csrf_token %}
+
+                                <div class="card-body">
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">نام دسته‌بندی :</label>
+                                        <div class="col-md-9">
+                                            <input name="name" value="{{category.name}}" class="form-control" placeholder="نام دسته‌بندی" type="text" >
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label class="col-md-3 form-label">دسته‌بندی مادر :</label>
+                                        <div class="col-md-9">
+                                            <select name="parent" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                                {% if category.is_sub == True %}
+                                                <option value= "{{ category.parent.id }}" class="text-white">{{ category.parent.name }}</option>
+                                                {% else %}
+                                                <option value="0" class="text-white">انتخاب</option>
+                                                {% endif %}
+                                                {% for category in categories %}
+                                                    <li><option value="{{ category.id }}">{{ category.name }}</option></li>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class=" d-flex g-2">
+                                        <button type="submit" class="login100-form-btn btn-primary">ذخیره</button> 
+                                    </div>
+                                </div>
+
+                                
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">تصویر دسته‌بندی</div>
+                            </div>
+                            <div class="card-body">
+                                <a class="btn btn-success login100-form-btn" href="{% url 'shop:image_bank' 'category' category.id %}">ثبت تصویر جدید</a>
+                                </div>
+
+                            <div class="card-header">
+                                <h3 class="card-title">تصویر انتخاب شده</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-wrap">
+                                    <div class="file-image-1">
+                                            <img alt="" class="br-5" src="{{category.get_image_url}}">
+                                            <a href="{% url 'shop:delete_category_image' category.id %}" class="btn btn-danger login100-form-btn">حذف تصویر</a>
+                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- CONTAINER CLOSED -->
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/wysiwyag/jquery.richtext.js' %} "></script>
+<script src="{% static 'assets/plugins/wysiwyag/wysiwyag.js' %} "></script>
+<script src="{% static 'assets/js/handlecounter.js' %}"></script>
+
+{% endblock %}

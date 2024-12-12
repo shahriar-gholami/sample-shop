@@ -1,0 +1,128 @@
+@font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/thin.woff2') format('woff2');
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/extralight.woff2') format('woff2');
+	font-weight: 200;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/light.woff2') format('woff2');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/medium.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/semibold.woff2') format('woff2');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: vazirmatn;
+	src: url('../ir_fonts/vazirmatn/bold.woff2') format('woff2');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: vazirmatn;
+	src: url('../ir_fonts/vazirmatn/extrabold.woff2') format('woff2');
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+  }
+  
+  @font-face {
+	font-family: 'vazirmatn';
+	src: url('../ir_fonts/vazirmatn/black.woff2') format('woff2');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+  }
+
+/* 
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 300;
+	src: url('../ir_fonts/yekanbakh/woff/light.woff') format('woff'),   
+	url('../ir_fonts/yekanbakh/woff2/light.woff2') format('woff2');	
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 400;
+	src: url('../ir_fonts/yekanbakh/woff/regular.woff') format('woff'),   
+	url('../ir_fonts/yekanbakh/woff2/regular.woff2') format('woff2');		 
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 500;
+	src: url('../ir_fonts/yekanbakh/woff/semibold.woff') format('woff'),   
+	url('../ir_fonts/yekanbakh/woff2/semibold.woff2') format('woff2');		 
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 600,900;
+	src: url('../ir_fonts/yekanbakh/woff/bold.woff') format('woff'),   
+	url('../ir_fonts/yekanbakh/woff2/bold.woff2') format('woff2');		 
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 700;
+	src: url('../ir_fonts/yekanbakh/woff/extrabold.woff') format('woff'),   
+	url('../ir_fonts/yekanbakh/woff2/extrabold.woff') format('woff2');		 
+}
+
+@font-face {
+	font-family: yekanbakh;
+	font-style: normal;
+	font-weight: 800;
+	src: url('../ir_fonts/yekanbakh/woff/extrabold.woff') format('woff'),   
+	url('../ir_fonts/yekanbakh/woff2/extrabold.woff') format('woff2'); 
+}
+ 
+
+@font-face {
+	font-family: 'vazir';
+	font-style: normal;
+	src: url('../ir_fonts/numbers.woff2') format('woff2');
+	unicode-range: U+30-39;
+}  */

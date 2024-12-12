@@ -1,0 +1,469 @@
+{% extends "base_2.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}صفحه نخست{% endblock %}
+{% block content %}
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<!-- start main slider -->
+
+<div class="main-slider">
+        <div class="slider">
+            <div class="swiper homeSlider">
+                <div class="swiper-wrapper">
+                    {% for slide in slides %}
+                    <div class="swiper-slide">
+                        <a href="{% url 'shop:featured_products' slide.source %}">
+                            <img alt="" class="img-fluid" src="{{slide.image.url}}">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-button-next d-lg-flex d-none"></div>
+                <div class="swiper-button-prev d-lg-flex d-none"></div>
+            </div>
+        </div>
+</div>
+
+<!-- end main slider -->
+
+<!-- start product slider -->
+
+<div class="product-slider site-slider free-swiper py-40 mt-4">
+    <div class="container-fluid">
+        <div class="section-title">
+            <div class="row gy-3">
+                <div class="col-sm-12">
+                    <div class="section-title-title">
+                        <h2 class="title-font main-color-one-color h1">محصولات <span class="main-color-three-color">تازه وارد</span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="slider-parent">
+            <div class="swiper product-slider-swiper">
+
+                <div class="swiper-wrapper ">
+                    {% for product in products %}
+                    <div class="swiper-slide">
+                        <div class="product-box">
+                            <div>
+                                <a href="{% url 'shop:product_detail' product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}" alt="{{product.name}}" ></a>
+                                
+                                <!-- <div class="color-box">
+                                    <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                        <span class="color hint--top" style="background-color: #487eb0;"></span>
+                                    </div>
+                                    <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                        <span class="color hint--top" style="background-color: #353b48;"></span>
+                                    </div>
+                                    <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                        <span class="color hint--top" style="background-color: #7f8fa6;"></span>
+                                    </div>
+                                </div> -->
+                                <div class="product-box-price-discount">
+                                    {% if product.off_active == True %}<span class="d-block badge main-color-three-bg text-white font-14 rounded-0">حراج</span>{% endif %}
+                                </div>
+                                <span class="product-box-image-overlay"></span>
+                            </div>
+                            <div class="product-box-title">
+                                <a href="{% url 'shop:product_detail' product.slug %}">
+                                    <h5 class="text-overflow-2">{{product.name}}</h5>
+                                </a>
+                            </div>
+                            <!-- <div class="product-box-size pro-var-responsive">
+                                <ul>
+                                    <li><a class="active" href="">40</a></li>
+                                    <li><a href="">41</a></li>
+                                    <li><a href="">42</a></li>
+                                    <li><a href="">43</a></li>
+                                </ul>
+                            </div> -->
+                            <div class="product-box-price">
+
+                                {% if product.off_active == True %}
+                                <div class="product-box-offer-discount">
+                                    <del>{{product.price|intcomma}} </del>
+                                </div>
+                                <div class="product-box-price-price">
+                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.sales_price|intcomma}} <span
+                                            class="mb-0 text-muted-two">تومان</span></h5>
+
+                                </div>
+                                {% else %}
+                                <div class="product-box-price-price">
+                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.price|intcomma}} <span
+                                            class="mb-0 text-muted-two">تومان</span></h5>
+
+                                </div>
+                                {% endif %}
+                                <!-- <div class="product-box-offer-discount">
+                                    <del>2,000,000</del>
+                                </div>
+                                <div class="product-box-price-price">
+                                    <h5 class="title-font main-color-one-color h2 mb-0">799,000 <span
+                                            class="mb-0 text-muted-two">تومان</span></h5>
+
+                                </div> -->
+                            </div>
+                            <div class="product-box-action">
+                                <a class="btn rounded-0 main-color-three-bg border-0 w-100" href="{% url 'shop:product_detail' product.slug %}">جزئیات محصول</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button class="amazing-offer-btn" data-scroll-to="#banners"></button>
+        </div>
+
+    </div>
+</div>
+
+<!-- start advert -->
+
+<div class="">
+    <div class="container-fluid">
+        <div class="row">
+            {% for banner in small_banners %}
+            <div class="col-lg-6">
+                <div class="advert-item ">
+                    <a href="{% url 'shop:featured_products' banner.source %}">
+                        <img alt="" class="mb-2" src="{{banner.image.url}}" style="object-fit:contain">
+
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+<!-- end advert -->
+
+<!-- start main-category -->
+
+<div class="main-category mt-5">
+    <div class="container-fluid">
+        <div class="section-title">
+            <div class="row align-items-center gy-3">
+                <div class="col-sm-8">
+                    <div class="section-title-title">
+                        <h2 class="title-font main-color-one-color h1">دسته بندی <span class="main-color-three-color">محصولات</span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-4">
+                    <div class="section-title-link text-sm-end text-start">
+                        <a class="btn-flat dark" href=""> مشاهده همه</a>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="main-category-items mt-5">
+
+
+
+            <div class="swiper free-mode">
+                <div class="swiper-wrapper">
+                    {% for f_cat in featured_categories.categories.all %}
+                    <div class="swiper-slide">
+                        <div>
+                                <a href="{% url 'shop:category_products' f_cat.slug %}">
+                                    <img src="{{f_cat.get_image_url}}" alt="" width="180" height="180">
+                                </a>
+                           
+                            
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- end main-category -->
+
+<!-- start product slider -->
+
+<div class="product-slider site-slider free-swiper py-40 mt-4">
+    <div class="container-fluid">
+        <div class="section-title">
+            <div class="row gy-3 align-items-center">
+                <div class="col-sm-12">
+                    <div class="section-title-title">
+                        <h2 class="title-font main-color-one-color h1">محصولات <span class="main-color-three-color">پربازدید</span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                <span>
+                    <!-- <div class="col-sm-4">
+                        <div class="section-title-link text-sm-end text-start">
+                            <a class="font-16 btn-flat dark" href="{% url 'shop:product_list' %}"> مشاهده همه</a>
+                        </div>
+                    </div> -->
+                </span>
+                
+            </div>
+        </div>
+
+        <div class="slider-parent">
+            <div class="swiper product-slider-swiper">
+
+                <div class="swiper-wrapper ">
+                    {% for product in most_viewed_products %}
+                    <div class="swiper-slide">
+                        <div class="product-box">
+                            <div>
+                                <a href="{% url 'shop:product_detail' product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}"  alt="{{product.name}}" ></a>
+                                
+                                <!-- <div class="color-box">
+                                    <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                        <span class="color hint--top" style="background-color: #487eb0;"></span>
+                                    </div>
+                                    <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                        <span class="color hint--top" style="background-color: #353b48;"></span>
+                                    </div>
+                                    <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
+                                        <span class="color hint--top" style="background-color: #7f8fa6;"></span>
+                                    </div>
+                                </div> -->
+                                <div class="product-box-price-discount">
+                                    {% if product.off_active == True %}<span class="d-block badge main-color-three-bg text-white font-14 rounded-0">حراج</span>{% endif %}
+                                </div>
+                                <span class="product-box-image-overlay"></span>
+                            </div>
+                            <div class="product-box-title">
+                                <a href="{% url 'shop:product_detail' product.slug %}">
+                                    <h5 class="text-overflow-2">{{product.name}}</h5>
+                                </a>
+                            </div>
+                            <!-- <div class="product-box-size pro-var-responsive">
+                                <ul>
+                                    <li><a class="active" href="">40</a></li>
+                                    <li><a href="">41</a></li>
+                                    <li><a href="">42</a></li>
+                                    <li><a href="">43</a></li>
+                                </ul>
+                            </div> -->
+                            <div class="product-box-price">
+
+                                {% if product.off_active == True %}
+                                <div class="product-box-offer-discount">
+                                    <del>{{product.price|intcomma}} </del>
+                                </div>
+                                <div class="product-box-price-price">
+                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.sales_price|intcomma}} <span
+                                            class="mb-0 text-muted-two">تومان</span></h5>
+
+                                </div>
+                                {% else %}
+                                <div class="product-box-price-price">
+                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.price|intcomma}} <span
+                                            class="mb-0 text-muted-two">تومان</span></h5>
+
+                                </div>
+                                {% endif %}
+                                <!-- <div class="product-box-offer-discount">
+                                    <del>2,000,000</del>
+                                </div>
+                                <div class="product-box-price-price">
+                                    <h5 class="title-font main-color-one-color h2 mb-0">799,000 <span
+                                            class="mb-0 text-muted-two">تومان</span></h5>
+
+                                </div> -->
+                            </div>
+                            <div class="product-box-action">
+                                <a class="btn rounded-0 main-color-three-bg border-0 w-100" href="{% url 'shop:product_detail' product.slug %}">جزئیات محصول</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button class="amazing-offer-btn" data-scroll-to="#banners"></button>
+        </div>
+
+    </div>
+</div>
+
+<!-- end product slider -->
+
+
+
+<div class="advert d-lg-block advert-under-slider">
+    <div class="container-fluid">
+        <div class="row gx-0 gy-4">
+            {% for banner in big_banners %}
+            <div class="col-lg-12">
+                <div class="advert-item ms-2">
+                    <a href="{% url 'shop:featured_products' banner.source %}">
+                        <img alt="" src="{{banner.image.url}}" style="object-fit: cover">
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+<!-- start advert -->
+
+
+
+<div class="product-slider blog-slider free-sw free-swiper-two no-bg site-slider mt-5">
+    <div class="container-fluid position-relative">
+        <div class="section-title with-line">
+            <div class="row gy-3 align-items-center">
+                <div class="col-sm-8">
+                    <div class="section-title-title">
+                        <h2 class="title-font main-color-one-color h1">آخرین مطالب <span class="main-color-three-color">وبلاگ </span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="section-title-link text-sm-end text-start">
+                        <a class="btn-flat dark" href="{% url 'shop:post_list'  %}"> مشاهده همه</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper mt-4 blog-slider-swiper">
+
+            <div class="swiper-wrapper">
+
+               
+                {% for post in posts %}
+                <div class="swiper-slide">
+                    <div class="blog-item">
+                        <div class="blog-item-parent">
+                            <div class="blog-item-image">
+                                <img src="{{post.get_thumbnail}}" alt="">
+                            </div>
+                            <div class="blog-item-desc">
+                                <div class="blog-item-desc-parent">
+                                    <div class="blog-item-title">
+                                        <h5 class="title-font text-overflow-2">{{ post.title }}</h5>
+                                        <p class="mb-0 text-overflow-2">
+                                            {{post.body|truncatewords:20}}
+                                        </p>
+                                    </div>
+                                    <div class="blog-item-link">
+                                        <a href="{% url 'shop:post_detail' post.slug %}">
+                                            <span>خواندن ادامه</span>
+                                            <i class="bi bi-arrow-left"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="blog-item-date">
+                                    <div class="blog-item-date-date">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <span>{{post.shamsi_created_date}}</span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+                
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+
+        </div>
+
+    </div>
+</div>
+<!-- end advert -->
+
+
+<!-- start product slider -->
+
+
+
+<!-- end product slider -->
+
+
+<!-- start amazing slider -->
+
+
+
+<!-- end amazing slider -->
+
+<!-- start about us -->
+
+
+
+<!-- end about us -->
+
+
+<!-- start product slider -->
+
+
+</body>
+
+</html>
+
+{% endblock %}
