@@ -48,7 +48,7 @@
                         <div class="swiper-wrapper">
                             {% for slide in slides %}
                             <div class="swiper-slide" style="object-fit: fill;">
-                                <a href="{% url 'shop:featured_products' slide.source %}">
+                                <a href="{% url 'shop:featured_products' slide.id %}">
                                     <img src="{{slide.image.url}}" class="img-fluid" alt="" style="object-fit: inherit;">
                                 </a>
                             </div>
@@ -364,7 +364,7 @@
             {% for banner in small_banners %}
             <div class="col-lg-6">
                 <div class="advert-banner-item img-tilt" data-tilt>
-                    <a href="{% url 'shop:featured_products' banner.source %}">
+                    <a href="{% url 'shop:special_products' banner.id %}">
                         <img src="{{banner.image.url}}" alt="">
                     </a>
                 </div>
@@ -487,7 +487,7 @@
             {% for banner in big_banners %}
             <div class="col-12">
                 <div class="advert-banner-item img-tilt" data-tilt>
-                    <a href="{% url 'shop:featured_products' banner.source %}">
+                    <a href="{% url 'shop:special_products' banner.id %}">
                         <img src="{{banner.image.url}}" alt="">
                     </a>
                 </div>

@@ -9,6 +9,7 @@ from ckeditor.fields import RichTextField
 from bs4 import BeautifulSoup
 import datetime
 from datetime import timedelta
+from django_jalali.db import models as jmodels
 
 class Store(models.Model):
 	name = models.CharField(max_length=250, unique=True)
@@ -221,6 +222,9 @@ class Category(models.Model):
 			return categories
 		return None
 	
+	def get_products(self):
+		return self.product_set.all()
+	
 	def get_category_brands(self):
 		brands = []
 		products = self.product_set.all()
@@ -268,7 +272,7 @@ class ProductColor(models.Model):
 class Product(models.Model):
 	category = models.ManyToManyField(Category)
 	name = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=200, )
+	slug = models.CharField(max_length=200, )
 	description = RichTextField()
 	features = RichTextField()
 	brand = models.CharField(max_length=250, null=True, blank=True)
@@ -550,86 +554,11 @@ class Cart(models.Model):
 		return f'{self.customer.phone_number}'
 
 class Coupon(models.Model):
-	code = models.CharField(max_length=30, unique=True)
-	valid_from = models.CharField(max_length=250,)
-	valid_to = models.CharField(max_length=250)
-	discount = models.IntegerField()
-
-	def get_from_day(self):
-		from_time_words=self.valid_from.split()
-		if from_time_words[1] == 'شنبه':
-			from_time_day = int(from_time_words[2])
-		else:
-			from_time_day = int(from_time_words[1])
-		return from_time_day
-
-	def get_from_month(self):
-		months_dict = {
-						'فروردین': 1,
-						'اردیبهشت': 2,
-						'خرداد': 3,
-						'تیر': 4,
-						'مرداد': 5,
-						'شهریور': 6,
-						'مهر': 7,
-						'آبان': 8,
-						'آذر': 9,
-						'دی': 10,
-						'بهمن': 11,
-						'اسفند': 12
-					}
-		from_time_words=self.valid_from.split()
-		if from_time_words[2] in months_dict:
-			from_time_month = months_dict[from_time_words[2]]
-		elif from_time_words[3] in months_dict:
-			from_time_month = months_dict[from_time_words[3]]
-		return from_time_month
-
-	def get_from_year(self):
-		from_time_words=self.valid_from.split()
-		if from_time_words[3].isdigit():
-			from_time_year = int(from_time_words[3])
-		else:
-			from_time_year = int(from_time_words[4])
-		return from_time_year
-
-	def get_to_day(self):
-		to_time_words=self.valid_to.split()
-		if to_time_words[1] == 'شنبه':
-			to_time_day = int(to_time_words[2])
-		else:
-			to_time_day = int(to_time_words[1])
-		return to_time_day
-
-	def get_to_month(self):
-		months_dict = {
-						'فروردین': 1,
-						'اردیبهشت': 2,
-						'خرداد': 3,
-						'تیر': 4,
-						'مرداد': 5,
-						'شهریور': 6,
-						'مهر': 7,
-						'آبان': 8,
-						'آذر': 9,
-						'دی': 10,
-						'بهمن': 11,
-						'اسفند': 12
-					}
-		to_time_words=self.valid_to.split()
-		if to_time_words[2] in months_dict:
-			to_time_month = months_dict[to_time_words[2]]
-		elif to_time_words[3] in months_dict:
-			to_time_month = months_dict[to_time_words[3]]
-		return to_time_month
-
-	def get_to_year(self):
-		to_time_words=self.valid_to.split()
-		if to_time_words[3].isdigit():
-			to_time_year = int(to_time_words[3])
-		else:
-			to_time_year = int(to_time_words[4])
-		return to_time_year
+	code = models.CharField(max_length=50, unique=True, verbose_name="کد کوپن")
+	start_date = jmodels.jDateField(verbose_name="تاریخ شروع", null=True, blank=True)
+	end_date = jmodels.jDateField(verbose_name="تاریخ پایان", null=True, blank=True)
+	discount = models.IntegerField(verbose_name="میزان تخفیف (تومان)", default=0)
+	min_cart_volume = models.IntegerField(verbose_name="حداقل مبلغ سبد خرید (تومان)", default=0)
 
 	def __str__(self):
 		return self.code
@@ -783,7 +712,8 @@ class Slide(models.Model):
 	index = models.PositiveIntegerField(default=1)
 	image = models.ImageField(upload_to=slide_upload_path, default='media/11.png')
 	created = models.DateTimeField(auto_now_add=True)
-	source = models.CharField(max_length=250, default='انتخاب نشده')
+	tag = models.ManyToManyField(Tag)
+	category = models.ManyToManyField(Category)
 
 	class Meta:
 		ordering = ('created',)
@@ -806,7 +736,8 @@ class Banner(models.Model):
 	index = models.PositiveIntegerField(default=1)
 	image = models.ImageField(upload_to=banner_upload_path, default='media/11.png')
 	created = models.DateTimeField(auto_now_add=True)
-	source = models.CharField(max_length=250, default='انتخاب نشده')
+	tag = models.ManyToManyField(Tag)
+	category = models.ManyToManyField(Category)
 	size = models.CharField(max_length=250, default='small')
 	
 	class Meta:
@@ -1022,10 +953,18 @@ class FilterValue(models.Model):
 class Filter(models.Model):
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	name = models.CharField(max_length=250)
-	value = models.ManyToManyField(FilterValue)
+	value = models.ManyToManyField(FilterValue, blank=True)
 
 	def __str__(self):
 		return f'{self.name}'
+	
+class ProductFilter(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    filter = models.ForeignKey(Filter, on_delete=models.CASCADE)
+    values = models.ManyToManyField(FilterValue, blank=True)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.filter.name}"
 	
 class Announcement(models.Model):
 	subject = models.CharField(max_length=250, blank = True, null=True)

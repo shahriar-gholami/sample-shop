@@ -919,10 +919,20 @@ class FilterTagProducts(View):
 
 class FeaturedProductListView(View):
 
-	def get(self, request, source):
-		store = Store.objects.get(name=store_name)
+	def get(self, request, featured_products_id):
+		products = set()
+		slide = Slide.objects.get(id = featured_products_id)
+		if slide.tag:
+			for tag in slide.tag.all():
+				for product in tag.get_products():  # پیمایش کوئری‌ست
+					products.add(product)
+		if slide.category:
+			for category in slide.category.all():
+				for product in category.get_products():  # پیمایش کوئری‌ست
+					products.add(product)
+		products = list(products)
 		categories = Category.objects.all()
-		products = Product.objects.filter(verified = True)
+		# products = products.filter(verified = True)
 		paginator = Paginator(products, 12)
 		page = request.GET.get('page', 1)
 		try:
@@ -934,17 +944,6 @@ class FeaturedProductListView(View):
 		products_urls = f'{current_app_name}:product_detail'
 		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
-		parts = source.split('-')
-
-		if len(parts) == 2 and parts[1].isnumeric():
-			type_label, obj_id = parts
-			obj_id = int(obj_id)
-
-			if type_label == 'tag':
-				products = Product.objects.filter(tags__id=obj_id)
-			elif type_label == 'category':
-				main_selected_category = Category.objects.get(id = obj_id)
-				products = Product.objects.filter(category__id=obj_id)
 		items_per_page = 12
 		paginator = Paginator(products, items_per_page)
 		page = request.GET.get('page', 1)
@@ -960,7 +959,54 @@ class FeaturedProductListView(View):
 				 {'products': products, 
 	  			'brands': brands,
 				'colors': colors,
-	  			'main_selected_category': main_selected_category,
+				'to_products':products_urls, 
+				'store_name':store_name, 
+				'categories':categories,
+				'sizes':sizes,
+				'price_ranges':price_ranges})
+	
+class SpecialProductsListView(View):
+
+	def get(self, request, featured_products_id):
+		products = set()
+		banner = Banner.objects.get(id = featured_products_id)
+		if banner.tag:
+			for tag in banner.tag.all():
+				for product in tag.get_products():  # پیمایش کوئری‌ست
+					products.add(product)
+		if banner.category:
+			for category in banner.category.all():
+				for product in category.get_products():  # پیمایش کوئری‌ست
+					products.add(product)
+		products = list(products)
+		categories = Category.objects.all()
+		# products = products.filter(verified = True)
+		paginator = Paginator(products, 12)
+		page = request.GET.get('page', 1)
+		try:
+			products = paginator.page(page)
+		except PageNotAnInteger:
+			products = paginator.page(1)
+		except EmptyPage:
+			products = paginator.page(paginator.num_pages)
+		products_urls = f'{current_app_name}:product_detail'
+		sizes = Size.objects.all()
+		price_ranges = PriceRange.objects.all()
+		items_per_page = 12
+		paginator = Paginator(products, items_per_page)
+		page = request.GET.get('page', 1)
+		try:
+			products = paginator.page(page)
+		except PageNotAnInteger:
+			products = paginator.page(1)
+		except EmptyPage:
+			products = paginator.page(paginator.num_pages)
+		brands = Brand.objects.all()
+		colors = ProductColor.objects.all() 		
+		return render(request, f'{current_app_name}/product_list_{store.template_index}.html',
+				 {'products': products, 
+	  			'brands': brands,
+				'colors': colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
@@ -1099,14 +1145,6 @@ class ProductDetailView(View):
 		brand = Brand.objects.get(name = product.brand)
 		return render(request, f'{current_app_name}/product_detail_{store.template_index}.html', 
 				{'brand':brand,'services':services,'products':products,'product': product,'comments':comments ,'varieties':varieties,'form':form, 'message':message, 'add_to_cart':add_to_cart_url, 'store_name':store_name})
-
-class ProductDeleteView(IsOwnerUserMixin, View):
-	
-	def get(self, request, product_slug):
-		store = Store.objects.get(name=store_name)
-		product = Product.objects.filter(slug = product_slug).first()
-		product.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_products')
 
 class CommentCreateView(IsCustomerUserMixin, View):
 
@@ -1482,21 +1520,7 @@ class DeliveryApplyView(IsCustomerUserMixin, View):
 			order.save()
 		return redirect(f'{current_app_name}:order_detail', order_id)
 
-class CreateCouponView(IsOwnerUserMixin, View):
 
-	template_name = f'{current_app_name}/owner-dashboard-coupons.html'
-
-	def get(self, request):
-		form = CouponForm()
-		return render(request, self.template_name, {'form': form})
-
-	def post(self, request):
-		form = CouponForm(request.POST)
-		store = Store.objects.get(name = store_name)
-		if form.is_valid():
-			print(form.cleaned_data)
-			return redirect(f'{current_app_name}:owner_dashboard_coupons')
-		return render(request, self.template_name, {'form': form})
 
 
 	template_name = f'{current_app_name}/owner-dashboard-coupons.html'
@@ -1602,111 +1626,6 @@ class ProductSearchView(View):
 													'sizes':sizes,
 													'price_ranges':price_ranges})
 
-class CreateSlideView(IsOwnerUserMixin, View):
-
-	def post(self, request, index, *args, **kwargs):
-		form = AddSlideForm(request.POST, request.FILES)
-		store = Store.objects.get(name=store_name)
-		slide, create= Slide.objects.get_or_create( index=index)
-		if form.is_valid():
-			
-			source = form.cleaned_data['source']
-			if source != '':
-				slide.source = source
-
-			slide.save()
-
-			parts = source.split('-')
-	
-			if len(parts) == 2 and parts[1].isnumeric():
-				type_label, obj_id = parts
-				obj_id = int(obj_id)
-
-				if type_label == 'tag':
-					tag = Tag.objects.filter( id=obj_id).first()
-				elif type_label == 'category':
-					category = Category.objects.filter( id=obj_id).first()
-			return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-
-class CreateBannerView(IsOwnerUserMixin, View):
-	def post(self, request, index, *args, **kwargs):
-		form = AddBannerForm(request.POST, request.FILES)
-		store = Store.objects.get(name=store_name)
-		if index == '1' or index == '2':
-			size = 'small'
-		else:
-			size = 'big'
-		banner, create= Banner.objects.get_or_create( index=index, size = size)
-		if form.is_valid():
-
-			alt_name = form.cleaned_data['alt_name']
-			if alt_name != '':
-				banner.alt_name = alt_name
-
-			image = request.FILES.get('image')
-			if image != None:
-				banner.image=image
-			
-			source = form.cleaned_data['source']
-			if source != '':
-				banner.source = source
-
-			banner.save()
-
-			new_upload = UploadedImages.objects.create(
-				
-				image = image,
-				alt_name = alt_name,
-			)
-
-			parts = source.split('-')
-	
-			if len(parts) == 2 and parts[1].isnumeric():
-				type_label, obj_id = parts
-				obj_id = int(obj_id)
-
-				if type_label == 'tag':
-					tag = Tag.objects.filter( id=obj_id).first()
-				elif type_label == 'category':
-					category = Category.objects.filter( id=obj_id).first()
-			return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-
-class HomePageUpdateView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-edit-home.html'
-
-	def get(self, request, *args, **kwargs):
-
-		form = AddSlideForm
-		store = Store.objects.get(name = store_name)
-		slide1 = Slide.objects.filter( index=1).first()
-		slide2 = Slide.objects.filter( index=2).first()
-		slide3 = Slide.objects.filter( index=3).first()
-		slide4 = Slide.objects.filter( index=4).first()
-
-		banner1 = Banner.objects.filter( index=1).first()
-		banner2 = Banner.objects.filter( index=2).first()
-		banner3 = Banner.objects.filter( index=3).first()
-
-
-		categories = Category.objects.all()
-		tags = Tag.objects.all()
-
-		featured_categories = FeaturedCategories.objects.all().first()
-
-		return render(request, self.template_name, {'form':form, 
-											  		'featured_categories': featured_categories,
-													'store_name':store_name,
-													'slide1':slide1,
-													'slide2':slide2,
-													'slide3':slide3,
-													'slide4':slide4,
-													'categories':categories,
-													'tags':tags,
-													'banner1':banner1,
-													'banner2':banner2,
-													'banner3':banner3,})
-
 class FaqView(View):
 
 	def get(self, request, *args, **kwargs):
@@ -1714,69 +1633,8 @@ class FaqView(View):
 		faqs = Faq.objects.all()
 		return render(request, f'{current_app_name}/faq_{store.template_index}.html', {'store_name':store_name, 'faqs':faqs})
 	
-class FaqCreateView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-faq.html'
-
-	def get(self, request, *args, **kwargs):
-		form = FaqForm
-		store = Store.objects.get(name=store_name)
-		faqs = Faq.objects.all()
-		return render(request, self.template_name, {'store_name':store_name, 'faqs':faqs})
-
-	def post(self, request, *args, **kwargs):
-		form = FaqForm(request.POST)
-		store=Store.objects.get(name=store_name)
-		if form.is_valid():
-			question = form.cleaned_data['question']
-			answer = form.cleaned_data['answer']
-			new_faq = Faq.objects.create( question=question, answer=answer)
-			return redirect(f'{current_app_name}:faq_create')
-
-class FaqUpdateView(IsOwnerUserMixin, View):
-
-	def post(self, request, faq_id, *args, **kwargs):
-		form = FaqForm(request.POST)
-		store=Store.objects.get(name=store_name)
-		faq = Faq.objects.get( id=faq_id)
-		if form.is_valid():
-			question = form.cleaned_data['question']
-			answer = form.cleaned_data['answer']
-			faq.question = question
-			faq.answer = answer
-			faq.save()
-			return redirect(f'{current_app_name}:faq_create')
-
-class FaqDeleteView(IsOwnerUserMixin, View):
-
-	def get(self, request, faq_id, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		faq = Faq.objects.get( id=faq_id)
-		faq.delete()
-		return redirect(f'{current_app_name}:faq_create')
-	
-class LogoUpdateView(IsOwnerUserMixin, View):
-
-	def post(self, request, *args, **kwargs):
-		form = LogoUpdateForm(request.POST, request.FILES)
-		store = Store.objects.get(name=store_name)
-		if form.is_valid():
-			logo = request.FILES.get('logo')
-			existing_logos = StoreLogoImage.objects.all()
-			existing_logos.delete()
-			new_logo = StoreLogoImage.objects.create(
-											image = logo,
-											alt_name = f'{store_name} logo',
-											custom_name = f'{store_name} logo',)
-			new_upload = UploadedImages.objects.create(
-				
-				image = logo,
-				alt_name = f'{store_name} logo'
-			)
-		return redirect(f'{current_app_name}:owner_dashboard_store_update')
 
 class OrderPayView(IsCustomerUserMixin, View):
-	
 	
 	def get(self, request, order_id, *args, **kwargs):
 
@@ -1865,240 +1723,6 @@ class OrderVerifyView(LoginRequiredMixin, View):
 		else:
 			return render(request, self.template_name, {'message':'پرداخت ناموفق ', 'store_name':store_name})
 
-class OwnerDashboardFinanceView(IsOwnerUserMixin, View):
-	
-	template_name = f'{current_app_name}/owner-dashboard-finance.html'
-
-	def get(self, request, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		records = WithdrawRecord.objects.all()
-		balance = store.balance
-		owner_name = store.get_owner_name
-		form = WithdrawForm
-		return render(request, self.template_name, {
-			'store_name':store_name,
-			'store':store,
-			'balance':balance,
-			'owner_name':owner_name,
-			'form':form,
-			'message':'',
-			'records':records,
-		})
-
-	def post(self, request, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		balance = store.balance
-		records = WithdrawRecord.objects.all()
-		owner_name = store.get_owner_name
-		form = WithdrawForm(request.POST)
-		if form.is_valid():
-			sheba = form.cleaned_data['sheba_number']
-			amount = form.cleaned_data['amount']
-			if amount <=balance:
-				new_withdraw = WithdrawRecord.objects.create(
-					
-					sheba=sheba,
-					amount = amount,
-				)
-				store.balance -= amount
-				store.save()
-				return redirect(f'{current_app_name}:owner_dashboard_finance')
-			return render(request, self.template_name, {
-														'store_name':store_name,
-														'store':store,
-														'balance':balance,
-														'owner_name':owner_name,
-														'form':form,
-														'message':'مبلغ وارد شده بیش از اعتبار فروشگاه است.',
-														'records':records,
-														}) 
-		return render(request, self.template_name, {
-														'store_name':store_name,
-														'store':store,
-														'balance':balance,
-														'owner_name':owner_name,
-														'form':form,
-														'message':'لطفا مقادیر را کامل و به درستی وارد نمایید.',
-														'records':records,
-														}) 
-
-class BlogPostCreateView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/add-blog-post.html'
-
-	def get(self, request, *args, **kwargs):
-		form = BlogPostCreateForm
-		store = Store.objects.get(name = store_name)
-		blog_categories = BlogCategory.objects.all()
-		return render(request, self.template_name, {
-			'form':form,
-			'store_name':store_name,
-			'blog_categories':blog_categories,
-			'store':store,
-		})
-
-	def post(self, request, *args, **kwargs):
-		form = BlogPostCreateForm(request.POST) 
-		store = Store.objects.get(name = store_name)
-		if form.is_valid():
-			title = form.cleaned_data['title']
-			translator = Translator()
-			translation = translator.translate(title)
-			slug = re.sub(r'\s+', '-', translation.text)
-			slug = slug.lower()
-			body = form.cleaned_data['body']
-			published = form.cleaned_data['published']
-			cat_id = form.cleaned_data['category']
-			category = BlogCategory.objects.get(id=cat_id)
-			new_post = BlogPost.objects.create(
-				title = title,
-				slug = slug,
-				body=body,
-				published=published,
-				
-				category=category,
-			)
-			return redirect(f'{current_app_name}:edit_blog_post', new_post.slug)
-
-class OwnerDashboardBlogView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-blog.html'
-
-	def get(self, request, *args, **kwargs):
-		store = Store.objects.get(name = store_name)
-		posts = BlogPost.objects.all()
-		return render(request, self.template_name, {'store_name':store_name, 'store':store, 'posts':posts})
-
-class BlogPostEditView(IsOwnerUserMixin, View):
-	
-	template_name = f'{current_app_name}/edit-blog-post.html'
-
-	def get(self, request, post_slug, *args, **kwargs):
-		form = BlogPostCreateForm
-		meta_form = MetaForm
-		post = BlogPost.objects.get(slug = post_slug)
-		store = Store.objects.get(name = store_name)
-		blog_categories = BlogCategory.objects.all()
-		return render(request, self.template_name, {
-			'form':form,
-			'store_name':store_name,
-			'blog_categories':blog_categories,
-			'store':store,
-			'post':post,
-			'meta_form':meta_form,
-		})
-
-	def post(self, request, post_slug, *args, **kwargs):
-		form = BlogPostCreateForm(request.POST) 
-		meta_form = MetaForm
-		store = Store.objects.get(name = store_name)
-		if form.is_valid():
-			blog_categories = BlogCategory.objects.all()
-			post = BlogPost.objects.get(slug = post_slug)
-			title = form.cleaned_data['title']
-			translator = Translator()
-			translation = translator.translate(title)
-			slug = re.sub(r'\s+', '-', translation.text)
-			slug = slug.lower()
-			body = form.cleaned_data['body']
-			published = form.cleaned_data['published']
-			cat_id = form.cleaned_data['category']
-			category = BlogCategory.objects.get(id=cat_id)
-			post.title = title
-			post.slug=slug
-			post.body=body
-			post.published=published
-			post.category = category
-			post.save()
-			return redirect(f'{current_app_name}:edit_blog_post', post.slug)
-		return render(request, self.template_name, {
-			'form':form,
-			'store_name':store_name,
-			'blog_categories':blog_categories,
-			'store':store,
-			'post':post,
-			'meta_form':meta_form,
-		})
-	
-class PostMetaUpdateView(IsOwnerUserMixin, View):
-
-	def post(self, request, post_slug):
-
-		store = Store.objects.get(name = store_name)
-		post = BlogPost.objects.get(slug = post_slug)
-		form = MetaForm(request.POST)
-		if form.is_valid():
-			post.meta_description = form.cleaned_data['meta_description']
-			post.meta_keywords = form.cleaned_data['meta_keywords']
-			post.meta_og_title = form.cleaned_data['meta_og_title']
-			post.meta_og_description = form.cleaned_data['meta_og_description']
-			post.meta_tc_title = form.cleaned_data['meta_tc_title']
-			post.meta_tc_description = form.cleaned_data['meta_tc_description']
-			post.save()
-			return redirect(f'{current_app_name}:edit_blog_post', post.slug)
-		
-class PostThumbnailUpdateView(IsOwnerUserMixin, View):
-
-	def post(self, request, post_id, *args, **kwargs):
-		form = PostThumbnailUpdateForm(request.POST, request.FILES)
-		store = Store.objects.get(name=store_name)
-
-		if form.is_valid():
-			thumbnail = request.FILES.get('thumbnail')
-			post = BlogPost.objects.get(id=post_id)
-			existing_tumbnail = PostThumbnail.objects.filter( post=post)
-			existing_tumbnail.delete()
-			new_thumbnail = PostThumbnail.objects.create(
-											post=post,
-											image = thumbnail,
-											alt_name = post.title,)
-			new_upload = UploadedImages.objects.create(
-				
-				image = thumbnail,
-				alt_name = post.title
-			)
-		return redirect(f'{current_app_name}:edit_blog_post', post.slug)
-
-class BlogCategoryCreateView(IsOwnerUserMixin, View):
-	
-	def post(self, request, *args, **kwargs):
-		form = BlogCategoryForm(request.POST)
-		if form.is_valid():
-			cat_name = form.cleaned_data['name']
-			store = Store.objects.get(name = store_name)
-			new_blog_category = BlogCategory.objects.create( name = cat_name)
-			return redirect(f'{current_app_name}:owner_dashboard_blog_category')
-
-class BlogCategoryEditView(IsOwnerUserMixin, View):
-
-	def post(self, request, blog_category_id, *args, **kwargs):
-		form = BlogCategoryForm(request.POST)
-		if form.is_valid():
-			blog_category = BlogCategory.objects.get(id=blog_category_id)
-			blog_category.name = form.cleaned_data['name']
-			blog_category.save()
-			return redirect(f'{current_app_name}:owner_dashboard_blog_category') 
-
-class BlogCategoryDeleteView(IsOwnerUserMixin, View):
-
-	def get(self, request, blog_category_id, *args, **kwargs):
-		blog_category = BlogCategory.objects.get(id=blog_category_id)
-		blog_category.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_blog_category') 
-
-class OwnerDashboardBlogCategoryView(IsOwnerUserMixin, View):
-	
-	template_name = f'{current_app_name}/owner-dashboard-blog-category.html'
-
-	def get(self, request, *args, **kwargs):
-		form = BlogCategoryForm
-		store = Store.objects.get(name = store_name)
-		blog_categories = BlogCategory.objects.all()
-		return render(request, self.template_name, {'store':store,
-		'store_name':store_name,
-		'blog_categories':blog_categories,
-		'form':form})
-	
 class BlogView(View):
 
 	def get(self, request, *args, **kwargs):
@@ -2124,96 +1748,6 @@ class BlogPostDetailView(View):
 											  'posts':posts,
 											  'blog_categories':blog_categories})
 
-class ImageBankView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/image-bank.html'
-
-	def get(self, request, image_class, index, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		image_class = image_class
-		uploaded_images = UploadedImages.objects.all()
-		# picosite_bank = BankImage.objects.all()
-		form = ImageUploadForm
-		return render(request, self.template_name, {'store_name':store_name,
-											  'uploaded_images':uploaded_images,
-											#   'picosite_bank':picosite_bank,
-											  'image_class':image_class,
-											  'index':index,
-											  'form':form,})
-
-	def post(self, request, image_class, index, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		form = ImageUploadForm(request.POST, request.FILES)
-		uploaded_images = UploadedImages.objects.all()
-		# picosite_bank = BankImage.objects.all()
-		if form.is_valid():
-			image = request.FILES.get('image')
-			new_image = UploadedImages.objects.create(image=image,alt_name=f'{store_name}-{image_class}-{index}')
-			return redirect(f'{current_app_name}:image_bank', image_class, index)
-		return render(request, self.template_name, {'store_name':store_name,
-											  'uploaded_images':uploaded_images,
-											#   'picosite_bank':picosite_bank,
-											  'image_class':image_class,
-											  'index':index,
-											  'form':form,
-											  'message':'در آپلود تصویر مشکلی ایجاد شده است. لطفا دوباره تلاش نمایید.'})
-		
-class ApplyFromImageBankView(IsOwnerUserMixin, View):
-
-	def get(self, request, image_class, index, source, image_id, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		if source == 'uploaded_image':
-			image = UploadedImages.objects.get(id=image_id).image
-		# if source == 'picosite_image':
-		# 	image = BankImage.objects.get(id=image_id).image
-		if image_class == 'slide':
-			slide = Slide.objects.get(index = index)
-			slide.image = image
-			slide.save()
-			return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-		if image_class == 'banner':
-			banner = Banner.objects.get(index=index)
-			banner.image = image
-			banner.save()
-			return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-		if image_class == 'logo':
-			logo = StoreLogoImage.objects.all().first()
-			logo.image = image
-			logo.save()
-			return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-		if image_class == 'category':
-			category = Category.objects.filter( id=index).first()
-			category_image, create = CategoryImage.objects.get_or_create(category=category)
-			category_image.image = image
-			category_image.save()
-			return redirect(f'{current_app_name}:owner_dashboard_categories')
-
-class DeleteCategoryImageView(IsOwnerUserMixin, View):
-
-	def get(self, request, category_id, *args, **kwargs):
-		store = Store.objects.get(name = store_name)
-		category = Category.objects.get(id=category_id)
-		image = CategoryImage.objects.get(category=category)
-		image.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_categories')
-
-class GetFeaturedCategories(IsOwnerUserMixin, View):
-	
-	def post(self, request, *args, **kwargs):
-		form = HomeCategoryShowForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name=store_name)
-			categories = form.cleaned_data['categories']
-			store_featured_cats, created = FeaturedCategories.objects.get_or_create(store=store)
-
-			# Clear existing categories
-			store_featured_cats.categories.clear()
-
-			# Add new categories
-			store_featured_cats.categories.add(*categories)
-
-		return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-
 class SubscribeView(IsCustomerUserMixin, View):
 
 	def post(self, request, *args, **kwargs):
@@ -2224,109 +1758,6 @@ class SubscribeView(IsCustomerUserMixin, View):
 			new_subscriber, create = Subscription.objects.get_or_create( email=email)
 			return redirect(f'{current_app_name}:index')
 
-class ChangeThemeLayoutView(IsOwnerUserMixin, View):
-
-	def post(self, request, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		form = ThemeForm(request.POST)
-		if form.is_valid():
-			color = form.cleaned_data['color']
-			h = color.lstrip('#')
-			RGB_color = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
-			theme_color = f'{RGB_color[0]},{RGB_color[1]},{RGB_color[2]}'
-			store.color = theme_color
-			store.save()
-			return redirect(f'{current_app_name}:owner_dashboard_edit_home')
-		
-class CreateTicketView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-create-ticket.html'
-
-	def get(self, request):
-
-		ticket_form = TicketForm
-		store = Store.objects.get(name = store_name)
-		return render(request, self.template_name, {'store_name':store_name, 'ticket_form':ticket_form})
-
-	def post(self, request):
-
-		ticket_form = TicketForm(request.POST)
-		if ticket_form.is_valid():
-			store = Store.objects.get(name = store_name)
-			subject = ticket_form.cleaned_data['subject']
-			body = ticket_form.cleaned_data['body']
-			new_ticket = Ticket.objects.create(
-				
-				subject = subject,
-				body=body
-			)
-			return redirect(f'{current_app_name}:owner_dashboard_ticket_list')
-		return render(request, self.template_name, {'store_name':store_name, 'ticket_form':ticket_form, 'message': 'مقادیر وارد شده خالی یا  نامعتبر است'})
-
-class TicketDetailAndReplyView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-ticket-detail.html'
-	
-	def get(self, request, ticket_id):
-
-		form = TicketReplyForm
-		ticket = Ticket.objects.get(id=ticket_id)
-		replies = TicketReply.objects.filter(ticket = ticket)
-
-		return render(request, self.template_name, {'ticket':ticket ,'form':form, 'store_name':store_name, 'replies':replies})
-
-
-	def post(self, request, ticket_id):
-
-		form = TicketReplyForm(request.POST)
-		ticket = Ticket.objects.get(id = ticket_id)
-		replies = TicketReply.objects.filter(ticket = ticket)
-		if form.is_valid():
-			store = Store.objects.get(name = store_name)
-			body = form.cleaned_data['body']
-			new_ticket_reply = TicketReply.objects.create(
-				body=body,
-				ticket = ticket
-			)
-			ticket.is_answered = False
-			ticket.save()
-			return redirect(f'{current_app_name}:owner_dashboard_ticket_list')
-		return render(request, self.template_name, {'ticket':ticket ,'form':form, 'store_name':store_name, 'replies':replies, 'message':'مقادیر وارد شده خالی یا نامعتبر است'})
-
-class TicketListView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-tickets.html'
-
-	def get(self, request):
-		store = Store.objects.get(name = store_name)
-		tickets = Ticket.objects.all()
-		return render(request, self.template_name, {'store_name':store_name, 'tickets':tickets})
-
-class CloseTicketView(IsOwnerUserMixin, View):
-
-	def get(self, request, ticket_id):
-		ticket = Ticket.objects.get(id=ticket_id)
-		ticket.is_closed = True
-		ticket.save()
-		return redirect(f'{current_app_name}:owner_dashboard_ticket_list')
-
-class EditPoliciesView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/owner-dashboard-policies.html'
-
-	def get(self, request):
-		store = Store.objects.get(name = store_name)
-		form = PoliciesForm
-		return render(request, self.template_name, {'store_name':store_name, 'store':store, 'form':form})
-	
-	def post(self, request):
-		store = Store.objects.get(name = store_name)
-		form = PoliciesForm(request.POST)
-		if form.is_valid():
-			store.policies = form.cleaned_data['policies']
-			store.save()
-			return redirect(f'{current_app_name}:owner_dashboard_policies')
-		
 class PoliciesView(View):
 
 	def get(self, request):

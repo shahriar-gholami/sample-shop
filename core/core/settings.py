@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.humanize',
+    'django_jalali',
     'rest_framework',
     'accounts',
     'core',
@@ -131,6 +132,11 @@ TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 USE_TZ = True
+
+JALALI_DATE_DEFAULTS = {
+    "js_lib_url": "https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js",
+    "css_lib_url": "https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css",
+}
 
 
 # Static files (CSS, JavaScript, Images)
