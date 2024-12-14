@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Host: shahrtoy.com
+Sitemap: https://shahrtoy.com/sitemap.xml
