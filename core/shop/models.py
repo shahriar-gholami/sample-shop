@@ -1,6 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from datetime import date
+
+from jalali_date import datetime2jalali, date2jalali
 from khayyam import JalaliDatetime
 from random import randint
 from django.urls import reverse
@@ -560,6 +563,17 @@ class Coupon(models.Model):
 	discount = models.IntegerField(verbose_name="میزان تخفیف (تومان)", default=0)
 	min_cart_volume = models.IntegerField(verbose_name="حداقل مبلغ سبد خرید (تومان)", default=0)
 
+	def is_valid(self):
+		"""بررسی می‌کند که آیا کوپن در بازه زمانی معتبر است یا نه."""
+		today = date2jalali(date.today())  # تاریخ امروز به فرمت شمسی
+		if self.start_date and self.end_date:
+			return self.start_date <= today <= self.end_date
+		elif self.start_date:
+			return self.start_date <= today
+		elif self.end_date:
+			return today <= self.end_date
+		return False
+
 	def __str__(self):
 		return self.code
 
@@ -959,12 +973,12 @@ class Filter(models.Model):
 		return f'{self.name}'
 	
 class ProductFilter(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    filter = models.ForeignKey(Filter, on_delete=models.CASCADE)
-    values = models.ManyToManyField(FilterValue, blank=True)
+	product = models.ForeignKey(Product, on_delete=models.CASCADE)
+	filter = models.ForeignKey(Filter, on_delete=models.CASCADE)
+	values = models.ManyToManyField(FilterValue, blank=True)
 
-    def __str__(self):
-        return f"{self.product.name} - {self.filter.name}"
+	def __str__(self):
+		return f"{self.product.name} - {self.filter.name}"
 	
 class Announcement(models.Model):
 	subject = models.CharField(max_length=250, blank = True, null=True)

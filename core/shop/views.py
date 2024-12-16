@@ -1477,30 +1477,22 @@ class CouponApplyView(IsCustomerUserMixin, View):
 			code = form.cleaned_data['code']
 			store = Store.objects.get(name = store_name)
 			coupon = Coupon.objects.filter(code__exact=code).first()
-			if coupon == None:
-				order.delivery_description = order.delivery_description + f'<p class="text-danger">کد تخفیف نامعتبر</p>' 
+			if order.used_coupon == True:
+				order.delivery_description = order.delivery_description + f'<p class="text-danger">برای این سفارش قبلا کد تخفیف وارد شده است</p><br>' 
 				order.save()
 				return redirect(f'{current_app_name}:order_final_check', order_id)
-			
-			current_datetime = datetime.now()
-			jalali_datetime  = JalaliDatetime(current_datetime)
-			formatted_date = jalali_datetime.strftime('%Y/%m/%d')
-			if jalali_datetime.year>=coupon.get_from_year() and jalali_datetime.year<=coupon.get_to_year():
-				if jalali_datetime.month>=coupon.get_from_month() and jalali_datetime.month<=coupon.get_to_month():
-					if jalali_datetime.day>=coupon.get_from_day() and jalali_datetime.day<=coupon.get_to_day():
-						if order.used_coupon == True:
-							order.delivery_description = order.delivery_description + f'<p class="text-danger">برای این سفارش قبلا کد تخفیف وارد شده است</p>' 
-							order.save()
-							return redirect(f'{current_app_name}:order_final_check', order_id)
-						else:
-							order.total_price -= coupon.discount
-							order.used_coupon = True
-							order.delivery_description = order.delivery_description + f'<p class="text-danger">مبلغ نهایی پس از اعمال کد تخفیف: {order.total_price+order.delivery_cost:,} تومان</p>' 
-							order.save()
-						return redirect(f'{current_app_name}:order_final_check', order_id)
-			order.delivery_description = order.delivery_description + f'<p class="text-danger">کد وارد شده نامعتبر بوده و یا قبلا وارد شده است</p>' 
-			order.save()
-			return redirect(f'{current_app_name}:order_final_check', order_id)
+			if coupon == None:
+				order.delivery_description = order.delivery_description + f'<p class="text-danger">کد تخفیف نامعتبر</p><br>' 
+				order.save()
+				return redirect(f'{current_app_name}:order_final_check', order_id)
+			if coupon.is_valid():
+				order.total_price -= coupon.discount
+				order.used_coupon = True
+				order.delivery_description = order.delivery_description + f'<p class="text-success">مبلغ نهایی پس از اعمال کد تخفیف: {order.total_price+order.delivery_cost:,} تومان</p><br>' 
+				order.save()
+				return redirect(f'{current_app_name}:order_final_check', order_id)
+		order.delivery_description = order.delivery_description + f'<p class="text-danger">کد وارد شده نامعتبر بوده و یا قبلا وارد شده است</p><br>' 
+		order.save()
 		return redirect(f'{current_app_name}:order_final_check', order_id)
 	
 class DeliveryApplyView(IsCustomerUserMixin, View):
@@ -1787,27 +1779,6 @@ class FilterView(View):
 			)
 			return redirect(f'{current_app_name}:owner_dashboard_filters')
 		
-class EditFilterTitleView(IsOwnerUserMixin, View):
-
-	def post(self, request, filter_id):
-
-		form = EditFilterTitleForm(request.POST)
-		if form.is_valid():
-			filter_name = form.cleaned_data['name']
-			filter = Filter.objects.get(id=filter_id)
-			filter.name = filter_name
-			filter.save()
-		return redirect(f'{current_app_name}:owner_dashboard_filters')
-		
-class DeleteFilter(View):
-
-	def get(self, request, filter_id):
-		filter = Filter.objects.get(id = filter_id)
-		for value in filter.value.all():
-			value.delete()
-		filter.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_filters')
-	
 class AsignFilterToProductView(View):
 
 	def post(self, request, product_id, *args, **kwargs):
@@ -1824,14 +1795,6 @@ class AsignFilterToProductView(View):
 			filter.value.add(new_filter_asign)
 			filter.save()
 			return redirect(f'{current_app_name}:product_update', product.id)
-
-class DeleteFilterValueView(View):
-
-	def get(self, request, product_id ,filter_value_id):
-		filter_value = FilterValue.objects.get(id = filter_value_id)
-		product = Product.objects.get(id = product_id)
-		filter_value.delete()
-		return redirect(f'{current_app_name}:product_update', product.id)
 
 form_classes = [type(f'FeatureFilterForm{i}', (FeatureFilterForm,), {}) for i in range(1, 4)]
 
@@ -1908,21 +1871,6 @@ class ClearActiveFilterValueView(View):
 				request.session.modified = True
 
 				return redirect(f'{current_app_name}:category_products', category.slug )
-
-class OwnerDashboardAnnouncements(View):
-
-	template_name = 'shop/owner-dashboard-announcements.html'
-
-	def get(self, request):
-		store = Store.objects.get(name = store_name)
-		announcements = []
-		store.has_notif = False
-		store.save()
-		
-		for item in Announcement.objects.all():
-			if store in item.store.all() and item.is_active == True:
-				announcements.append(item)
-		return render(request, self.template_name, {'store':store, 'store_name':store_name, 'announcements':announcements})
 
 def format_features(features_list):
 	output = ""
@@ -2349,96 +2297,6 @@ class BrandProductListView(View):
 					
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', {'store_name':store_name})
 
-class TagListCreateView(IsOwnerUserMixin ,View):
-
-	template_name = f'{current_app_name}/owner-dashboard-tag.html'
-
-	def get(self, request, *args, **kwargs):
-		form = TagForm
-		store = Store.objects.get(name=store_name)
-		tags = Tag.objects.all()
-		create_tag_url = 'shop:owner_dashboard_tag'
-		edit_tag_url = 'shop:edit_tag'
-		return render(request, self.template_name, {'edit_tag_url':edit_tag_url,
-													'create_tag_url':create_tag_url,
-													'form': form, 
-													'tags':tags,
-													'store_name':store_name})
-
-	def post(self, request, *args, **kwargs):
-		form = TagForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name=store_name)
-			tag = Tag.objects.create(
-				
-				name = form.cleaned_data['name'],
-				slug = form.cleaned_data['slug'],
-				is_special = form.cleaned_data['is_special']
-			)
-			tags = Tag.objects.all()
-			create_tag_url = f'{current_app_name}:tag-list-and-create'
-			edit_tag_url = f'{current_app_name}:edit_tag'
-			return redirect(f'{current_app_name}:owner_dashboard_tag')
-		create_tag_url = f'{current_app_name}:tag-list-and-create'
-		edit_tag_url = f'{current_app_name}:edit_tag'
-		return render(request, self.template_name, {'edit_tag_url':edit_tag_url,
-													'create_tag_url':create_tag_url,
-													'form': form, 
-													'tags':tags,
-													'store_name':store_name})
-
-class TagEditView(IsOwnerUserMixin ,View):
-
-	def post(self, request, pk, *args, **kwargs):
-		tag = get_object_or_404(Tag, pk=pk)
-		form = TagForm(request.POST)
-		if form.is_valid():
-			tag.is_special = form.cleaned_data['is_special']
-			tag.save()
-			return redirect('shop:owner_dashboard_tag') 
-		store = Store.objects.filter(name = store_name).first()
-		tagss = Delivery.objects.all()
-		create_tag_url = f'{current_app_name}:tag-list-and-create'
-		edit_tag_url = f'{current_app_name}:edit_tag'
-		return render(request, self.template_name, {'edit_tag_url':edit_tag_url,
-													'create_tag_url':create_tag_url,
-													'form': form, 
-													'tag':tag,
-													'store_name':store_name})
-
-class TagDeleteView(IsOwnerUserMixin, View):
-		
-	def get(self, request, pk, *args, **kwargs):
-		tag = Tag.objects.get(pk=pk)
-		tag.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_tag')
-
-class DeleteCategoryGroupView(View):
-
-	def post(self, request, *args, **kwargs):
-		form = CategorySelectForm(request.POST)
-		selected_categories = request.POST.getlist('category_select')
-		for id in selected_categories:
-			category = Category.objects.get(id=id)
-			category.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_categories' )
-
-class SetMerchantCodeView(View):
-
-	def post(self, request):
-
-		store = Store.objects.get(name = store_name)
-		form = MerchantCodeForm(request.POST)
-		if form.is_valid():
-			store.merchant = form.cleaned_data['merchant_code']
-			store.save()
-			return redirect('shop:owner_dashboard_store_update')
-		return render(request, 'shop/owner-dashboard-store-settings.html',
-		{
-			'wrong_merchant_message': 'ورودی نا معتبر',
-			'store': store
-		})
-
 class RecieverDetailsView(View):
 
 	template_name = f'{current_app_name}/reciever_details.html'
@@ -2478,9 +2336,8 @@ class OrderDeliveryOptionsView(View):
 			express_time_normal = form.cleaned_data['express_time_normal']
 			normal_day = form.cleaned_data['normal_day']
 			normal_time = form.cleaned_data['normal_time']
-			print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
-			print(form.cleaned_data)
-
+			normal_delivery = Delivery.objects.get(name= 'ارسال عادی')
+			express_delivery = Delivery.objects.get(name= 'ارسال اکسپرس')
 			if express_time_express != '0' and express_day_normal != '0' and express_day_normal != '':
 				form = OrderDeliveryOptionsForm
 				tehran_timezone = pytz.timezone('Asia/Tehran')
@@ -2495,8 +2352,6 @@ class OrderDeliveryOptionsView(View):
 					'Thursday': 'پنج‌شنبه',
 					'Friday': 'جمعه',
 				}
-				normal_delivery = Delivery.objects.get(name= 'ارسال عادی')
-				express_delivery = Delivery.objects.get(name= 'ارسال اکسپرس')
 				next_days = []
 				for i in range(1, 6):  # از فردا تا پنج روز بعد
 					future_date = today + timedelta(days=i)
@@ -2570,15 +2425,19 @@ class OrderDeliveryOptionsView(View):
 			order.save()
 			return redirect('shop:order_final_check', order.id)
 
-# class OtherCitiesDeliveryOptionsView(View):
-
-# 	far_delivery_method = Delivery.objects.get(name='سایر شهرها')
-
-
-
 class OrderFinalCheckView(View):
 
 	def get(self, request, order_id):
+		result = ''
 		store = Store.objects.all().first()
 		order = Order.objects.get(id = order_id)
+		delivery_des = order.delivery_description
+		if 'text-success' in delivery_des:
+			lines = delivery_des.split('<br>')
+			for line in lines:
+				print(line)
+				if 'text-danger' not in line or 'مبلغ نهایی' in line:
+					result = result + f'<br> {line}'
+			order.delivery_description = result
+			order.save()
 		return render(request, f'{current_app_name}/order_final_check_{store.template_index}.html', {'store':store, 'order':order})
