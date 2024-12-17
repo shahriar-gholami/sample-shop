@@ -264,11 +264,7 @@ class RecieverDetailsForm(forms.Form):
     address = forms.CharField(required = False)
 
 class OrderDeliveryOptionsForm(forms.Form):
-    express_time_express = forms.CharField(required=False)
-    express_day_normal = forms.CharField(required=False)
-    express_time_normal = forms.CharField(required=False)
-    normal_day = forms.CharField(required=False)
-    normal_time = forms.CharField(required=False)
+    delivery_method = forms.CharField()
 
 
 

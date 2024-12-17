@@ -51,108 +51,8 @@
 </div>
 
 
-{% if order.reciever_city == 'تهران' %}
-<form method="post" action="{% url 'shop:order_delivery_options' order.id %}">
+<form method="post" action="{% url 'shop:order_detail' order.id %}">
 {% csrf_token %}
-{% if order.get_order_express_products %}
-<div class="container-fluid">
-    <div class="col-12">
-        <div class="container-fluid content-box p-4">
-            <h6 class="title-font mb-3 h6">کالاهای با قابلیت ارسال اکسپرس</h6>
-            <div class="product-row-parent">
-                <div class="row g-4">
-                    {% for item in order.items.all %}
-                    {% if item.variety.product.express == True %}
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="product-row-item">
-                            <a href="">
-                                <div class="row align-items-center">
-                                    <div class="col-4">
-                                        <img src="{{ item.variety.product.get_main_image }}" alt="">
-                                    </div>
-                                    <div class="col-8">
-                                        <h3 class="text-overflow-1 title-font font-14">{{item.variety.product.name}}</h3>
-                                        <div class="cart-canvas-price my-3 d-flex align-items-center">
-                                            <p>قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان <br>
-                                                تعداد: {{item.quantity}}<br>
-                                                مجموع: {{item.get_item_price|intcomma}} تومان</p>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="factor-item pb-3 mt-4">
-                <h5 class="title-font mb-3 h6">شیوه و زمان ارسال</h5>
-                <div class="row gy-3">
-                    <div class="col-sm-6">
-                        <div class="bank-item p-4">
-                            <h5 class="title-font mb-3 h6">ارسال فوری</h5>
-                            <div class="comment-item w-100 mt-4" for="floatingInputOstan">
-                                <p class="m-0">زمان ارسال</p>
-                                <!-- <label class="label-float fw-bold">زمان ارسال <span class="text-danger">*</span></label> -->
-                                <select name="express_time_express"  class="form-select width-200 mb-3">
-                                    <option value= "0">انتخاب</option>
-                                    {% for interval in intervals %}
-                                        {% if interval.start_time > now_hour and interval.start_time != 100 and interval.start_time != 0 %}
-                                            <option value= "{{interval.id}}">ارسال امروز از ساعت {{interval.start_time}} الی {{interval.end_time}} + {{express_delivery_price}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="bank-item p-4">
-                            <h5 class="title-font mb-3 h6">ارسال معمولی</h5>
-                            <div class="comment-item w-100 mt-4" for="floatingInputOstan">
-                                <div class="row">
-                                    <div class="col-md-6 form_group">
-                                    <!-- <label class="label-float fw-bold">روز ارسال <span class="text-danger">*</span></label> -->
-                                    <p class="p-0 m-0">روز ارسال</p>
-                                    <select name="express_day_normal"  class="form-select width-200 form-group">
-                                        <option value= "0">انتخاب</option>
-                                        {% if order.get_order_normal_products != None %}
-                                        <option value= "همراه با کالاهای ارسال عادی">ارسال عادی همراه با سایر کالاهای ارسال عادی - رایگان</option>
-                                        {% endif %}
-                                        {% for day in next_days %}
-                                        <option value= "{{day.date}}">ارسال روز {{day.day}} - {{day.date}} + {{normal_delivery_price}}</option>
-                                        {% endfor %}
-                                    </select>
-                                    </div>
-                                    <div class="col-md-6">   
-                                    <!-- <label class="label-float fw-bold">بازه زمانی ارسال <span class="text-danger">*</span></label> -->
-                                    <p class="p-0 m-0">بازه زمانی ارسال</p>
-                                    <select name="express_time_normal"  class="form-select width-200 form-group">
-                                        <option value= "{{default_delivery_id}}">انتخاب</option>
-                                        {% if order.get_order_normal_products != None %}
-                                        <option value= "{{merging_delivery_id}}">همزمان با سایر کالاهای ارسال عادی - رایگان</option>
-                                        {% endif %}
-                                        {% for interval in intervals %}
-                                        {% if interval.start_time != 100 and interval.start_time != 0 %}
-                                        <option value= "{{interval.id}}">ارسال از ساعت {{interval.start_time}} الی {{interval.end_time}}</option>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% endif %}
-{% if order.get_order_normal_products %}
 <div class="container-fluid mt-4">
     <div class="col-12">
         <div class="container-fluid content-box p-4">
@@ -161,7 +61,6 @@
             <div class="product-row-parent">
                 <div class="row g-4">
                     {% for item in order.items.all %}
-                    {% if item.variety.product.express == False %}
                     <div class="col-lg-4 col-sm-6">
                         <div class="product-row-item">
                             <a href="">
@@ -182,41 +81,26 @@
                             </a>
                         </div>
                     </div>
-                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
              
             <div class="factor-item pb-3 mt-4">
-                <h5 class="title-font mb-3 h6">شیوه و زمان ارسال</h5>
+                <h5 class="title-font mb-3 h6">شیوه ارسال</h5>
                 <div class="row gy-3">
                     
                     <div class="col-sm-12">
                         <div class="bank-item p-4">
-                            <h5 class="title-font mb-3 h6">ارسال معمولی</h5>
                             <div class="comment-item w-100 mt-4" for="floatingInputOstan">
                                 <div class="row mb-3 form-group">
-                                    <div class="col-md-6 form-group">
-                                    <!-- <label class="label-float fw-bold">روز ارسال <span class="text-danger">*</span></label> -->
-                                    <p class="p-0 m-0">روز ارسال</p>
-                                    <select name="normal_day" class="form-select width-200 form-group">
-                                        <option value= "0">انتخاب</option>
-                                        {% for day in next_days %}
-                                        <option value= "{{day.date}}">ارسال روز {{day.day}} - {{day.date}} + {{express_delivery_price}}</option>
-                                        {% endfor %}
-                                    </select>
-                                    </div>
-                                    <div class="col-md-6">   
+                                    
+                                    <div class="col-md-12">   
                                     <!-- <label class="label-float fw-bold">بازه زمانی ارسال <span class="text-danger">*</span></label> -->
-                                    <p class="p-0 m-0">بازه زمانی ارسال</p>
-                                    <select name="normal_time" class="form-select width-200 form-group">
-                                        <option value= "{{default_delivery_id}}">انتخاب</option>
-                                        {% for interval in intervals %}
-                                        {% if interval.start_time != 100 and interval.start_time != 0 %}
-                                        <option value= "{{interval.id}}">ارسال از ساعت {{interval.start_time}} الی {{interval.end_time}}</option>
-                                        {% endif %}
+                                    <p class="p-0 m-0">انتخاب روش‌های ارسال</p>
+                                    <select name="delivery_method" class="form-select width-200 form-group">
+                                        {% for delivery in delivery_mthods %}
+                                        <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
                                         {% endfor %}
-
                                     </select>
                                     </div> 
                                 </div>
@@ -228,56 +112,11 @@
         </div>
     </div>
 </div>
-{% endif %}
 <div class="container-fluid mt-4">
     <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">تایید و ادامه فرایند خرید</button> 
     <p class="text-danger">{{multi_choice_error}}</p>
 </div>
 </form>
-{% else %}
-<div class="container-fluid mt-4">
-    <div class="col-12">
-        <div class="container-fluid content-box p-4">
-            <h6 class="title-font mb-3 h6">کالاهای با قابلیت ارسال عادی</h6>
-            
-            <div class="product-row-parent">
-                <div class="row g-4">
-                    {% for item in order.items.all %}
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="product-row-item">
-                            <a href="">
-                                <div class="row align-items-center">
-                                    <div class="col-4">
-                                        <img src="{{ item.variety.product.get_main_image }}" alt="">
-                                    </div>
-                                    <div class="col-8">
-                                        <h3 class="text-overflow-1 title-font font-14">{{item.variety.product.name}}</h3>
-                                        <div class="cart-canvas-price my-3 d-flex align-items-center">
-                                            <p>قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان <br>
-                                                تعداد: {{item.quantity}}<br>
-                                                مجموع: {{item.get_item_price|intcomma}} تومان</p>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-             
-            <div class="factor-item pb-3 mt-4">
-                <h5 class="title-font mb-3 h6">تحویل به شرکت حمل نقل بعد از یک روز کاری</h5>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid mt-4">
-    <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">تایید و ادامه فرایند خرید</button> 
-</div>
-{% endif %}
-
 
 {% endblock %}
 

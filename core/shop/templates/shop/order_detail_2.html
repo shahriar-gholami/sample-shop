@@ -152,38 +152,14 @@
                 </div>
                 <div class="col-12">
                     <div class="row gy-4">
-                        <div class="col-xl-9">
-                            <div class="content-box">
-                                <div class="container-fluid">
-
-                                    <div class="alert alert-danger rounded-0">
-                                        با توجه به محدود بودن موجودی کالاها، افزودن کالا به سبد خرید به معنی رزرو آن
-                                        نیست. جهت نهایی کردن خرید پیش از اتمام موجودی، همین حالا سبد خود را ثبت و خرید
-                                        را تکمیل کنید.
-                                    </div>
-
-                                    
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-xl-3">
+                        
+                        <div class="col-xl-12">
                             <div class="content-box">
                                 <div class="container-fluid">
                                     <div class="item">
                                         <div class="factor">
-                                            <form action="{% url 'shop:apply_coupon' order.id %}" method="post">
-                                            {% csrf_token %}
-                                            <div class="form-group">
-                                                <label class="label-float fw-bold">کد تخفیف <span class="text-danger">*</span></label>
-                                                <input name="code" class="form-control form-label label-float" id="exampleInputname" placeholder="کد تخفیف خود را وارد نمایید"
-                                                       type="text">
-                                            </div>
-                                            <button type="submit" class="btn-flat dark text-center lg w-100">اعمال کد تخفیف</button>
-                                            <label class="col-md-9 form-label">{{message}}</label>
-                                            </form>
                                             <div class="form-group mt-4">
-                                                <form method="post" action="{% url 'shop:apply_delivery' order.id %}">
+                                                <form method="post" action="{% url 'shop:order_detail' order.id %}">
                                                 {% csrf_token %}
                                                 <label class="label-float fw-bold">شیوه ارسال <span class="text-danger">*</span></label>
             
@@ -193,18 +169,9 @@
                                                     <option value="{{delivery.id}}">{{delivery.name}}</option>
                                                     {% endfor %}
                                                 </select>
-                                                <button type="submit" class="btn-flat dark text-center lg w-100">اعمال شیوه ارسال</button>
-                                                <p>{% if order.delivery_method != None %}انتخاب شیوه ارسال فعلی: {{order.delivery_method.name}} + {{order.delivery_method.price}} تومان {%endif%}</p>
-                                                <p class="text-danger">{{message2}}</p>
                                                 </form>
                                             </div>
-                                            <div class="d-flex factor-item mb-3 align-items-center justify-content-between">
-                                                <h5 class="mb-0 h6">جمع کل:</h5>
-                                                
-                                                <p class="mb-0 font-17">{{order.get_final_payment|intcomma }} تومان</p>
-                                            </div>
-
-                                            <div class="action mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="action mt-3 d-flex align-items-center justify-content-center mb-3">
                                                 <a href="{% url 'shop:order_payment' order.id %}"
                                                    class="btn-flat dark text-center lg w-100">تایید سفارش</a>
                                             </div>

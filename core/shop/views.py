@@ -1367,91 +1367,6 @@ class DeleteCartItemView(View):
 		cart_item.delete()
 		return redirect(f'{current_app_name}:cart_view', cart_id)
 
-class CreateOrderView(IsCustomerUserMixin, View):
-
-	def get(self, request):
-		message = ''
-		store = Store.objects.get(name = store_name)
-		customer = Customer.objects.filter(phone_number=request.user.phone_number).first()
-		cart = Cart.objects.filter(customer=customer).first()
-		if cart.items.all().first() != None:
-			items = cart.items.all()
-			total_price = 0
-			order_status = OrderStatus.objects.get(pk=2)
-			for item in items:
-				price = item.variety.product.get_active_price()*item.quantity
-				total_price += price
-			order = Order.objects.create(customer=customer, total_price=total_price, status = order_status)
-			order.items.set(items)
-			for item in order.items.all():
-				if item.variety.product.express == True:
-					order.has_express_items = True
-					order.save()
-					break
-			for item in order.items.all():
-				if item.variety.product.express == False:
-					order.has_normal_items = True
-					order.save()
-					break
-			cart.items.clear()
-			return redirect(f'{current_app_name}:order_reciever_detail' , order.id)
-		return render(request, f'{current_app_name}/empty-cart_{store.template_index}.html', {'store_name':store_name})
-
-class OrderDetailView(IsCustomerUserMixin ,View):
-
-	form_class = CouponApplyForm
-
-	def get(self, request, order_id):
-		order = Order.objects.get(id=order_id)
-		store = Store.objects.get(name = store_name)
-		order_detail_url = f"{current_app_name}:apply_coupon"
-		form2 = DeliveryApplyForm
-		tehran_timezone = pytz.timezone('Asia/Tehran')
-		today = datetime.now(tehran_timezone)
-		now_hour = today.hour
-		days_map = {
-			'Saturday': 'شنبه',
-			'Sunday': 'یکشنبه',
-			'Monday': 'دوشنبه',
-			'Tuesday': 'سه‌شنبه',
-			'Wednesday': 'چهارشنبه',
-			'Thursday': 'پنج‌شنبه',
-			'Friday': 'جمعه',
-		}
-		normal_delivery = Delivery.objects.get(name= 'ارسال عادی')
-		express_delivery = Delivery.objects.get(name= 'ارسال اکسپرس')
-		next_days = []
-		for i in range(1, 6):  # از فردا تا پنج روز بعد
-			future_date = today + timedelta(days=i)
-			date_str = JalaliDatetime(future_date).strftime('%Y/%m/%d')
-			day_name = days_map[future_date.strftime('%A')]
-			next_days.append({'day': day_name, 'date': date_str})
-		intervals = ExpressDeliveryInterval.objects.all()
-		merging_delivery_id = ExpressDeliveryInterval.objects.get(start_time = 100).id
-		default_delivery_id = ExpressDeliveryInterval.objects.get(start_time = 0).id
-		if order.total_price >=  normal_delivery.min_cart_free and normal_delivery.min_cart_free_active == True:
-			normal_delivery_price = 'رایگان'
-		else:
-			normal_delivery_price = str(normal_delivery.price) + 'تومان'
-		if order.total_price >=  express_delivery.min_cart_free and express_delivery.min_cart_free_active == True:
-			express_delivery_price = 'رایگان'
-		else:
-			express_delivery_price = str(express_delivery.price) + 'تومان'
-		return render(request, f'{current_app_name}/order_detail_{store.template_index}.html', {'form2':form2,
-																								'next_days':next_days,
-																								'default_delivery_id':default_delivery_id,
-																								'now_hour':now_hour,
-																								'express_delivery_price':express_delivery_price,
-																								'normal_delivery_price':normal_delivery_price,
-																								'intervals':intervals,
-																								'order':order, 
-																								'merging_delivery_id':merging_delivery_id,
-																								'normal_delivery':normal_delivery,
-																								'express_delivery':express_delivery,
-																								'form':self.form_class, 
-																								'order_detail':order_detail_url, 
-																								'store_name':store_name})
-
 class OrderWrongCouponView(IsCustomerUserMixin, View):
 
 	form_class = CouponApplyForm
@@ -1488,67 +1403,14 @@ class CouponApplyView(IsCustomerUserMixin, View):
 			if coupon.is_valid():
 				order.total_price -= coupon.discount
 				order.used_coupon = True
-				order.delivery_description = order.delivery_description + f'<p class="text-success">مبلغ نهایی پس از اعمال کد تخفیف: {order.total_price+order.delivery_cost:,} تومان</p><br>' 
+				order.delivery_description = order.delivery_description + f'<p class="text-success">مبلغ نهایی پس از اعمال کد تخفیف: {order.total_price+order.delivery_cost:,} تومان</p>' 
 				order.save()
 				return redirect(f'{current_app_name}:order_final_check', order_id)
 		order.delivery_description = order.delivery_description + f'<p class="text-danger">کد وارد شده نامعتبر بوده و یا قبلا وارد شده است</p><br>' 
 		order.save()
 		return redirect(f'{current_app_name}:order_final_check', order_id)
 	
-class DeliveryApplyView(IsCustomerUserMixin, View):
-
-	def post(self, request, order_id, *args, **kwargs):
-		form = DeliveryApplyForm(request.POST)
-		if form.is_valid():
-			delivery = form.cleaned_data['delivery']
-			store = Store.objects.get(name = store_name)
-			try:
-				method = Delivery.objects.get(id=int(delivery))
-			except Delivery.DoesNotExist:
-				messages.error(request, 'this method does not exists', 'danger')
-				return redirect(f'{current_app_name}:order_detail' ,order_id)
-			order = Order.objects.get(id=order_id)
-			order.delivery_method =  method
-			order.save()
-		return redirect(f'{current_app_name}:order_detail', order_id)
-
-
-
-
 	template_name = f'{current_app_name}/owner-dashboard-coupons.html'
-
-	def get(self, request):
-		store = Store.objects.get(name = store_name)
-		coupons = Coupon.objects.all()
-		return render(request, self.template_name, {'coupons': coupons, 'store_name':store_name})
-	
-	def post(self, request):
-		form = CouponForm(request.POST)
-		store = Store.objects.get(name = store_name)
-		if form.is_valid():
-			code = form.cleaned_data['code']
-			from_time = form.cleaned_data['from_time']
-			to_time = form.cleaned_data['to_time']
-			discount = form.cleaned_data['discount']
-			new_coupon = Coupon.objects.create(
-											code=code,
-											valid_from=from_time,
-											valid_to=to_time,
-											discount=discount)
-			current_datetime = datetime.now()
-
-
-			return redirect(f'{current_app_name}:owner_dashboard_coupons')
-		return render(request, self.template_name, {'form': form})
-
-
-	template_name = f'{current_app_name}/order_list.html'
-
-	def get(self, request, *args, **kwargs):
-		store = Store.objects.get(name = store_name)
-		orders = Order.objects.all()
-		order_process_url = f'{current_app_name}:update_order_status'
-		return render(request, self.template_name, {'orders': orders, 'order_process':order_process_url, 'store_name':store_name})	
 
 class AboutUsPageView(View):
 
@@ -1625,96 +1487,6 @@ class FaqView(View):
 		faqs = Faq.objects.all()
 		return render(request, f'{current_app_name}/faq_{store.template_index}.html', {'store_name':store_name, 'faqs':faqs})
 	
-
-class OrderPayView(IsCustomerUserMixin, View):
-	
-	def get(self, request, order_id, *args, **kwargs):
-
-		store = Store.objects.get(name = store_name)
-		order = Order.objects.get(id=order_id)
-		request.session['order_pay'] = {
-			'order_id': order.id,
-		}
-
-		if order.get_final_payment() == 0:
-			order.status = OrderStatus.objects.get(id=1)
-			customer = order.customer
-			customer.wallet_balance -= order.get_without_cashback_cost()
-			customer.save()
-			order.paid_by_wallet = order.get_without_cashback_cost()
-			order.save()
-			return redirect(f'{current_app_name}:customer_dashboard_order_detail', order.id)
-		MERCHANT = store.merchant
-		req_data = {
-			"merchant_id": MERCHANT,
-			"amount": order.get_final_payment()*10,
-			"callback_url": f'https://picosite.ir/shop/{store_name}/orders/verify/',
-			"description": description,
-			"metadata": {"mobile": request.user.phone_number, "email": request.user.email}
-		}
-		req_header = {"accept": "application/json",
-					"content-type": "application/json'"}
-		req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
-			req_data), headers=req_header)
-		authority = req.json()['data']['authority']
-		if len(req.json()['errors']) == 0:
-			return redirect(ZP_API_STARTPAY.format(authority=authority))
-		else:
-			e_code = req.json()['errors']['code']
-			e_message = req.json()['errors']['message']
-			return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
-
-class OrderVerifyView(LoginRequiredMixin, View):
-
-	template_name = f'{current_app_name}/customer-payment-result.html'
-
-	def get(self, request):
-		paid_status = OrderStatus.objects.get(id=1)
-		order_id = request.session['order_pay']['order_id']
-		order = Order.objects.get(id=int(order_id))
-		store = order.store
-		store_name = order.store.name
-		if store.merchant != None:
-			MERCHANT = store.merchant
-		t_status = request.GET.get('Status')
-		t_authority = request.GET['Authority']
-		if request.GET.get('Status') == 'OK':
-			req_header = {"accept": "application/json",
-						  "content-type": "application/json'"}
-			req_data = {
-				"merchant_id": MERCHANT,
-				"amount": order.get_final_payment()*10,
-				"authority": t_authority
-			}
-			req = requests.post(url=ZP_API_VERIFY, data=json.dumps(req_data), headers=req_header)
-			if len(req.json()['errors']) == 0:
-				t_status = req.json()['data']['code']
-				if t_status == 100:
-					order.status = paid_status
-					customer = order.customer
-					if order.get_final_payment() >= customer.wallet_balance:
-						customer.wallet_balance = 0
-						order.paid_by_wallet = customer.wallet_balance
-						
-					else:
-						customer.wallet_balance -= order.get_final_payment()
-						order.paid_by_wallet = order.get_final_payment()
-					customer.save()
-					
-					order.save()
-					
-					return render(request, self.template_name, {'message':'پرداخت شما موفقیت آمیز بود. سفارش شما ثبت گردید و در حال پردازش است ', 'ref_id':req.json()['data']['ref_id'], 'store_name':store_name})
-				elif t_status == 101:
-					return render(request, self.template_name, {'message':str(req.json()['data']['message']), 'store_name':store_name})
-				else:
-					return render(request, self.template_name, {'message':'پرداخت ناموفق ', 'store_name':store_name})
-			else:
-				e_code = req.json()['errors']['code']
-				e_message = req.json()['errors']['message']
-				return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
-		else:
-			return render(request, self.template_name, {'message':'پرداخت ناموفق ', 'store_name':store_name})
-
 class BlogView(View):
 
 	def get(self, request, *args, **kwargs):
@@ -2297,6 +2069,95 @@ class BrandProductListView(View):
 					
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', {'store_name':store_name})
 
+class CreateOrderView(IsCustomerUserMixin, View):
+
+	def get(self, request):
+		message = ''
+		store = Store.objects.get(name = store_name)
+		customer = Customer.objects.filter(phone_number=request.user.phone_number).first()
+		cart = Cart.objects.filter(customer=customer).first()
+		if cart.items.all().first() != None:
+			items = cart.items.all()
+			total_price = 0
+			order_status = OrderStatus.objects.get(pk=2)
+			for item in items:
+				price = item.variety.product.get_active_price()*item.quantity
+				total_price += price
+			order = Order.objects.create(customer=customer, total_price=total_price, status = order_status)
+			order.items.set(items)
+			for item in order.items.all():
+				if item.variety.product.express == True:
+					order.has_express_items = True
+					order.save()
+					break
+			for item in order.items.all():
+				if item.variety.product.express == False:
+					order.has_normal_items = True
+					order.save()
+					break
+			cart.items.clear()
+			return redirect(f'{current_app_name}:order_detail' , order.id)
+		return render(request, f'{current_app_name}/empty-cart_{store.template_index}.html', {'store_name':store_name})
+
+class OrderDetailView(IsCustomerUserMixin ,View):
+
+	def get(self, request, order_id):
+		form = OrderDeliveryOptionsForm
+		order = Order.objects.get(id=order_id)
+		order_detail_url = f"{current_app_name}:apply_coupon"
+		delivery_mthods = []
+		for delivery in Delivery.objects.all():
+			if order.total_price <= delivery.min_cart_free:
+				price = f'{delivery.price:,} تومان'
+			else:
+				price = 'رایگان'
+			new_del = {
+				'id': delivery.id,
+				'name': delivery.name,
+				'price': price,
+			}
+			delivery_mthods.append(new_del)
+		
+		return render(request, f'{current_app_name}/order_detail_{store.template_index}.html', {'form':form,
+																								'order':order, 
+																								'order_detail':order_detail_url, 
+																								'store_name':store_name,
+																								'delivery_mthods':delivery_mthods})
+	def post(self, request, order_id):
+		store = Store.objects.all().first()
+		form = OrderDeliveryOptionsForm(request.POST)
+		order = Order.objects.get(id = order_id)
+		if form.is_valid():
+			print('KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
+			print(form.cleaned_data)
+			delivery_method = Delivery.objects.get(id = int(form.cleaned_data['delivery_method']))
+			order.delivery_method = delivery_method
+			delivery_description = ''
+			delivery_description = delivery_description+'اقلام سفارش: <br>'
+			for item in order.items.all():
+				delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
+			delivery_description = delivery_description+'شیوه ارسال: <br>'
+			if order.total_price <= delivery_method.min_cart_free:
+				delivery_description = delivery_description+f'{delivery_method.name} + {delivery_method.price:,} تومان  <br>'
+				order.delivery_cost = delivery_method.price
+				delivery_cost = delivery_method.price
+			else:
+				delivery_description = delivery_description+f'{delivery_method.name}، هزینه رایگان <br>'
+				order.delivery_cost = 0
+				delivery_cost = 0
+			delivery_description = delivery_description + '---------------------------------------------<br>'
+			delivery_description = delivery_description + f'هزینه کالاهای سفارش: {order.total_price:,} تومان<br>'
+			delivery_description = delivery_description + '---------------------------------------------<br>'
+			if order.total_price <= delivery_method.min_cart_free:
+				delivery_description = delivery_description+f'هزینه ارسال: {delivery_method.price:,} تومان  <br>'
+			else:
+				delivery_description = delivery_description+f'هزینه ارسال: رایگان <br>'
+			delivery_description = delivery_description + '---------------------------------------------<br>'
+			delivery_description = delivery_description + f'مجموع هزینه: {order.total_price+delivery_cost:,} تومان<br>'
+			order.delivery_description = delivery_description
+			order.save()
+			return redirect('shop:order_reciever_detail', order.id)
+
 class RecieverDetailsView(View):
 
 	template_name = f'{current_app_name}/reciever_details.html'
@@ -2322,107 +2183,6 @@ class RecieverDetailsView(View):
 			order.reciever_zip_code = form.cleaned_data['zip_code']
 			order.reciever_address = form.cleaned_data['address']
 			order.save()
-			return redirect('shop:order_detail', order.id)
-
-class OrderDeliveryOptionsView(View):
-
-	def post(self, request, order_id):
-		store = Store.objects.all().first()
-		form = OrderDeliveryOptionsForm(request.POST)
-		order = Order.objects.get(id = order_id)
-		if form.is_valid():
-			express_time_express = form.cleaned_data['express_time_express']
-			express_day_normal = form.cleaned_data['express_day_normal']
-			express_time_normal = form.cleaned_data['express_time_normal']
-			normal_day = form.cleaned_data['normal_day']
-			normal_time = form.cleaned_data['normal_time']
-			normal_delivery = Delivery.objects.get(name= 'ارسال عادی')
-			express_delivery = Delivery.objects.get(name= 'ارسال اکسپرس')
-			if express_time_express != '0' and express_day_normal != '0' and express_day_normal != '':
-				form = OrderDeliveryOptionsForm
-				tehran_timezone = pytz.timezone('Asia/Tehran')
-				today = datetime.now(tehran_timezone)
-				now_hour = today.hour
-				days_map = {
-					'Saturday': 'شنبه',
-					'Sunday': 'یکشنبه',
-					'Monday': 'دوشنبه',
-					'Tuesday': 'سه‌شنبه',
-					'Wednesday': 'چهارشنبه',
-					'Thursday': 'پنج‌شنبه',
-					'Friday': 'جمعه',
-				}
-				next_days = []
-				for i in range(1, 6):  # از فردا تا پنج روز بعد
-					future_date = today + timedelta(days=i)
-					date_str = JalaliDatetime(future_date).strftime('%Y/%m/%d')
-					day_name = days_map[future_date.strftime('%A')]
-					next_days.append({'day': day_name, 'date': date_str})
-				intervals = ExpressDeliveryInterval.objects.all()
-				merging_delivery_id = ExpressDeliveryInterval.objects.get(start_time = 100).id
-				default_delivery_id = ExpressDeliveryInterval.objects.get(start_time = 0).id
-				if order.total_price >=  normal_delivery.min_cart_free and normal_delivery.min_cart_free_active == True:
-					normal_delivery_price = 'رایگان'
-				else:
-					normal_delivery_price = str(normal_delivery.price) + 'تومان'
-				if order.total_price >=  express_delivery.min_cart_free and express_delivery.min_cart_free_active == True:
-					express_delivery_price = 'رایگان'
-				else:
-					express_delivery_price = str(express_delivery.price) + 'تومان'
-				return render(request, f'{current_app_name}/order_detail_{store.template_index}.html', {
-																									'next_days':next_days,
-																									'default_delivery_id':default_delivery_id,
-																									'now_hour':now_hour,
-																									'normal_delivery_price':normal_delivery_price,
-																									'express_delivery_price':express_delivery_price,
-																									'intervals':intervals,
-																									'multi_choice_error':'شما نمی‌توانید همزمان دو روش مختلف ارسال برای کالاهای با تحویل فوری انتخاب نمایید.',
-																									'order':order, 
-																									'merging_delivery_id':merging_delivery_id,
-																									'normal_delivery':normal_delivery,
-																									'express_delivery':express_delivery,
-																									'form':form, 
-																									'store_name':store_name})
-
-
-			if express_time_express == '0':
-				if ExpressDeliveryInterval.objects.get(id=int(express_time_normal)).start_time != 100:
-					express_delivery = f'{express_day_normal} - {ExpressDeliveryInterval.objects.get(id = int(express_time_normal)).start_time}'
-				else:
-					express_delivery = f'ارسال کالاهای اکسپرس همراه با کالاهای عادی'
-			elif express_time_express != '':
-				express_delivery = f'امروز ساعت: {ExpressDeliveryInterval.objects.get(id = int(express_time_express)).start_time }'
-			delivery_description = ' '
-			delivery_cost = 0
-			if order.has_express_items == True:
-				delivery_description = delivery_description+'کالاهای اکسپرس: <br>'
-				for item in order.items.all():
-					if item.variety.product.express == True:
-						delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
-				delivery_description = delivery_description+'زمان تحویل: <br>'
-				delivery_description = delivery_description+f'{express_delivery} <br>'
-				if order.total_price <= express_delivery.min_cart_free or express_delivery.min_cart_free_active == True:
-					delivery_cost = delivery_cost + Delivery.objects.get(name = 'ارسال اکسپرس').price
-
-			if order.has_normal_items == True:
-				delivery_description = delivery_description+'کالاهای ارسال عادی: <br>'
-				for item in order.items.all():
-					if item.variety.product.express == False:
-						delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
-				delivery_description = delivery_description+'زمان تحویل: <br>'
-				delivery_description = delivery_description+f'{normal_day} - ساعت {ExpressDeliveryInterval.objects.get(id = int(normal_time)).start_time} <br>'
-			
-			if order.total_price <= normal_delivery.min_cart_free or normal_delivery.min_cart_free_active == True:
-				delivery_cost = delivery_cost + Delivery.objects.get(name = 'ارسال عادی').price
-			order.delivery_cost = delivery_cost
-			delivery_description = delivery_description + '---------------------------------------------<br>'
-			delivery_description = delivery_description + f'هزینه کالاهای سفارش: {order.total_price:,} تومان<br>'
-			delivery_description = delivery_description + '---------------------------------------------<br>'
-			delivery_description = delivery_description + f'هزینه ارسال کالاها: {delivery_cost:,} تومان<br>'
-			delivery_description = delivery_description + '---------------------------------------------<br>'
-			delivery_description = delivery_description + f'مجموع هزینه: {order.total_price+delivery_cost:,} تومان<br>'
-			order.delivery_description = delivery_description
-			order.save()
 			return redirect('shop:order_final_check', order.id)
 
 class OrderFinalCheckView(View):
@@ -2437,7 +2197,107 @@ class OrderFinalCheckView(View):
 			for line in lines:
 				print(line)
 				if 'text-danger' not in line or 'مبلغ نهایی' in line:
-					result = result + f'<br> {line}'
+					result = result + f'{line}<br> '
 			order.delivery_description = result
 			order.save()
 		return render(request, f'{current_app_name}/order_final_check_{store.template_index}.html', {'store':store, 'order':order})
+	
+
+class OrderPayView(IsCustomerUserMixin, View):
+	
+	def get(self, request, order_id, *args, **kwargs):
+
+		store = Store.objects.get(name = store_name)
+		order = Order.objects.get(id=order_id)
+		request.session['order_pay'] = {
+			'order_id': order.id,
+		}
+
+		if order.get_final_payment() == 0:
+			order.status = OrderStatus.objects.get(id=1)
+			customer = order.customer
+			customer.wallet_balance -= order.get_without_cashback_cost()
+			customer.save()
+			order.paid_by_wallet = order.get_without_cashback_cost()
+			order.save()
+			return redirect(f'{current_app_name}:customer_dashboard_order_detail', order.id)
+		MERCHANT = store.merchant
+		req_data = {
+			"merchant_id": MERCHANT,
+			"amount": order.get_final_payment()*10,
+			"callback_url": f'https://picosite.ir/shop/{store_name}/orders/verify/',
+			"description": description,
+			"metadata": {"mobile": request.user.phone_number, "email": request.user.email}
+		}
+		req_header = {"accept": "application/json",
+					"content-type": "application/json'"}
+		req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
+			req_data), headers=req_header)
+		authority = req.json()['data']['authority']
+		if len(req.json()['errors']) == 0:
+			return redirect(ZP_API_STARTPAY.format(authority=authority))
+		else:
+			e_code = req.json()['errors']['code']
+			e_message = req.json()['errors']['message']
+			return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
+
+class OrderVerifyView(LoginRequiredMixin, View):
+
+	template_name = f'{current_app_name}/customer-payment-result.html'
+
+	def get(self, request):
+		paid_status = OrderStatus.objects.get(id=1)
+		order_id = request.session['order_pay']['order_id']
+		order = Order.objects.get(id=int(order_id))
+		store = order.store
+		store_name = order.store.name
+		if store.merchant != None:
+			MERCHANT = store.merchant
+		t_status = request.GET.get('Status')
+		t_authority = request.GET['Authority']
+		if request.GET.get('Status') == 'OK':
+			req_header = {"accept": "application/json",
+						  "content-type": "application/json'"}
+			req_data = {
+				"merchant_id": MERCHANT,
+				"amount": order.get_final_payment()*10,
+				"authority": t_authority
+			}
+			req = requests.post(url=ZP_API_VERIFY, data=json.dumps(req_data), headers=req_header)
+			if len(req.json()['errors']) == 0:
+				t_status = req.json()['data']['code']
+				if t_status == 100:
+					order.status = paid_status
+					customer = order.customer
+					if order.get_final_payment() >= customer.wallet_balance:
+						customer.wallet_balance = 0
+						order.paid_by_wallet = customer.wallet_balance
+						
+					else:
+						customer.wallet_balance -= order.get_final_payment()
+						order.paid_by_wallet = order.get_final_payment()
+					customer.save()
+					
+					order.save()
+					
+					return render(request, self.template_name, {'message':'پرداخت شما موفقیت آمیز بود. سفارش شما ثبت گردید و در حال پردازش است ', 'ref_id':req.json()['data']['ref_id'], 'store_name':store_name})
+				elif t_status == 101:
+					return render(request, self.template_name, {'message':str(req.json()['data']['message']), 'store_name':store_name})
+				else:
+					return render(request, self.template_name, {'message':'پرداخت ناموفق ', 'store_name':store_name})
+			else:
+				e_code = req.json()['errors']['code']
+				e_message = req.json()['errors']['message']
+				return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
+		else:
+			return render(request, self.template_name, {'message':'پرداخت ناموفق ', 'store_name':store_name})
+
+
+
+
+
+
+
+
+
+
