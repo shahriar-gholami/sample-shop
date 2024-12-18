@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}مرور نهایی سفارش{% endblock %}
+
+{% block content %}
+
+    <div class="main-content app-content mt-0">
+        <div class="side-app">
+
+            <!-- CONTAINER -->
+            <div class="main-container container-fluid">
+
+                <!-- PAGE-HEADER -->
+                <div class="page-header">
+                    <h1 class="page-title">مرور نهایی سفارش</h1>
+                    <div>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">فروشگاه</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">سفارش شما</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- PAGE-HEADER END -->
+
+                <!-- ROW-1 OPEN -->
+                <div class="row">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">خلاصه سفارش شما</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-12 col-xl-12">
+                                        {{ order.delivery_description|safe }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <form method="post" action="{% url 'shop:apply_coupon' order.id %}">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 mb-0">
+                                        <div class="form-group">
+                                            <input name="code" class="form-control" placeholder="کد تخفیف" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-footer mt-2">
+                                    <button type="submit" class="btn btn-primary">اعمال کد تخفیف</button>
+                                </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-end">
+                                <a href="{% url 'shop:order_payment' order.id %}" class="btn btn-primary">پرداخت</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                
+                </div>
+                <!-- ROW-1 CLOSED -->
+            </div>
+            <!-- CONTAINER CLOSED -->
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

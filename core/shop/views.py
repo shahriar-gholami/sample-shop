@@ -47,6 +47,7 @@ current_app_name = apps.get_containing_app_config(__name__).name
 class IndexView(View):
 
 	def get(self, request):
+		store = Store.objects.all().first()
 		current_page = request.path
 		slides = Slide.objects.all()
 		small_banners = Banner.objects.filter(size='small')
@@ -2102,6 +2103,7 @@ class CreateOrderView(IsCustomerUserMixin, View):
 class OrderDetailView(IsCustomerUserMixin ,View):
 
 	def get(self, request, order_id):
+		store = Store.objects.all().first()
 		form = OrderDeliveryOptionsForm
 		order = Order.objects.get(id=order_id)
 		order_detail_url = f"{current_app_name}:apply_coupon"
@@ -2166,7 +2168,7 @@ class RecieverDetailsView(View):
 		form = RecieverDetailsForm
 		store = Store.objects.get(name = store_name)
 		order = Order.objects.get(id = order_id)
-		return render(request, self.template_name, {'order':order, 'store':store, 'form':form})
+		return render(request, f'{current_app_name}/reciever_details_{store.template_index}.html', {'order':order, 'store':store, 'form':form})
 
 	def post(self, request, order_id):
 

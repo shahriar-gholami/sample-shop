@@ -49,125 +49,53 @@
 
             <!-- ROW-1 OPEN -->
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xl-8">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card cart">
                         <div class="card-header">
                             <h3 class="card-title">سبد خرید</h3>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-vcenter">
-                                    <thead>
-                                    <tr class="border-top">
-                                        <th>محصول</th>
-                                        <th>عنوان</th>
-                                        <th>قیمت</th>
-                                        <th>مقدار</th>
-                                        <th>مجموع</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for item in order.items.all %}
-                                        
-                                        
-                                            <tr>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <img alt="" class="cart-img text-center"
-                                                            src="{{item.variety.product.get_main_image}}">
-                                                    </div>
-                                                </td>
-                                                <td>{{item.variety.product.name}} {% if item.variety.name != 'default variety' %}- {{item.variety.name}}{% endif %}</td>
-                                                <td class="fw-bold">{{item.variety.product.get_active_price|intcomma}}</td>
-                                                <td
-                                                    class="fw-bold">{{item.quantity}}
-                                                </td>
-                                                <td>{{item.get_item_price|intcomma}} تومان</td>
-                                                
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="col-lg-12 col-xl-4 col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">جزییات سفارش</div>
-                        </div>
-                        <div class="card-body py-2">
-                            <div class="table-responsive">
-                                <table class="table table-borderless text-nowrap mb-0">
-                                    <tbody>
-                                    <tr>
-                                        <form action="{% url 'shop:apply_coupon' order.id %}" method="post">
-                                        {% csrf_token %}
-                                        <label class="col-md-12 form-label">کد تخفیف<br>
-                                        کد تخفیف خود را وارد نمایید و بر روی دکمه اعمال کلیک نمایید.
-                                        </label>
-                                        {% if order.used_coupon == True %}<label class="col-md-12 form-label text-success">کوپن تخفیف به مبلغ: {{order.get_discount|intcomma}} تومان برای سفارش شما اعمال شد.</label>{% endif %}
-                                            <div class="input-group mb-1">
-                                                
-                                                <input name="code" class="form-control" placeholder="کد تخفیف" type="text">
-                                                <button type="submit" class="login100-form-btn btn-primary mt-2">اعمال کوپن</button> 
-                                                <label class="col-md-9 form-label">{{message}}</label>
+                            <div class="row">
+                                {% for item in order.items.all %}
+                                <div class="col-md-12  col-xl-6">
+                                    <div class="card">
+                                        <div class="row g-0">
+
+                                            <div class="col-md-4">
+                                                <img alt="img" class="card-img-left" src="{{item.variety.product.get_main_image}}" style="width: 150px;">
                                             </div>
-                                        </form>
-                                    </tr>
-                                    
-                                    </tbody>
-                                </table>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h5 class="card-title m-0">{{item.variety.product.name}}</h5>
+                                                    <p class="card-text m-0">تنوع: {{item.variety.name}}</p>
+                                                    <p class="card-text m-0">قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان</p>
+                                                    <p class="card-text m-0">تعداد: {{item.quantity}} عدد</p>
+                                                    <p class="card-text m-0">مجموع: {{item.get_item_price|intcomma}} تعداد</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
-                        
-                        <div class="card-body">
-                        <form method="post" action="{% url 'shop:apply_delivery' order.id %}">
-                            {% csrf_token %}
-                            <label class="col-md-12 form-label">شیوه‌ی ارسال<br>
-                            شیوه ارسال مورد نظر خود را انتخاب نمایید و روی دکمه اعمال کلیک نمایید.</label>
-                            {% if order.delivery_method != None %}<label class="col-md-12 form-label text-success">شیوه ارسال انتخاب شده‌ی فعلی: {{order.delivery_method.name}} + {{order.delivery_method.price|intcomma}} تومان</label>{% endif %}
-                            <select name="delivery" type="text" class="form-control form-select select2" id="select-beast">
-                                    <option value="0">انتخاب</option>
-                                    {% for delivery in delivery_methods %}
-                                        <li>
-                                            <option value="{{ delivery.id }}">{{ delivery }}</option> 
-
-                                        </li>
-                                    {% endfor %}
-                            </select>
-                            <button type="submit" class="login100-form-btn btn-primary mt-2">اعمال شیوه ارسال</button> 
-                            <p class="text-danger">{{message2}}</p>
-                        </form>
-                        </div>
-
-                        <div class="card-body">
-                        <tr>
-                            <td class="text-start fs-18">جمع کل</td>
-                            <td class="text-end"><span
-                                    class="ms-2 fw-bold fs-18">{{order.get_final_payment|intcomma}} تومان</span></td>
-                        </tr>
-                        </div>
-
-
-
-                        
                         <div class="card-footer">
-                            <div class="btn-list">
-                                <a class="btn btn-primary" href="{% url 'shop:product_list' %}"><i
-                                        class="fa fa-arrow-right me-1"></i>ادامه خرید</a>
-                                <a class="btn btn-success float-sm-end" href="{% url 'shop:order_payment' order.id %}">تسویه حساب<i
-                                        class="fa fa-arrow-left ms-1"></i></a>
-                            </div>
+                            <form method="post" action="{% url 'shop:order_detail' order.id %}">
+                                {% csrf_token %}
+                                <label class="col-md-12 form-label">شیوه‌ی ارسال</label>
+                                <select name="delivery_method" type="text" class="form-control form-select select2" id="select-beast">
+                                    {% for delivery in delivery_mthods %}
+                                        <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="login100-form-btn btn-primary mt-2">اعمال شیوه ارسال</button> 
+                                <p class="text-danger">{{message2}}</p>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- ROW-1 CLOSED -->
         </div>
-        <!-- CONTAINER CLOSED -->
     </div>
 </div>
 

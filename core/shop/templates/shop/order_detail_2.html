@@ -95,57 +95,39 @@
                     <div class="cart-product-item">
                         <div class="content-box">
                             <div class="container-fluid">
-                                <div class="responsive-table">
-                                    <table class="table table-bordered site-tbl">
-                                        <thead>
-                                        <tr>
-                                            <th class="h5 text-center" colspan="2">محصول</th>
-                                            <th class="h5 text-center">عنوان</th>
-                                            <th class="h5 text-center">تعداد</th>
-                                            <th class="h5 text-center">قیمت</th>
-                                            <th class="h5 text-center">مجموع</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for item in order.items.all %}
-                                            
-                                            <tr>
-                                                <td colspan="2" class="text-center align-middle">
-                                                    <a href="{% url 'shop:product_detail' item.variety.product.slug %}"><img src="{{item.variety.product.get_main_image}}" width="80" class="rounded-3" alt=""></a>
-                                                </td>
-                                                <td class="align-middle">
-                                                    
-                                                    <h5 class="fw-light">{{item.variety.product.name}}</h5>
-                                                    
-                                                    <div class="d-flex flex-lg-row flex-column mt-4 justify-content-start  align-items-lg-center align-items-start">
-                                                        
-                                                        
-                                                        <div class="item d-flex align-items-center">
-                                                            <div class="icon"><i class="bi bi-palette2"></i></div>
-                                                            <div class="saller-name mx-2">تنوع:</div>
-                                                            <div class="saller-name text-muted">
-                                                                <div class="product-meta-color-items mt-0" style="line-height: 1">
-                                                                {{item.variety.name}}
-                                                                </div>
-                                                            </div>
+                                
+                                {% for item in order.items.all %}
+                                <div class="blog-item">
+                                    <div class="blog-item-parent">
+                                        <div class="shadow-box">
+                                            <a href="{% url 'shop:product_detail' item.variety.product.slug %}"><img src="{{item.variety.product.get_main_image}}" alt="" style="height: 150px;"></a>
+                                        </div>
+                                        <div class="blog-item-desc">
+                                            <div class="blog-item-desc-parent">
+                                                <div class="blog-item-title">
+                                                    <h5 class="title-font text-overflow-2">{{item.variety.product.name}}</h5>
+                                                    <div class="saller-name text-muted">
+                                                        <div class="product-meta-color-items mt-3" style="line-height: 1">
+                                                        تعداد: {{item.quantity}} عدد
                                                         </div>
-                                                        
                                                     </div>
-                                                    
-                                                </td>
-                                                <td class="text-center align-middle"><h6 class="title-font main-color-one-color h2 mb-0">{{item.quantity}}</h6></td>
-                                                <td class="text-center align-middle">
-                                                    <h5 class="title-font main-color-one-color h2 mb-0">{{item.variety.product.get_active_price|intcomma}}<span class="mb-0 text-muted-two font-14 fw-lighter"> تومان</span></h5>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <h5 class="title-font main-color-one-color h2 mb-0">{{item.get_item_price|intcomma}}<span class="mb-0 text-muted-two font-14 fw-lighter"> تومان</span></h5>
-                                                </td>
-                                                
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                                                    <div class="saller-name text-muted">
+                                                        <div class="product-meta-color-items mt-3" style="line-height: 1">
+                                                        قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان
+                                                        </div>
+                                                    </div>
+                                                    <div class="saller-name text-muted">
+                                                        <div class="product-meta-color-items mt-3" style="line-height: 1">
+                                                        مجموع: {{item.get_item_price|intcomma}} تومان
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                {% endfor %}
+                                        
                             </div>
                         </div>
                     </div>
@@ -163,18 +145,17 @@
                                                 {% csrf_token %}
                                                 <label class="label-float fw-bold">شیوه ارسال <span class="text-danger">*</span></label>
             
-                                                <select name="delivery" id="floatingInputOstan" class="form-control form-label label-float">
-                                                    <option label="انتخاب"></option>
-                                                    {% for delivery in delivery_methods %}
-                                                    <option value="{{delivery.id}}">{{delivery.name}}</option>
+                                                <select name="delivery_method" id="floatingInputOstan" class="form-control form-label label-float">
+                                                    {% for delivery in delivery_mthods %}
+                                                    <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
                                                     {% endfor %}
                                                 </select>
-                                                </form>
+                                                
                                             </div>
                                             <div class="action mt-3 d-flex align-items-center justify-content-center mb-3">
-                                                <a href="{% url 'shop:order_payment' order.id %}"
-                                                   class="btn-flat dark text-center lg w-100">تایید سفارش</a>
+                                                <button type="submit" class="btn-flat dark text-center lg w-100">تایید سفارش</button>
                                             </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
