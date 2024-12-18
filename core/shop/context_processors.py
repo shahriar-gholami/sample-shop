@@ -35,7 +35,7 @@ def base_template_context(request):
 		
 	if 'temp_cat' in request.session:
 		if request.session['temp_cat']:
-			temp_category = Category.objects.get(name = request.session['temp_cat'], store=store)
+			temp_category = Category.objects.get(name = request.session['temp_cat'])
 
 			if 'category' in path_segments and temp_category.slug not in path_segments:
 				for key in list(request.session.keys()):

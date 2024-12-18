@@ -278,7 +278,7 @@ class Product(models.Model):
 	slug = models.CharField(max_length=200, )
 	description = RichTextField()
 	features = RichTextField()
-	brand = models.CharField(max_length=250, null=True, blank=True)
+	brand = models.ForeignKey('Brand', on_delete=models.CASCADE, null=True, blank=True)
 	price = models.IntegerField()
 	sales_price = models.IntegerField(null=True, blank=True)
 	off_active = models.BooleanField(default=False)
@@ -300,14 +300,6 @@ class Product(models.Model):
 
 	def get_varieties(self):
 		return Variety.objects.filter(product = self)
-
-	def get_filtered_products(self, filter_value_ids):
-		products = Product.objects.all()
-		for id in filter_value_ids:
-			value = FilterValue.objects.get(id = id)
-			filter_products = value.product.all()
-			products = products & filter_products
-		return products
 	
 	def show_varieties(self):
 		varieties = Variety.objects.filter(product=self)
@@ -959,19 +951,22 @@ class Domain(models.Model):
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
-	
-class FilterValue(models.Model):
-	value = models.CharField(max_length=250)	
-	product = models.ManyToManyField(Product)
 
 class Filter(models.Model):
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	name = models.CharField(max_length=250)
-	value = models.ManyToManyField(FilterValue, blank=True)
+
+	def get_values(self):
+		return FilterValue.objects.filter(filter=self)
 
 	def __str__(self):
 		return f'{self.name}'
 	
+class FilterValue(models.Model):
+	value = models.CharField(max_length=250)	
+	product = models.ForeignKey('Product',on_delete=models.CASCADE, related_name='filter_values', null=True, blank=True)  # اضافه کردن related_name
+	filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=True, blank=True)
+
 class ProductFilter(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
 	filter = models.ForeignKey(Filter, on_delete=models.CASCADE)

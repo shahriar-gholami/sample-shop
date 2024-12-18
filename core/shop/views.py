@@ -829,7 +829,7 @@ class ProductListView(View):
 				selected_category = Category.objects.filter(id = int(category)).first()
 				filters = Filter.objects.all()
 				for filter in filters:
-					values = filter.value.all()
+					values = filter.get_values()
 					class FeatureFilterForm(forms.Form):
 						name = filter.name
 						choices = tuple([(value.value, value.value) for value in values])
@@ -1045,7 +1045,7 @@ class CategoryProductsListView(View):
 		filters = Filter.objects.all()
 		my_forms = []
 		for filter in filters:
-			values = filter.value.all()
+			values = filter.get_values()
 			class FeatureFilterForm(forms.Form):
 				name = filter.name
 				choices = tuple([(value.value, value.value) for value in values])
@@ -1576,7 +1576,7 @@ class FeatureFilterView(View):
 		store = Store.objects.get(name = store_name)
 		category = Category.objects.get( slug = category_slug)
 		filter = Filter.objects.filter( name = form_name).first()
-		values = filter.value.all()
+		values = filter.get_values()
 		class FeatureFilterForm(forms.Form):
 			name = filter.name
 			choices = tuple([(value.value, value.value) for value in values])
@@ -1594,7 +1594,7 @@ class FeatureFilterView(View):
 			request.session.modified = True
 			my_forms = []
 			for filter in filters:
-				values = filter.value.all()
+				values = filter.get_values()
 				class FeatureFilterForm(forms.Form):
 					name = filter.name
 					choices = tuple([(value.value, value.value) for value in values])
@@ -1610,12 +1610,12 @@ class FeatureFilterView(View):
 					
 					filter_name = key.replace('filter-', '')
 					selected_filter = Filter.objects.get( name = filter_name)
-					for posi_value in selected_filter.value.all():
+					for posi_value in selected_filter.get_values():
 						if posi_value.value in value:
 							new_active_filter = {'filter':selected_filter,'value':posi_value}
 							active_filters.append(new_active_filter)
 							selected_values.append(posi_value.id)
-			products = Product.get_filtered_products(Product ,selected_values)
+			products = [value.product for value in FilterValue.objects.filter(id__in=selected_values)]
 
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 

@@ -87,36 +87,16 @@ class ProductImageInline(admin.TabularInline):
 
 	preview.short_description = "Image Preview"  # عنوان ستون در پنل ادمین
 
-@admin.register(FilterValue)
-class FilterValueAdmin(admin.ModelAdmin):
-	list_display = ('value',)  # نمایش مقدار در لیست مدل
-	search_fields = ('value',)  # جستجو براساس مقدار
-	autocomplete_fields = ['product'] 
+class FilterValueInline(admin.StackedInline):  # یا admin.TabularInline
+	model = FilterValue
+	extra = 1  # تعداد فرم‌های اضافی
+	fields = ('filter', 'value')  # ترتیب نمایش فیلدها
 
-@admin.register(Filter)
-class FilterAdmin(admin.ModelAdmin):
-	list_display = ('name', 'category')  # نمایش ستون‌های نام و دسته‌بندی
-	search_fields = ('name',)  # امکان جستجو براساس نام
-	autocomplete_fields = ['category', 'value']
-
-class FilterValueInline(admin.TabularInline):
-	model = FilterValue.product.through  # دسترسی به جدول میانی برای محصول و FilterValue
+# 2. Inline برای Filter
+class FilterInline(admin.StackedInline):  # یا admin.TabularInline
+	model = Filter
 	extra = 1
-
-class ProductFilterInline(admin.TabularInline):
-	model = ProductFilter
-	extra = 1
-	autocomplete_fields = ['values']
-	inlines = [FilterValueInline] 
-
-	def formfield_for_foreignkey(self, db_field, request, **kwargs):
-		if db_field.name == 'filter':
-			product_id = request.resolver_match.kwargs.get('object_id')
-			if product_id:
-				product = Product.objects.get(pk=product_id)
-				kwargs['queryset'] = Filter.objects.filter(category__in=product.category.all())
-		return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
+	inlines = [FilterValueInline]  # اضافه کردن FilterValue به داخل Filter
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -131,7 +111,7 @@ class ProductAdmin(admin.ModelAdmin):
 	search_fields = ['name', 'slug']
 	autocomplete_fields = ['category',]
 	prepopulated_fields = {'slug': ('name',)}  
-	inlines = [ProductImageInline, VarietyInline, ProductFilterInline]
+	inlines = [ProductImageInline, VarietyInline, FilterValueInline]
 
 	class Media:
 		css = {
@@ -155,6 +135,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 	view_on_site_icon.short_description = 'View on Site'  # عنوان ستون در ادمین
 	view_on_site_icon.allow_tags = True
+
+
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
