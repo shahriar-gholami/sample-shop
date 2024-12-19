@@ -279,43 +279,11 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="row align-items-center mt-4 gy-4">
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-green-200 border-success-subtle">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-1.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>سفارشات شما</h6>
-                                <a href="{% url 'shop:customer_dashboard_orders' %}" class="text-muted d-inline-block mt-2 mco-hover font-14">مشاهده و پیگیری سفارش</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-orange-200 border-warning">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-2.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>پشتیبانی</h6>
-                                <a href="{% url 'shop:contact' %}" class="text-muted d-inline-block mt-2 mco-hover font-14">اطلاعات تماس با مجموعه</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-red-200 border-danger-subtle">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-3.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>ذخیره شده‌ها</h6>
-                                <a href="{% url 'shop:customer_dashboard_favorites' %}" class="text-muted d-inline-block mt-2 mco-hover font-14">لیست علاقمندی‌های شما</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-purple-200 border-purple">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-4.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>ویرایش اطلاعات</h6>
-                                <a href="" class="text-muted d-inline-block mt-2 mco-hover font-14">ویرایش حساب کاربری</a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="product-slider-box-title">
+                    <h4 class="title-font product-slider-box-title-title dot">
+                        <span class="main-color-one-color">ویرایش</span>
+                        <span>حساب کاربری</span>
+                    </h4>
                 </div>
                 <div class="alert slider-parent bg-white mt-5 shadow-box rounded-4">
                     <form method="post" action="{% url 'shop:customer_dashboard_info' %}">

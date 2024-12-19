@@ -183,6 +183,7 @@ class CustomerDashboardView(View):
 class CustomerDashboardOrdersView(IsCustomerUserMixin, View):
 
 	def get(self, request):
+		store = Store.objects.all().first()
 		customer = Customer.objects.get(phone_number=request.user.phone_number)		
 		paid_status = OrderStatus.objects.get(id=1)
 		paid_orders = Order.objects.filter(customer=customer, status=paid_status)
@@ -222,6 +223,7 @@ class CustomerDashboardInfoView(IsCustomerUserMixin, View):
 
 	form_class = CustomerForm
 	def get(self, request):
+		store = Store.objects.all().first()
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
 		form = CustomerForm
 		return render(request, f'{current_app_name}/customer-dashboard-info_{store.template_index}.html', 

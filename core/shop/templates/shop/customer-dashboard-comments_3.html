@@ -219,30 +219,30 @@
                             
                             <div class="col-lg-12">
                                 <div class="slider-parent ">
-                                   <div class="table-responsive-lg table-custom">
-                                       <table class="table shadow-none table-bordered">
-                                           <thead>
-                                           <tr>
-                                               <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">محصول</h6></th>
-                                               <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">متن دیدگاه</h6></th>
-                                               <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">تاریخ ثبت</h6></th>
-                                               <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">وضعیت انتشار</h6></th>
-                                               <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">نمایش</h6></th>
-                                           </tr>
-                                           </thead>
-                                           <tbody>
-                                            {% for comment in comments %}
-                                           <tr>
-                                               <td class="align-middle text-center"><p class="mt-2 font-16">{{comment.product.name}}</p></td>
-                                               <td class="align-middle text-center"><p class="mt-2 font-16">{{comment.body}}</p></td>
-                                               <td class="align-middle text-center"><p class="mt-2 font-16">{{comment.shamsi_created_date}}</p></td>
-                                               <td class="align-middle text-center"><p class="mt-2 font-16">{% if comment.approved %}منتشر شده{% else %}منتشر نشده{% endif %}</p></td>
-                                               <td class="align-middle text-center"><a href="{% url 'shop:product_detail' comment.product.slug %}" class="btn main-color-three-bg shadow-none btn-sm rounded-0"> <i class="bi bi-eye me-1"></i> نمایش</a></td>
-                                           </tr>
-                                           {% endfor %}
-                                           </tbody>
-                                       </table>
-                                   </div>
+                                    <div class="table-responsive-lg table-custom">
+                                        <table class="table shadow-none table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">محصول</h6></th>
+                                                <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">متن دیدگاه</h6></th>
+                                                <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">تاریخ ثبت</h6></th>
+                                                <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">وضعیت انتشار</h6></th>
+                                                <th class="align-middle text-center"><h6 class="fw-bold font-18  text-muted">نمایش</h6></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for comment in comments %}
+                                            <tr>
+                                                <td class="align-middle text-center"><p class="mt-2 font-16">{{comment.product.name}}</p></td>
+                                                <td class="align-middle text-center"><p class="mt-2 font-16">{{comment.body}}</p></td>
+                                                <td class="align-middle text-center"><p class="mt-2 font-16">{{comment.shamsi_created_date}}</p></td>
+                                                <td class="align-middle text-center"><p class="mt-2 font-16">{% if comment.approved %}منتشر شده{% else %}منتشر نشده{% endif %}</p></td>
+                                                <td class="align-middle text-center"><a href="{% url 'shop:product_detail' comment.product.slug %}" class="btn main-color-one-bg"> <i class="bi bi-eye me-1"></i> نمایش</a></td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                     </div>
                 </div>

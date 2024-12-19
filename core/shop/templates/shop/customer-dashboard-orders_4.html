@@ -279,94 +279,110 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="row align-items-center mt-4 gy-4">
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-green-200 border-success-subtle">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-1.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>سفارشات شما</h6>
-                                <a href="{% url 'shop:customer_dashboard_orders' %}" class="text-muted d-inline-block mt-2 mco-hover font-14">مشاهده و پیگیری سفارش</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-orange-200 border-warning">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-2.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>پشتیبانی</h6>
-                                <a href="{% url 'shop:contact' %}" class="text-muted d-inline-block mt-2 mco-hover font-14">اطلاعات تماس با مجموعه</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-red-200 border-danger-subtle">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-3.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>ذخیره شده‌ها</h6>
-                                <a href="{% url 'shop:customer_dashboard_favorites' %}" class="text-muted d-inline-block mt-2 mco-hover font-14">لیست علاقمندی‌های شما</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="mini-box bs-bg-purple-200 border-purple">
-                            <div class="mini-box-icon"><img src="{% static 'assets4/image/mini-box/icon-4.png' %}" alt=""></div>
-                            <div class="text-center mt-4">
-                                <h6>ویرایش اطلاعات</h6>
-                                <a href="" class="text-muted d-inline-block mt-2 mco-hover font-14">ویرایش حساب کاربری</a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="product-slider-box-title">
+                    <h4 class="title-font product-slider-box-title-title dot">
+                        <span class="main-color-one-color">سفارشات</span>
+                        <span>شما</span>
+                    </h4>
                 </div>
-                <div class="alert slider-parent bg-white mt-5 shadow-box rounded-4">
-                    <form method="post" action="{% url 'shop:customer_dashboard_info' %}">
-                        {% csrf_token %}
-                        <div class="row g-4 mt-3">
-                                <div class="col-md-6">
-                                    <div class="comment-item mb-3">
-                                        <input name="full_name" type="text" class="form-control" value="{{ customer.full_name }}" id="floatingInputLName" placeholder="نام خانوادگی خود را وارد کنید ...">
-                                        <label for="floatingInputLName" class="form-label label-float fw-bold">نام و نام خانوادگی <span class="text-danger">*</span></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                <div class="comment-item mb-3">
-                                    <input name="phone_number" type="text" value="{{customer.phone_number}}" class="form-control" id="floatingInputName" placeholder="شماره تماس خود را وارد کنید...">
-                                    <label for="floatingInputName" class="form-label label-float fw-bold font-16">شماره تماس<span class="text-danger">*</span></label>
-                                </div>
-                                </div>
-                            <div class="col-12">
-                                <div class="comment-item mb-3">
-                                    <input type="email" name="email" value="{{ customer.email }}" class="form-control" id="floatingInputStreet" placeholder="ایمیل خود را وارد کنید ...">
-                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">ایمیل</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="comment-item mb-3">
-                                    <input type="text" name="city" value="{{ customer.city }}" class="form-control" id="floatingInputStreet" placeholder="شهر خود را وارد کنید ...">
-                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">شهر</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="comment-item mb-3">
-                                    <input type="text" name="zip_code" value="{{ customer.zip_code }}" class="form-control" id="floatingInputStreet" placeholder="کد پستی خود را وارد کنید ...">
-                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">کد پستی</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="comment-item mb-3">
-                                    <input type="text" name="address" value="{{ customer.address }}" class="form-control" id="floatingInputStreet" placeholder="آدرس پستی خود را وارد کنید ...">
-                                    <label for="floatingInputStreet" class="form-label label-float fw-bold">آدرس</label>
-                                </div>
-                            </div>
-                            
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <button type="submit" class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill">
-                                        ویرایش
-                                    </button>
-                                </div>
-                            </div>
+                
+                <div class="alert slider-parent bg-white mt-2 shadow-box rounded-4 ">
+                    <div class="panel-latest-order">
+                        <div class="table-responsive roundedTable p-0">
+                            <table class="table table-bordered main-table rounded-0">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                                لیست اقلام
+                                            </h5>
+                                        </td>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                            </h5>
+                                        </td>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                                کد سفارش
+                                            </h5>
+                                        </td>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                                تاریخ
+                                            </h5>
+                                        </td>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                                مبلغ (تومان)
+                                            </h5>
+                                        </td>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                                مشاهده
+                                            </h5>
+                                        </td>
+                                        <td colspan="2" class="align-middle">
+                                            <h5 class=" mt-2 font-15">
+                                                پرداخت
+                                            </h5>
+                                        </td>
+                                    </tr>
+                                {% for order in orders %}
+                                <tr>
+                                    <td colspan="2" class="align-middle">
+                                        <div class="avatar-group d-flex align-items-center justify-content-center assigned-avatar">
+                                            {% for item in order.items.all %}
+                                            <div class="avatar avatar-md" data-bs-toggle="tooltip"
+                                                 data-bs-placement="top"
+                                                 aria-label="تی شرت لانگ ورزشی مردانه نوزده نودیک مدل TS1967 WW"
+                                                 data-bs-original-title="{{ item.variety.product.name}}">
+                                                <a href="{% url 'shop:product_detail' item.variety.product.slug %}">
+                                                    <img src="{{ item.variety.product.get_main_image}}"
+                                                         alt="Avatar" class="rounded-circle  pull-up">
+                                                </a>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </td>
+                                    <td colspan="2" class="align-middle">
+                                        <h5 class=" mt-2 font-15">
+                                            {% for item in order.items.all %}
+                                            {{item.variety.product.name}}{% if item.variety.name != 'default variety' %}- {{item.variety.name}}{% endif %} | 
+                                            
+                                            {{item.quantity}} عدد<br>
+                                            {% endfor %}
+                                        </h5>
+                                    </td>
+                                    <td colspan="2" class="align-middle">
+                                        <div class="d-flex align-items-center">
+                                            <p class="mb-0 text-muted font-15">{{order.id}}</p>
+                                        </div>
+                                        
+                                    </td>
+                                    <td colspan="2" class="align-middle">
+                                        <p class="mb-0 text-muted mt-2 font-14">{{order.shamsi_created_date}}</p>
+                                    </td>
+                                    <td colspan="2" class="align-middle">
+                                        <p class="mb-0 fw-bold mt-2 font-14">{{order.get_without_cashback_cost|intcomma}}</p>
+                                    </td>
+                                    <td colspan="2" class="align-middle">
+                                        <div class="text-center">
+                                            <a href="{% url 'shop:customer_dashboard_order_detail' order.id %}" class="btn main-color-one-bg">مشاهده</a>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" class="align-middle">
+                                        <div class="text-center">
+                                            {% if order.status.id == 1 %} پرداخت شده
+                                            {% elif order.status.latest_status == 'ارسال شده' %} ارسال شده
+                                            {% elif order.status.id == 2 %} <a class="btn main-color-one-bg" href="{% url 'shop:order_detail' order.id %}">پرداخت</a> {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
