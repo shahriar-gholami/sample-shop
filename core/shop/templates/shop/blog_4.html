@@ -1,0 +1,165 @@
+{% extends "base_4.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+
+{% block title %}وبلاگ{% endblock %}
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<section class="content my-25">
+    <div class="container-fluid">
+        <div class="row gy-4">
+            <div class="col-12">
+                <div class="product-slider-box-title mb-3">
+                    <h4 class="title-font product-slider-box-title-title dot">
+                        <span class="main-color-one-color">آخرین</span>
+                        <span>مطالب</span>
+                    </h4>
+                </div>
+            </div>
+            <div class="col-lg-9 order-lg-1 order-2">
+                <div class="row gy-4">
+                    {% for post in posts %}
+                    <div class="col-12">
+                        <div class="blog-post-card bg-white  shadow-box rounded-3">
+                            <div class="row gy-3">
+                                <div class="col-md-4">
+                                    <div class="blog-post-card-thumbnail">
+                                        <img src="{{post.get_thumbnail}}" class="rounded-3" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <a href="{% url 'shop:post_detail' post.slug %}">
+                                        <div class="blog-post-card-title">
+                                            <h6 class="fw-bold text-overflow-1">
+                                                {{ post.title|truncatewords:10 }}
+                                            </h6>
+                                        </div>
+                                        <div class="blog-post-card-description my-2">
+                                            <p class="text-muted text-overflow-2">
+                                                {{post.body|truncatewords:40|safe}}
+                                            </p>
+                                        </div>
+                                    </a>
+                                    <div class="blog-post-card-meta pt-3 border-dashed">
+                                        <div class="row">
+                                            <div class="col-4">
+
+                                                <a href="" class="badge text-bg-dark font-14">{{ post.category.name }}</a>
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="blog-item-date d-flex justify-content-end align-items-center">
+                                                    <div class="blog-item-date-date">
+                                                        <i class="bi bi-clock me-1"></i>
+                                                        <span>{{ post.shamsi_created_date }}</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-3 order-lg-2 order-1">
+                <aside class="position-sticky top-0">
+                    <div class="row gy-4">
+                        <div class="col-12">
+                            <div class="box-ui bg-white shadow-box border-ui p-3 rounded-3">
+                                <div class="box-ui-title mb-1">
+                                    <h6 class="icon-circle border-bottom pb-2 border-1">دسته بندی ها</h6>
+                                </div>
+                                <div class="box-ui-desc">
+                                    <nav class="navbar">
+                                        <ul class="navbar-nav">
+                                            {% for category in blog_categories %}
+                                            <li class="nav-item">
+                                                <a href="{% url 'shop:category_post_list' category.get_slug %}" class="nav-link text-muted"><i class="bi bi-tag me-2"></i>
+                                                    {{category.name}}</a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="box-ui bg-white shadow-box border-ui p-3 rounded-3">
+                                <div class="box-ui-title mb-1">
+                                    <h6 class="icon-circle border-bottom pb-2 border-1">آخرین پست ها</h6>
+                                </div>
+                                <div class="box-ui-desc">
+                                    <nav class="navbar">
+                                        <ul class="navbar-nav">
+                                            {% for post in recent_posts %}
+                                            <li class="nav-item">
+                                                <a href="{% url 'shop:post_detail' post.slug %}" class="nav-link">
+                                                    <div class="mini-blog-item">
+                                                        <div class="image">
+                                                            <img src="{% static 'assets4/image/blog/blog-1.png' %}"
+                                                                 class="img-thumbnail" alt="">
+                                                        </div>
+                                                        <div class="d-flex align-items-start desc flex-wrap flex-column justify-content-between">
+                                                            <h6 class="title mct-hover">{{ post.title|truncatewords:8 }}</h6>
+                                                            <div class="d-flex align-items-center">
+                                                                <p class="text-muted mb-0">{{ post.shamsi_created_date }}</p>
+                                                                <div class="text-end ms-2"><i
+                                                                        class="bi bi-arrow-left main-color-one-color"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

@@ -1038,6 +1038,15 @@ class AddToFavoritesView(View):
 		if ref == 'fav_list':
 			return redirect(f'{current_app_name}:customer_dashboard_favorites')			
 
+class CategoryBlogPostList(View):
+
+	def get(self, request, category_slug):
+
+		category = Category.objects.bet(slug = category_slug)
+		blog_posts= BlogPost.objects.filter(category=category)
+		recent_posts = BlogPost.objects.all()[:4]
+		return render(request, f'shop/blog_{store.template_index}', {'posts':blog_posts, 'recent_posts':recent_posts})
+
 class CategoryProductsListView(View):
 
 	def get(self, request, category_slug, *args, **kwargs):
@@ -1423,7 +1432,7 @@ class AboutUsPageView(View):
 class ContactUsPageView(View):
 
 	def get(self, request):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
 		return render(request, f'{current_app_name}/contact_{store.template_index}.html', {'store':store})
 
 	def post(self, request, *args, **kwargs):
@@ -1495,11 +1504,13 @@ class BlogView(View):
 		posts = BlogPost.objects.all()
 		products = Product.objects.all()
 		blog_categories = BlogCategory.objects.all()
+		recent_posts = BlogPost.objects.all()[:4]
 		return render(request, f'{current_app_name}/blog_{store.template_index}.html', {'store_name':store_name,
 											  'store':store,
 											  'posts':posts,
 											  'products':products,
-											  'blog_categories':blog_categories})
+											  'blog_categories':blog_categories,
+											  'recent_posts':recent_posts})
 	
 class BlogPostDetailView(View):
 

@@ -51,7 +51,7 @@
                          <div class="swiper-wrapper">
                             {% for slide in slides %}
                             <div class="swiper-slide" style="object-fit: fill;">
-                                <a href="{% url 'shop:featured_products' slide.source %}">
+                                <a href="{% url 'shop:featured_products' slide.id %}">
                                     <img src="{{slide.image.url}}" class="img-fluid" alt="" style="object-fit: inherit;">
                                 </a>
                             </div>
@@ -630,7 +630,7 @@
             {% for banner in big_banners %}
              <div class="col-lg-12">
                  <div class="banner-item running-top">
-                     <a href="{% url 'shop:featured_products' banner.source %}">
+                     <a href="{% url 'shop:featured_products' banner.id %}">
                          <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
                      </a>
                  </div>
@@ -1270,7 +1270,7 @@
             {% for banner in small_banners %}
              <div class="col-sm-6">
                  <div class="banner-item running-top">
-                     <a href="{% url 'shop:featured_products' banner.source %}">
+                     <a href="{% url 'shop:featured_products' banner.id %}">
                          <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
                      </a>
                  </div>
@@ -1297,33 +1297,33 @@
                  </div>
                  <div class="col-lg-4 col-6">
                      <div class="text-end">
-                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                         <a href="{% url 'shop:post_list' %}" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
                      </div>
                  </div>
              </div>
          </div>
          <div class="swiper pro-slider blog-slider-sw">
              <div class="swiper-wrapper">
-                
-                 <div class="swiper-slide">
-                     <a href="">
-                         <div class="blog-item">
-                             <div class="blog-item-image">
-                                 <img src="{% static 'assets4/image/blog/blog-1.png' %}" alt="">
-                             </div>
-                             <div class="blog-item-desc">
-                                 <div class="blog-item-title">
-                                     <h6 class="text-overflow-1">رونمایی از پرچمدار جدید سامسونگ </h6>
-                                 </div>
-                                 <div class="blog-item-date">
-                                     <h6 class="f-800">30</h6>
-                                     <span class="d-block">بهمن</span>
-                                     <span>1402</span>
-                                 </div>
-                             </div>
-                         </div>
-                     </a>
-                 </div>
+                {% for post in posts|slice:"0:5" %}
+                <div class="swiper-slide">
+                    <a href="{% url 'shop:post_detail' post.slug %}">
+                        <div class="blog-item">
+                            <div class="blog-item-image">
+                                <img src="{{ post.get_thumbnail }}" alt="">
+                            </div>
+                            <div class="blog-item-desc">
+                                <div class="blog-item-title">
+                                    <h6 class="text-overflow-1">{{ post.title }}</h6>
+                                </div>
+                                <div class="blog-item-date">
+                                    
+                                    <span>{{ post.shamsi_created_date }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
              </div>
              <div class="swiper-button-next"></div>
              <div class="swiper-button-prev"></div>

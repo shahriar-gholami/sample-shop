@@ -70,6 +70,7 @@ urlpatterns = [
     path('faq/', views.FaqView.as_view(), name='faq_list'),
     path('policies/', views.PoliciesView.as_view(), name='policies'),
     path('blog/', views.BlogView.as_view(), name='post_list'),
+    path('blog/category/<str:category_slug>/', views.CategoryBlogPostList.as_view(), name='category_post_list'),
     path('blog/<str:post_slug>/', views.BlogPostDetailView.as_view(), name='post_detail'),
     path('subscribe/', views.SubscribeView.as_view(), name='subscribe'),
     path('order-payment/<int:order_id>/', views.OrderPayView.as_view(), name='order_payment'),

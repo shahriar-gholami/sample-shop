@@ -775,6 +775,9 @@ class WithdrawRecord(models.Model):
 class BlogCategory(models.Model):
 	name = models.CharField(max_length=250)
 
+	def get_slug(self):
+		return self.name.replace('/','').replace(' ','-')
+
 	def __str__(self):
 		return self.name
 

@@ -1,0 +1,180 @@
+{% extends "base_4.html" %}
+{% load static %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}تماس با ما{% endblock %}
+
+{% block content %}
+
+{% if store.has_domain == True %}
+<script>
+    // Replace the common part of the URL with an empty string
+    var currentUrl = window.location.href;
+    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
+    history.replaceState(null, null, newUrl);
+</script>
+{% endif %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:contact' %}" class="font-14 text-muted-two">خانه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">تماس با ما</a></li>
+
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="product-slider-box-title">
+            <h4 class="title-font product-slider-box-title-title dot">
+                <span class="main-color-one-color">تماس</span>
+                <span>با ما</span>
+            </h4>
+        </div>
+        <div class="row gy-3">
+            <div class="col-12">
+                <div class="single-address-parent border-ui">
+                    <div class="single_address">
+                        <i class="bi bi-pin-map"></i>
+                        <h4>آدرس</h4>
+                        <p>{{ store.address }}</p>
+                    </div>
+                    <div class="single_address">
+                        <i class="bi bi-envelope"></i>
+                        <h4>ایمیل</h4>
+                        <p>{{ store.email }}</p>
+                    </div>
+                    <div class="single_address">
+                        <i class="bi bi-telephone"></i>
+                        <h4>شماره تماس</h4>
+                        <p>{{ store.phone_number }}</p>
+                    </div>
+                    <div class="single_address">
+                        <i class="bi bi-clock-history"></i>
+                        <h4>ساعت کاری</h4>
+                        <p>شنبه تا چهارشنبه 8 صبح تا 17 بعد از ظهر <br>پنج شنبه ها 8 صبح تا 2 بعد از ظهر</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="content">
+    <div class="container-fluid">
+
+        
+        
+
+        <div class="contact-us-title">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-warning text-center">
+                        لطفاً پیش از ارسال ایمیل یا تماس تلفنی، ابتدا پرسش‌های متداول را مشاهده کنید
+                    </div>
+
+
+                    <div class="contact-form">
+                        <div class="content-box">
+                            <div class="container-fluid">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="comment-item mb-3">
+                                                <input name="name" type="text" class="form-control" id="floatingInputName" placeholder="نام خود را وارد کنید...">
+                                                <label for="floatingInputName" class="form-label label-float fw-bold font-16">نام <span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="comment-item mb-3">
+                                                <input name="familly_name" type="text" class="form-control" id="floatingInputLName" placeholder="نام خانوادگی خود را وارد کنید ...">
+                                                <label for="floatingInputLName" class="form-label label-float fw-bold">نام خانوادگی <span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="comment-item mb-3">
+                                                <input name="email" type="text" class="form-control" id="floatingInputLName" placeholder="ایمیل خود را وارد کنید ...">
+                                                <label for="floatingInputLName" class="form-label label-float fw-bold">ایمیل <span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="comment-item mb-3">
+                                                <input name="phone" type="text" class="form-control" id="floatingInputLName" placeholder="شماره موبایل خود را وارد کنید ...">
+                                                <label for="floatingInputLName" class="form-label label-float fw-bold">شماره تماس <span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="comment-item mb-3">
+                                                <input name="subject" type="text" class="form-control" id="floatingInputLName" placeholder="موضوع پیام خود را وارد کنید ...">
+                                                <label for="floatingInputLName" class="form-label label-float fw-bold">موضوع پیام <span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="comment-item mb-3">
+                                                <textarea name="message_text" class="form-control py-3" id="floatingInputDesc" rows="5" placeholder="اگر نظر یا سوال خاصی دارید اینجا وارد کنید"></textarea>
+                                                <label for="floatingInputDesc" class="form-label label-float fw-bold">متن پیام</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill">
+                                                    ارسال پیام
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<!-- end content -->
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
