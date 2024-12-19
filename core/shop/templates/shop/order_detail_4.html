@@ -1,0 +1,119 @@
+{% extends "base_4.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}جزئیات سفارش{% endblock %}
+
+{% block content %}
+
+
+
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="font-14 text-muted-two">فروشگاه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">جزئیات سفارش</a></li>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+<form method="post" action="{% url 'shop:order_detail' order.id %}">
+{% csrf_token %}
+<div class="container-fluid mt-4">
+    <div class="col-12">
+        <div class="container-fluid content-box p-4">
+            <h6 class="title-font mb-3 h6">کالاهای با قابلیت ارسال عادی</h6>
+            
+            <div class="product-row-parent">
+                <div class="row g-4">
+                    {% for item in order.items.all %}
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="product-row-item">
+                            <a href="">
+                                <div class="row align-items-center">
+                                    <div class="col-4">
+                                        <img src="{{ item.variety.product.get_main_image }}" alt="">
+                                    </div>
+                                    <div class="col-8">
+                                        <h3 class="text-overflow-1 title-font font-14">{{item.variety.product.name}}</h3>
+                                        <div class="cart-canvas-price my-3 d-flex align-items-center">
+                                            <p>قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان <br>
+                                                تعداد: {{item.quantity}}<br>
+                                                مجموع: {{item.get_item_price|intcomma}} تومان</p>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+             
+            <div class="factor-item pb-3 mt-4">
+                <h5 class="title-font  h6">شیوه ارسال</h5>
+                <div class="row gy-3">
+                    
+                            <div class="comment-item w-100 mt-4" for="floatingInputOstan">
+                                <div class="row mb-3 form-group">
+                                    
+                                    <div class="col-md-12">   
+                                    <!-- <label class="label-float fw-bold">بازه زمانی ارسال <span class="text-danger">*</span></label> -->
+                                    <p class="p-0 m-0">انتخاب روش‌های ارسال</p>
+                                    <select name="delivery_method" class="form-select width-200 form-group">
+                                        {% for delivery in delivery_mthods %}
+                                        <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    </div> 
+                                </div>
+                            </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-4">
+    <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">تایید و ادامه فرایند خرید</button> 
+    <p class="text-danger">{{multi_choice_error}}</p>
+</div>
+</form>
+
+{% endblock %}
+

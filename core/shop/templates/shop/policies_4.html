@@ -25,7 +25,7 @@
 <meta name="twitter:image" content="{{store.get_logo_image}}">
 {% endblock %}
 
-{% block title %}سبد خرید{% endblock %}
+{% block title %}قوانین و مقررات{% endblock %}
 
 {% block content %}
 
@@ -38,28 +38,38 @@
 </script>
 {% endif %}
 
-<div class="content">
+
+
+<div class="bread-crumb py-4">
     <div class="container-fluid">
-        <div class="cart-empty">
-            <div class="content-box">
-                <div class="container-fluid">
-                    <div class="cart-empty-image text-center">
-                        <img src="{% static 'assets3/img/mini_cart-empty.png' %}" width="300" alt="">
-                    </div>
-                    <div class="cart-empty-title">
-                        <h2 class="text-center title-font">
-                            سبد خرید شما خالی میباشد
-                        </h2>
-                        <div class="text-center mt-3">
-                            <a href="{% url 'shop:product_list' %}" class="btn main-color-one-outline rounded-pill px-4">رفتن به فروشگاه</a>
-                        </div>
-                    </div>
+        <nav aria-label="breadcrumb" class="my-lg-0 ">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index'  %}" class="font-14 text-muted-two">خانه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">قوانین و مقررات</a></li>
+
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="product-slider-box-title">
+            <h4 class="title-font product-slider-box-title-title dot">
+                <span class="main-color-one-color">قوانین </span>
+                <span>و مقررات</span>
+            </h4>
+        </div>
+
+        <div class="ui-boxs">
+            <div class="ui-box">
+                <div class="ui-box-item slider-parent ui-box-white p-3 text-justify">
+                    <p>{{store.policies|safe}}</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 </div>
 
 <!-- end content -->

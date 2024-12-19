@@ -200,6 +200,7 @@ class CustomerDashboardOrdersView(IsCustomerUserMixin, View):
 class CustomerDashboardOrderDatailView(IsCustomerUserMixin, View):
 	
 	def get(self, request, order_id):
+		store= Store.objects.all().first()
 		order = get_object_or_404(Order, id=order_id)
 		return render(request, f'{current_app_name}/order-detail-customer_{store.template_index}.html',
 				 {'order':order, 'store_name':store_name})

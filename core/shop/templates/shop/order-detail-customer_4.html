@@ -1,0 +1,125 @@
+{% extends "base_4.html" %}
+{% load static %}
+{% load humanize %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}جزییات سفارش{% endblock %}
+
+{% block content %}
+
+<div class="bread-crumb py-4">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="my-lg-0 my-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:index' %}" class="font-14 text-muted-two">فروشگاه</a></li>
+                <li class="breadcrumb-item"><a href="#" class="font-14 text-muted-two">جزئیات سفارش</a></li>
+
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- start bread-crumb -->
+
+<!-- start content -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="product-slider-box-title">
+            <h4 class="title-font product-slider-box-title-title dot">
+                <span class="main-color-one-color">جزئیات</span>
+                <span>سفارش</span>
+            </h4>
+        </div>
+        <div class="orders-item">
+            <div class="ui-boxs">
+                <div class="ui-box">
+                    <div class="ui-box-item slider-parent ui-box-white">
+
+                        <div class="ui-box-item-desc p-0">
+                            <div class="orders">
+                                <div class="order-item p-4">
+                                    <div class="order-item-detail">
+                                        <ul class="nav">
+                                            <li class="nav-item">
+                                                <span class="text-mute">کد پیگیری سفارش</span>
+                                                <strong>{{order.id}}</strong>
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">تاریخ ثبت سفارش</span>
+                                                <strong>{{order.shamsi_created_date}}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="order-item-detail" style="padding-top: 20px;">
+                                        <ul class="nav">
+                                            <li class="nav-item">
+                                                <span class="text-mute">سفارش دهنده</span>
+                                                <strong>{{order.customer.full_name}}</strong>
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">شماره موبایل </span>
+                                                <strong>{{order.customer.phone_number}}</strong>
+                                            </li>
+                                            <li class="nav-item w-100">
+                                            </li>
+                                            <li class="nav-item">
+                                                <span class="text-mute">آدرس</span>
+                                                <strong>{{order.reciever_address}}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="orders">
+                                        <div class="order-item p-4">
+                                            <p>
+                                                {{order.delivery_description|safe}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end content -->
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
+
+
+
+
+
+
