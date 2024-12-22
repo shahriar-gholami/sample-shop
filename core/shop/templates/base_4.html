@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{% static 'assets4/plugin/rasta-contact/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets4/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets4/css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'assets4/plugin/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css' %}">
+    <link href="{% static 'assets4/plugin/tagify/tagify.css' %}" rel="stylesheet">
 
 </head>
 <body>
@@ -986,6 +988,20 @@
 <script src="{% static 'assets4/js/swiperInit.js' %}"></script>
 <script src="{% static 'assets4/js/megaMenu.js' %}"></script>
 <script src="{% static 'assets4/js/app.js' %}"></script>
+
+<script src="{% static 'assets4/plugin/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+
+<!-- initial counter product for product add to cart section -->
+<script>
+    $(document).ready(function () {
+        $("input[name='count']").TouchSpin({
+            min: 1,
+            max: '1000000000000000',
+            buttondown_class: "btn-counter waves-effect waves-light",
+            buttonup_class: "btn-counter waves-effect waves-light"
+        });
+    });
+</script>
 
 <!-- initial config contact button  -->
 <script>
