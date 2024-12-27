@@ -67,7 +67,6 @@ class VarietyInline(admin.TabularInline):  # یا admin.StackedInline برای �
 	fields = ('name', 'stock')  # فیلدهایی که می‌خواهید قابل ویرایش باشند
 	can_delete = True  # در صورت نیاز به حذف کردن، این را به True تغییر دهید
 
-
 def erase_stock(modeladmin, request, queryset):
 	for product in queryset:
 		erase_stock_volume(product)
@@ -135,8 +134,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 	view_on_site_icon.short_description = 'View on Site'  # عنوان ستون در ادمین
 	view_on_site_icon.allow_tags = True
-
-
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
