@@ -2398,7 +2398,7 @@ class OrderDeliveryOptionsView(View):
 				delivery_description = delivery_description+'کالاهای اکسپرس: <br>'
 				for item in order.items.all():
 					if item.variety.product.express == True:
-						delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
+						delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace("default variety","ندارد")} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
 				delivery_description = delivery_description+'زمان تحویل: <br>'
 				delivery_description = delivery_description+f'{express_delivery} <br>'
 				if order.total_price <= express_delivery.min_cart_free or express_delivery.min_cart_free_active == True:
@@ -2408,7 +2408,7 @@ class OrderDeliveryOptionsView(View):
 				delivery_description = delivery_description+'کالاهای ارسال عادی: <br>'
 				for item in order.items.all():
 					if item.variety.product.express == False:
-						delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
+						delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace("default variety","ندارد")} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
 				delivery_description = delivery_description+'زمان تحویل: <br>'
 				delivery_description = delivery_description+f'{normal_day} - ساعت {ExpressDeliveryInterval.objects.get(id = int(normal_time)).start_time} <br>'
 			
