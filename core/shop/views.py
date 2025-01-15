@@ -59,6 +59,7 @@ class IndexView(View):
 		featured_categories = FeaturedCategories.objects.all().first()
 		most_viewed_products = Product.objects.order_by('-views')[:8]
 		return render(request, f'{current_app_name}/index_{store.template_index}.html', {'services':services,
+																				   'store':store,
 																				   'posts':posts,
 																				   'featured_categories':featured_categories,
 																				   'to_products':to_products ,
@@ -717,7 +718,7 @@ class ProductListView(View):
 		items_per_page = 12
 		store = Store.objects.get(name=store_name)
 		categories = Category.objects.all()
-		products = Product.objects.filter(verified = True)
+		products = Product.objects.all()
 		paginator = Paginator(products, items_per_page)
 		page = request.GET.get('page', 1)
 		try:

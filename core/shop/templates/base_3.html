@@ -301,6 +301,7 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
+                                {% if store.show_brands == True %}
                                 <li class="nav-item">
                                     <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">برندها<i class="bi bi-suit-spade"></i></a>
                                     <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
@@ -310,6 +311,7 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
+                                {% endif %}
                                 <li class="nav-item"><a href="{% url 'shop:contact'  %}" class="nav-link header-top-menu-link-a  ">تماس با ما<i class="bi bi-phone"></i></a></li>
                                 <li class="nav-item"><a href="{% url 'shop:about'  %}" class="nav-link header-top-menu-link-a  ">درباره ما<i class="bi bi-person-check"></i></a></li>
                                 <li class="nav-item"><a href="{% url 'shop:policies'  %}" class="nav-link header-top-menu-link-a  ">قوانین و مقررات<i class="bi bi-shield"></i></a></li>

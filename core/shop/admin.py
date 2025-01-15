@@ -34,7 +34,7 @@ class StoreAdmin(admin.ModelAdmin):
 	list_display = ('name', 'get_owner_name', 'phone_number', 'shamsi_created_date', 'has_domain','domain_msg', 'has_payment_gw', 'gw_msg', 'has_notif')
 	fields = ('name', 'is_active', 'active_days', 'address', 'country', 'city', 
 			  'about_description', 'instagram', 'telegram', 'linkedin', 'merchant', 
-			  'independent', 'phone_number', 'balance', 'email', 'Layout_body', 'layout_sticky', 
+			  'independent', 'phone_number', 'balance', 'email','show_brands' , 'Layout_body', 'layout_sticky', 
 			  'layout_container', 'color', 'meta_description', 'meta_keywords', 'meta_og_title', 
 			  'meta_og_description', 'meta_tc_title', 'meta_tc_description', 'has_domain', 'has_payment_gw',
 			  'policies', 'template_index', 'index_title', 'enamad_code')
@@ -47,19 +47,14 @@ class OwnerAdmin(admin.ModelAdmin):
 class DeliveryAdmin(admin.ModelAdmin):
 	list_display = ('name', 'price', 'min_cart_free')
 
-@admin.register(Announcement)
-class AnnouncementAdmin(admin.ModelAdmin):
-	list_display = ('subject','is_active', 'shamsi_created_date')
+# @admin.register(Announcement)
+# class AnnouncementAdmin(admin.ModelAdmin):
+# 	list_display = ('subject','is_active', 'shamsi_created_date')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
 	list_display = ('parent', 'is_sub', 'name', 'slug')
 	search_fields = ['name', 'slug']
-
-@admin.register(Variety)
-class VarietyAdmin(admin.ModelAdmin):
-	list_display = ('name', 'product', 'stock',)
-	search_fields = ['name', 'product__name']
 
 class VarietyInline(admin.TabularInline):  # یا admin.StackedInline برای نمایش به صورت بلوکی
 	model = Variety
@@ -105,28 +100,14 @@ class ProductAdmin(admin.ModelAdmin):
 	@admin.display(description='Active Price')
 	def active_price(self, obj):
 		return obj.get_active_price()
-	list_display = ('name','brand' ,'price','sales_price','ref_price','off_active', 'active_price','ref_class','stock_alarm', 'view_on_site_icon', 'express','verified')
-	list_editable = ('verified','brand' ,'ref_class','price','ref_price','off_active','express','sales_price')
+	list_display = ('name' ,'price','sales_price','off_active', 'active_price','stock_alarm', 'view_on_site_icon')
+	list_editable = ('price','off_active','sales_price')
 	search_fields = ['name', 'slug']
 	autocomplete_fields = ['category',]
 	prepopulated_fields = {'slug': ('name',)}  
 	inlines = [ProductImageInline, VarietyInline, FilterValueInline]
 
-	class Media:
-		css = {
-			'all': ('assets/css/admin_custom.css',)  # لینک به فایل CSS
-		}
-
 	actions = [erase_stock,update_slugs]
-
-	def save_model(self, request, obj, form, change):
-		if obj.brand:
-			brand_name = obj.brand  # حذف فاصله‌های اضافی
-			brand_obj, created = Brand.objects.get_or_create(
-				name=brand_name
-			)
-			obj.brand = brand_obj.name
-			super().save_model(request, obj, form, change)
 
 	def view_on_site_icon(self, obj):
 		url = obj.get_absolute_url()  # اطمینان حاصل کنید متد get_absolute_url در مدل تعریف شده
@@ -150,9 +131,9 @@ class OrderAdmin(admin.ModelAdmin):
 	list_filter = ('status', 'used_coupon')
 	search_fields = ['customer__full_name', 'status__latest_status']
 
-@admin.register(Size)
-class SizeAdmin(admin.ModelAdmin):
-	list_display = ['name']
+# @admin.register(Size)
+# class SizeAdmin(admin.ModelAdmin):
+# 	list_display = ['name']
 
 @admin.register(PriceRange)
 class PriceRangeAdmin(admin.ModelAdmin):
@@ -278,15 +259,15 @@ class BrandAdmin(admin.ModelAdmin):
 	list_display = ('name',)
 	search_fields = ['name']
 
-class TicketReplyInline(admin.TabularInline):
-	model = TicketReply
-	extra = 0
+# class TicketReplyInline(admin.TabularInline):
+# 	model = TicketReply
+# 	extra = 0
 
-class TicketAdmin(admin.ModelAdmin):
-	list_display = ('subject', 'is_answered', 'is_closed', 'shamsi_created_date')
-	inlines = [TicketReplyInline]
+# class TicketAdmin(admin.ModelAdmin):
+# 	list_display = ('subject', 'is_answered', 'is_closed', 'shamsi_created_date')
+# 	inlines = [TicketReplyInline]
 
-admin.site.register(Ticket, TicketAdmin)
+# admin.site.register(Ticket, TicketAdmin)
 
 class DomainAdmin(admin.ModelAdmin):
 	list_display = ('domain', 'is_active', 'shamsi_created_date')  # Add 'shamsi_created_date' to the list_display

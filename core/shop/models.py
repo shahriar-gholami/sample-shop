@@ -1,18 +1,19 @@
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
-from datetime import date
-
-from jalali_date import datetime2jalali, date2jalali
 from khayyam import JalaliDatetime
 from random import randint
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from ckeditor.fields import RichTextField
 from bs4 import BeautifulSoup
-import datetime
+import jdatetime
 from datetime import timedelta
 from django_jalali.db import models as jmodels
+from datetime import date
+
+def date2jalali(g_date):
+	return jdatetime.date.fromgregorian(date=g_date) if g_date else None
 
 class Store(models.Model):
 	name = models.CharField(max_length=250, unique=True)
@@ -43,13 +44,14 @@ class Store(models.Model):
 	meta_tc_description = models.CharField(max_length=250, default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
 	has_domain = models.BooleanField(default=False)
 	has_payment_gw = models.BooleanField(default=False)
+	show_brands = models.BooleanField(default=False)
 	policies = RichTextField(default = "در این بخش مهم‌ترین سیاست‌های فروشگاه را ذکر نمایید. مهم‌ترین عناوین این بخش شامل سیاست‌های مرجوعی و شیوه‌ها و بازه زمانی ارسال کالا می‌باشند.")
 	template_index = models.IntegerField(default = 1)
 	index_title = models.CharField(max_length=250, null=True, blank=True, default='خانه')
 	enamad_code = models.CharField(max_length=1000, null=True, blank=True, default='none')
 	domain_msg = models.BooleanField(default=False)
 	gw_msg = models.BooleanField(default=False)
-	has_notif = models.BooleanField(default=False)
+	has_notif = models.BooleanField(default=False) 
 
 	
 	@property
@@ -278,7 +280,7 @@ class Product(models.Model):
 	slug = models.CharField(max_length=200, )
 	description = RichTextField()
 	features = RichTextField()
-	brand = models.ForeignKey('Brand', on_delete=models.CASCADE, null=True, blank=True)
+	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه')
 	price = models.IntegerField()
 	sales_price = models.IntegerField(null=True, blank=True)
 	off_active = models.BooleanField(default=False)
@@ -295,8 +297,6 @@ class Product(models.Model):
 	ref_class = models.ForeignKey(ProductRefClass, null=True, blank=True, on_delete=models.SET_NULL)
 	ref_price = models.IntegerField(default=0, null=True, blank=True)
 	stock_alarm_volume = models.IntegerField(default=0, null=True, blank=True)
-	verified = models.BooleanField(default=False)
-	express = models.BooleanField(default=False)
 
 	def get_varieties(self):
 		return Variety.objects.filter(product = self)
@@ -374,8 +374,7 @@ class Product(models.Model):
 
 	class Meta:
 		ordering = ('name',)
-		verbose_name = "محصول"
-		verbose_name_plural = "محصولات"
+		
 
 	def get_main_image(self):
 		images = ProductImage.objects.filter(product=self)
@@ -530,6 +529,9 @@ class Comment(models.Model):
 class CartItem(models.Model):
 	variety = models.ForeignKey(Variety, on_delete = models.CASCADE, null=True, blank=True)
 	quantity = models.PositiveIntegerField(default = 1)
+
+	def __str__(self):
+		return f'{self.variety.product.name} - {self.quantity} عدد'
 
 	def get_item_price(self):
 		item_price = self.quantity*self.variety.product.get_active_price()

@@ -182,6 +182,7 @@
                                     {% endfor %}
                                     </ul>
                                 </li>
+                                {% if store.show_brands == True %}
                                 <li class="nav-item bg-ul-f7"><a class="nav-link" href="">برندها</a>
                                     <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
                                     <ul class="navbar-nav h-0">
@@ -190,6 +191,7 @@
                                     {% endfor %}
                                     </ul>
                                 </li>
+                                {% endif %}
                                 <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:about'  %}">درباره ما</a>
                                 </li>
                                 <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:contact'  %}">تماس با ما</a>
@@ -458,6 +460,7 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    {% if store.show_brands == True %}
                     <li class="nav-item">
                         <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">برندها</a>
                         <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
@@ -467,6 +470,7 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    {% endif %}
                     <!-- <li class="nav-item">
                         <a class="nav-link  header-top-menu-link-a fw-bold-hover" href="">منو ساده</a>
                         <ul class="level-one">

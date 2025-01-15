@@ -2,10 +2,13 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from urllib.parse import urlparse
 from .models import Store, Owner, Customer
 
-store_name = Store.objects.all().first().name
-store = Store.objects.all().first()
+
+
+
 
 class IsOwnerUserMixin(UserPassesTestMixin):
+	# store_name = Store.objects.all().first().name
+	# store = Store.objects.all().first()
 	def test_func(self):
 		if self.request.user.is_authenticated:
 			current_path = self.request.path
@@ -19,6 +22,8 @@ class IsOwnerUserMixin(UserPassesTestMixin):
 		return False
 	
 class IsCustomerUserMixin(UserPassesTestMixin):
+	# store_name = Store.objects.all().first().name
+	# store = Store.objects.all().first()
 	def test_func(self):
 		if self.request.user.is_authenticated:
 			current_path = self.request.path

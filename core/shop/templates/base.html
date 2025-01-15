@@ -878,6 +878,7 @@
                                     {% endfor %}
                                 </ul>
                             </li>
+                            {% if store.show_brands == True %}
 
                             <li class="slide">
                                 <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i class="side-menu__icon fe fe-package"></i><span class="side-menu__label">برندها</span><i
@@ -892,7 +893,7 @@
                                     {% endfor %}
                                 </ul>
                             </li>
-                            
+                            {% endif %}
                             <!-- تماس با ما -->
                             <li>
                                 <a class="side-menu__item has-link" href="{% url 'shop:contact'  %}"><i
