@@ -494,8 +494,9 @@
                         
                             <!-- LOGO -->
                             <div class="main-header-center ms-3 d-none d-lg-block text-danger">
-                                <form method="get" action="{% url 'shop:product_search'  %}">
-                                    <input type="text" name="q" value="{{ query }}" class="form-control text-danger"  placeholder="جستجو برای محصولات ...">
+                                <form method="post" action="{% url 'shop:search'  %}">
+                                    {% csrf_token %}
+                                    <input type="text" name="search" class="form-control text-danger"  placeholder="جستجو برای محصولات ...">
                                     <button type="submit" class="btn px-0 pt-2"><i aria-hidden="true" class="fe fe-search"></i></button>
                                 </form>
                             </div>
@@ -506,8 +507,9 @@
                                     </a>
                                     <div class="dropdown-menu header-search dropdown-menu-start">
                                         <div class="input-group w-100 p-2">
-                                            <form method="get" action="{% url 'shop:product_search'  %}">
-                                                <input type="text" name="q" value="{{ query }}"  class="form-control ">
+                                            <form method="post" action="{% url 'shop:search'  %}">
+                                                {% csrf_token %}
+                                                <input type="text" name="search" class="form-control ">
                                                 <div class="input-group-text btn btn-primary">
                                                     <button type="submit" class="btn px-0 pt-2"><i aria-hidden="true" class="fe fe-search"></i></button>
                                                 </div>
@@ -549,7 +551,8 @@
                                     <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
                                         <div class="d-flex order-lg-2">
                                             <div class="dropdown d-lg-none d-flex">
-                                                <form method="get" action="{% url 'shop:product_search'  %}">
+                                                <form method="post" action="{% url 'shop:search'  %}">
+                                                    {% csrf_token %}
                                                     <div class="input-group w-100 p-2">
                                                         <input name="q"  class="form-control" placeholder="جستجو ..." type="text">
                                                         <button class="input-group-text btn btn-primary" type="submit">

@@ -1073,7 +1073,7 @@ class CategoryProductsListView(View):
 			categories = [cat for cat in Category.objects.all() if cat.parent == category]
 		filters = Filter.objects.filter(category=category)
 		products = set()
-		cat_products = [product for product in Product.objects.filter(category=category) if product.verified == True]
+		cat_products = [product for product in Product.objects.filter(category=category)]
 		for product in cat_products:
 			products.add(product)
 		if category.get_sub_categories() != None:
@@ -1156,7 +1156,7 @@ class ProductDetailView(View):
 		
 		add_to_cart_url = f'{current_app_name}:add-to-cart'
 		products = product.get_related_products()
-		brand = Brand.objects.get(name = product.brand)
+		brand = product.brand
 		return render(request, f'{current_app_name}/product_detail_{store.template_index}.html', 
 				{'brand':brand,'services':services,'products':products,'product': product,'comments':comments ,'varieties':varieties,'form':form, 'message':message, 'add_to_cart':add_to_cart_url, 'store_name':store_name})
 
@@ -1463,17 +1463,12 @@ class ContactUsPageView(View):
 			return render(request, f'{current_app_name}/contact_{store.template_index}.html', {'message':'پیام شما با موفقیت ارسال گردید.'})
 		return render(request, f'{current_app_name}/contact_{store.template_index}.html', {'message':'مقادیر به درستی وارد نشده‌اند.'})
 
-class ProductSearchView(View):
+class SearchResultsView(View):
 
-	def get(self, request, *args, **kwargs):
+	def get(self, request, search_item, *args, **kwargs):
+		print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
 		store = Store.objects.get(name=store_name)
-		query = request.GET.get('q')
-		if query:
-			
-			products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query)).distinct()
-		else:
-			products = Product.objects.all()
-
+		products = Product.objects.filter(name__icontains=search_item)
 		products_urls = f'{current_app_name}:product_detail'
 		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
@@ -1487,12 +1482,18 @@ class ProductSearchView(View):
 		# except EmptyPage:
 		# 	products = paginator.page(paginator.num_pages)
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', {'products': products, 
-													'query': query, 
 													'to_products':products_urls, 
 													'store_name':store_name, 
 													'categories':categories,
 													'sizes':sizes,
 													'price_ranges':price_ranges})
+class SearchView(View):
+
+	def post(self, request, *args, **kwargs):
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			search_item = form.cleaned_data['search']
+			return redirect('shop:search_results', search_item)
 
 class FaqView(View):
 
@@ -1938,8 +1939,7 @@ class SpecialProductListView(View):
 class BrandProductListView(View):
 
 	def get(self, request, brand_name):
-		brand = Brand.objects.filter(name=brand_name).first()
-		products = Product.objects.filter(brand=brand.name, verified = True)
+		products = Product.objects.filter(brand=brand_name)
 		items_per_page = 12
 		store = Store.objects.get(name=store_name)
 		categories = Category.objects.all()

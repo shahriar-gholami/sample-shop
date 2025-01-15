@@ -100,8 +100,9 @@
 
             <div class="col-lg-3 order-3 d-lg-block d-none">
                 <div class="header-search">
-                    <form method="get" action="{% url 'shop:product_search'  %}">
-                        <input name="q" class="header-search-txt" placeholder="جستجوی محصولات" type="text">
+                    <form method="post" action="{% url 'shop:search'  %}">
+                        {% csrf_token %}
+                        <input name="search" class="header-search-txt" placeholder="جستجوی محصولات" type="text">
                     </form>
                 </div>
             </div>
@@ -138,8 +139,9 @@
                                 <img alt="" class="img-fluid" src="{{ store.get_logo_image }}" width="100">
                             </a>
                             <div class="header-search pb-4 w-100">
-                                <form method="get" action="{% url 'shop:product_search'  %}">
-                                    <input name="q" class="header-search-txt py-3" placeholder="جستجوی محصولات"
+                                <form method="post" action="{% url 'shop:search'  %}">
+                                    {% csrf_token %}
+                                    <input name="search" class="header-search-txt py-3" placeholder="جستجوی محصولات"
                                            type="text">
                                 </form>
                             </div>

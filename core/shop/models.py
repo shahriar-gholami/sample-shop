@@ -236,8 +236,7 @@ class Category(models.Model):
 		brands = set()
 		for product in products:
 			if product.brand:
-				brand = Brand.objects.get(name = product.brand)
-				brands.add(brand)
+				brands.add(product.brand)
 		if self.get_sub_categories() != None:
 			sub_categories = self.get_sub_categories()
 			for sub_cat in sub_categories:

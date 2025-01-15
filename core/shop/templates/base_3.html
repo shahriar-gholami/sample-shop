@@ -72,8 +72,9 @@
             </div>
             <div class="col-xl-5 d-xl-block d-none">
                 <div class="header-form">
-                    <form method="get" action="{% url 'shop:product_search'  %}">
-                        <input name="q" type="text" class="form-control input-search" placeholder="جستجوی محصول">
+                    <form method="post" action="{% url 'shop:search'  %}">
+                    {% csrf_token %}
+                        <input name="search" type="text" class="form-control input-search" placeholder="جستجوی محصول">
                         <button type="submit" class="btn input-btn-search"><i class="bi bi-search"></i></button>
                     </form>
                 </div>
@@ -161,6 +162,7 @@
                                     {% endfor %}
                                     </ul>
                                 </li>
+                                {% if store.show_brands == True %}
                                 <li class="nav-item bg-ul-f7"><a class="nav-link" href="">برند‌ها</a>
                                     <span class="showSubMenu"><i class="bi bi-chevron-left"></i></span>
                                     <ul class="navbar-nav h-0">
@@ -170,6 +172,7 @@
                                     {% endfor %}
                                     </ul>
                                 </li>
+                                {% endif %}
                                 <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:about'  %}">درباره ما</a>
                                 </li>
                                 <li class="nav-item bg-ul-f7"><a class="nav-link" href="{% url 'shop:contact'  %}">تماس با ما</a>
@@ -190,8 +193,9 @@
             <div class="col-sm-11 col-10 d-xl-none d-block">
                 <div class="d-flex">
                     <div class="header-form w-100">
-                        <form method="get" action="{% url 'shop:product_search'  %}">
-                            <input name="q" type="search" class="form-control input-search" placeholder="جستجوی محصول">
+                        <form method="post" action="{% url 'shop:search'  %}">
+                            {% csrf_token %}
+                            <input name="search" type="search" class="form-control input-search" placeholder="جستجوی محصول">
                             <button type="submit" class="btn input-btn-search"><i class="bi bi-search"></i></button>
                         </form>
                     </div>
