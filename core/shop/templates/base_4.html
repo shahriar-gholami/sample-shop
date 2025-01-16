@@ -389,42 +389,7 @@
             <div class="card bg-transparent shadow-none card-style1 border-0">
                 <div class="card-body px-0 p-4 p-md-5 p-xl-6">
                     <div id="accordion" class="accordion-style">
-                        <div class="card mb-3">
-                            <div class="card-header" id="headingOne">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed font-14 py-3 bg-white"
-                                            data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                            aria-expanded="false" aria-controls="collapseOne">راهنمای مشتریان
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
-                                 data-bs-parent="#accordion">
-                                <div class="card-body">
-                                    <ul class="dropdown-menu flex-column"
-                                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 42px, 0px);"
-                                data-popper-placement="bottom-end">
-                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-house-door me-2"></i>پروفایل</a>
-                                </li>
-                                {% if request.user.is_authenticated %}
-                                <li><a href="
-                                    {% if request.user.phone_number in store.get_owner_phone_number %}
-                                    {% url 'shop:owner_dashboard'  %}
-                                    {% endif %}" class="dropdown-item"><i class="bi bi-arrow-up-right-square me-2"></i>داشبورد فروشندگی</a>
-                                </li>
-                                {% endif %}
-                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_orders'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-cart-check me-2"></i>سفارش های
-                                    من</a></li>
-                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_comments'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-chat-dots me-2"></i>نظرات
-                                    من</a></li>
-                                <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_favorites'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-heart me-2"></i>محصولات مورد
-                                    علاقه</a></li>
-                                <li><a href="" class="dropdown-item mct-hover"><i
-                                        class="bi bi-arrow-right-square me-2"></i>خروج از حساب کاربری</a></li>
-                            </ul>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="card mb-3">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
@@ -438,13 +403,10 @@
                                  data-bs-parent="#accordion">
                                 <div class="card-body">
                                     <ul class="navbar-nav flex-column">
-                                        <li class="nav-item"><a href="" class="nav-link font-14">حساب کاربری</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">تاریخچه سفارشات</a>
-                                        </li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">لیست دلخواه</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">اشتراک خبرنامه</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">ورود</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">ثبت نام</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:customer_dashboard' %}" class="nav-link font-14">حساب کاربری</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:customer_dashboard_orders' %}" class="nav-link font-14">تاریخچه سفارشات</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:customer_dashboard_favorites' %}" class="nav-link font-14">لیست دلخواه</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:customer_authentication' %}" class="nav-link font-14">ورود - ثبت‌نام</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -462,12 +424,9 @@
                                  data-bs-parent="#accordion">
                                 <div class="card-body">
                                     <ul class="navbar-nav flex-column">
-                                        <li class="nav-item"><a href="" class="nav-link font-14">شماره حساب ها</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">وبلاگ</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">صفحه خدمات</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">همکاری با ما</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">تماس با ما</a></li>
-                                        <li class="nav-item"><a href="" class="nav-link font-14">درباره ما</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:post_list' %}" class="nav-link font-14">وبلاگ</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:contact' %}" class="nav-link font-14">تماس با ما</a></li>
+                                        <li class="nav-item"><a href="{% url 'shop:about' %}" class="nav-link font-14">درباره ما</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -480,14 +439,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="footer-desc-item">
-                        <h3 class="font-16 my-3">فروشگاه یلدا ، بررسی ، انتخاب و خرید آنلاین</h3>
+                        <h3 class="font-16 my-3">فروشگاه {{store.name}} ، بررسی ، انتخاب و خرید آنلاین</h3>
                         <p class="text-muted font-14">
-                            یک خرید اینترنتی مطمئن، نیازمند فروشگاهی است که بتواند کالاهایی متنوع، باکیفیت و
-                            دارای قیمت مناسب را در مدت زمانی کوتاه به دست مشتریان خود برساند و ضمانت بازگشت
-                            کالا
-                            هم داشته باشد؛ ویژگی‌هایی که فروشگاه اینترنتی یلدا سال‌هاست بر روی آن‌ها کار
-                            کرده و
-                            توانسته از این طریق مشتریان ثابت خود را داشته باشد
+                            {{store.about_description}}
                         </p>
                     </div>
                 </div>
@@ -507,7 +461,7 @@
                 <p class="text-muted mb-lg-0 mb-3 font-14">برای استفاده از مطالب فروشگاه، داشتن «هدف غیرتجاری» و
                     ذکر «منبع» کافیست.
                     تمام
-                    حقوق اين وب‌سايت نیز برای شرکت یلدا است.
+                    حقوق اين وب‌سايت نیز برای {{store.name}} است.
                 </p>
             </div>
             <div class="col-lg-4">
