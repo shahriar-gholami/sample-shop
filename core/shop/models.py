@@ -15,6 +15,12 @@ from datetime import date
 def date2jalali(g_date):
 	return jdatetime.date.fromgregorian(date=g_date) if g_date else None
 
+class Policy(models.Model):
+	delivery = models.TextField(default='توضیحات لازم در مورد شیوه‌های ارسال، مدت زمان انتظار و هزینه ارسال کالا')
+	payment = models.TextField(default='معرفی شیوه‌های پرداختی که در فروشگاه امکان‌پذیر است')
+	returns = models.TextField(default='توضیح صریح سیاست‌های مرجوعی و بازپرداخت وجه کالاهای عودت داده شده')
+	rules_and_policies = models.TextField(default='قوانین و مقررات کلی سایت و سیاست‌های حریم خصوصی')
+
 class Store(models.Model):
 	name = models.CharField(max_length=250, unique=True)
 	is_active = models.BooleanField(default = False)
@@ -22,7 +28,7 @@ class Store(models.Model):
 	address = models.CharField(max_length = 500, null=True, blank=True)
 	country = models.CharField(max_length = 250, default = 'iran')
 	city = models.CharField(max_length = 250, default='tehran')
-	about_description = RichTextField(default = "درباره فروشگاه، خدمات و سوابق آن")
+	about_description = models.TextField(default = "درباره فروشگاه، خدمات و سوابق آن")
 	instagram = models.CharField(max_length=250, null=True, blank=True)
 	telegram = models.CharField(max_length=250, null=True, blank=True)
 	linkedin = models.CharField(max_length=250, null=True, blank=True)
@@ -45,7 +51,6 @@ class Store(models.Model):
 	has_domain = models.BooleanField(default=False)
 	has_payment_gw = models.BooleanField(default=False)
 	show_brands = models.BooleanField(default=False)
-	policies = RichTextField(default = "در این بخش مهم‌ترین سیاست‌های فروشگاه را ذکر نمایید. مهم‌ترین عناوین این بخش شامل سیاست‌های مرجوعی و شیوه‌ها و بازه زمانی ارسال کالا می‌باشند.")
 	template_index = models.IntegerField(default = 1)
 	index_title = models.CharField(max_length=250, null=True, blank=True, default='خانه')
 	enamad_code = models.CharField(max_length=1000, null=True, blank=True, default='none')
@@ -243,7 +248,7 @@ class Category(models.Model):
 				products = sub_cat.product_set.all()
 				for product in products:
 					if product.brand:
-						brand = Brand.objects.get(name = product.brand)
+						brand = product.brand
 						brands.add(brand)
 		return brands		
 

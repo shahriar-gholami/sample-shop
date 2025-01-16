@@ -61,11 +61,39 @@
                 <span>و مقررات</span>
             </h4>
         </div>
-
+        <div id="rules_and_policies" class="mb-3"><h3>قوانین و رویه‌ها</h3></div>
+        <div class="ui-boxs">
+            <div class="ui-box" >
+                <div class="ui-box-item slider-parent ui-box-white p-3 text-justify">
+                    
+                    <p>{{policy.rules_and_policies|safe}}</p>
+                </div>
+            </div>
+        </div>
+        <div id="delivery" class="mb-3"><h3>شیوه‌های ارسال</h3></div>
+        <div class="ui-boxs">
+            <div class="ui-box" >
+                <div class="ui-box-item slider-parent ui-box-white p-3 text-justify">
+                    
+                    <p>{{policy.delivery|safe}}</p>
+                </div>
+            </div>
+        </div>
+        <div id="payment" class="mb-3"><h3>شیوه‌های پرداخت</h3></div>
         <div class="ui-boxs">
             <div class="ui-box">
                 <div class="ui-box-item slider-parent ui-box-white p-3 text-justify">
-                    <p>{{store.policies|safe}}</p>
+                    
+                    <p>{{policy.payment|safe}}</p>
+                </div>
+            </div>
+        </div>
+        <div id="returns" class="mb-3"><h3>سیاست‌های عودت کالا</h3></div>
+        <div class="ui-boxs">
+            <div class="ui-box">
+                <div class="ui-box-item slider-parent ui-box-white p-3 text-justify">
+                    
+                    <p>{{policy.returns|safe}}</p>
                 </div>
             </div>
         </div>

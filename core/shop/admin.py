@@ -23,11 +23,17 @@ class ProductColorAdmin(admin.ModelAdmin):
 	list_display = ('name', 'color_code')  # نمایش فیلدهای اصلی در پنل ادمین
 	search_fields = ('name', 'color_code')
 
-@admin.register(ExpressDeliveryInterval)
-class ExpressDeliveryIntervalAdmin(admin.ModelAdmin):
-	list_display = ('start_time', 'end_time', 'total_cap', 'teken_cap')
-	list_filter = ('start_time', 'end_time')
-	search_fields = ('start_time', 'end_time')
+@admin.register(Policy)
+class PolicyAdmin(admin.ModelAdmin):
+    list_display = ('delivery', 'payment', 'returns', 'rules_and_policies')
+    search_fields = ('delivery', 'payment', 'returns', 'rules_and_policies')
+    ordering = ('id',)
+
+@admin.register(Filter)
+class FilterAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'category')  # ستون‌هایی که در لیست نمایش داده می‌شوند
+    search_fields = ('name',)  # امکان جستجو براساس نام
+    list_filter = ('category',)  # فیلتر بر اساس دسته‌بندی
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
@@ -37,7 +43,7 @@ class StoreAdmin(admin.ModelAdmin):
 			  'independent', 'phone_number', 'balance', 'email','show_brands' , 'Layout_body', 'layout_sticky', 
 			  'layout_container', 'color', 'meta_description', 'meta_keywords', 'meta_og_title', 
 			  'meta_og_description', 'meta_tc_title', 'meta_tc_description', 'has_domain', 'has_payment_gw',
-			  'policies', 'template_index', 'index_title', 'enamad_code')
+			  'template_index', 'index_title', 'enamad_code')
 
 @admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):

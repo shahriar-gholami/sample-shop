@@ -1543,7 +1543,8 @@ class PoliciesView(View):
 
 	def get(self, request):
 		store = Store.objects.get(name = store_name)
-		return render(request, f'{current_app_name}/policies_{store.template_index}.html', {'store':store})
+		policy = Policy.objects.all().first()
+		return render(request, f'{current_app_name}/policies_{store.template_index}.html', {'policy':policy,'store':store})
 	
 class FilterView(View):
 
@@ -1632,9 +1633,10 @@ class FeatureFilterView(View):
 							active_filters.append(new_active_filter)
 							selected_values.append(posi_value.id)
 			products = [value.product for value in FilterValue.objects.filter(id__in=selected_values)]
-
+			colors = ProductColor.objects.all() 
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
+	 			'colors':colors,
 				'store_name':store_name, 
 				'categories':categories,
 				'sizes':sizes,
@@ -1807,8 +1809,10 @@ class SpecialProductListView(View):
 		products_urls = f'{current_app_name}:product_detail'
 		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
+		colors = ProductColor.objects.all() 
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
+	 			'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
@@ -1913,10 +1917,11 @@ class SpecialProductListView(View):
 			except EmptyPage:
 				# اگر شماره صفحه بیشتر از تعداد کل صفحات است
 				products = paginator.page(paginator.num_pages)
-
+			colors = ProductColor.objects.all() 
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				 {'products': products, 
 				'brands':brands,
+				'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
@@ -1955,8 +1960,10 @@ class BrandProductListView(View):
 		products_urls = f'{current_app_name}:product_detail'
 		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
+		colors = ProductColor.objects.all() 
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
+	 			'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
@@ -2062,10 +2069,11 @@ class BrandProductListView(View):
 			except EmptyPage:
 				# اگر شماره صفحه بیشتر از تعداد کل صفحات است
 				products = paginator.page(paginator.num_pages)
-
+			colors = ProductColor.objects.all() 
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				 {'products': products, 
 				'brands':brands,
+				'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
@@ -2101,16 +2109,6 @@ class CreateOrderView(IsCustomerUserMixin, View):
 				total_price += price
 			order = Order.objects.create(customer=customer, total_price=total_price, status = order_status)
 			order.items.set(items)
-			for item in order.items.all():
-				if item.variety.product.express == True:
-					order.has_express_items = True
-					order.save()
-					break
-			for item in order.items.all():
-				if item.variety.product.express == False:
-					order.has_normal_items = True
-					order.save()
-					break
 			cart.items.clear()
 			return redirect(f'{current_app_name}:order_detail' , order.id)
 		return render(request, f'{current_app_name}/empty-cart_{store.template_index}.html', {'store_name':store_name})
@@ -2145,8 +2143,6 @@ class OrderDetailView(IsCustomerUserMixin ,View):
 		form = OrderDeliveryOptionsForm(request.POST)
 		order = Order.objects.get(id = order_id)
 		if form.is_valid():
-			print('KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
-			print(form.cleaned_data)
 			delivery_method = Delivery.objects.get(id = int(form.cleaned_data['delivery_method']))
 			order.delivery_method = delivery_method
 			delivery_description = ''
