@@ -42,12 +42,12 @@ class Store(models.Model):
 	layout_container = models.CharField(max_length = 250, default= 'main-container container')
 	color = models.CharField(max_length = 250, default = '0,0,0')
 	created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-	meta_description = models.CharField(max_length=500, default='فروشگاه اینترنتی ساخته شده با سایت ساز رایگان پیکوسایت')
-	meta_keywords = models.CharField(max_length=500, default='ساخته شده با فروشگاه ساز پیکوسایت, فروشگاه اینترنتی, فروشگاه آنلاین, سایت ساز پیکوسایت')
-	meta_og_title = models.CharField(max_length=250, default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	meta_og_description = models.CharField(max_length=1000, default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	meta_tc_title = models.CharField(max_length=250, default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	meta_tc_description = models.CharField(max_length=250, default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
+	meta_description = models.TextField(default='فروشگاه اینترنتی ساخته شده با سایت ساز رایگان پیکوسایت')
+	meta_keywords = models.TextField(default='ساخته شده با فروشگاه ساز پیکوسایت, فروشگاه اینترنتی, فروشگاه آنلاین, سایت ساز پیکوسایت')
+	meta_og_title = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
+	meta_og_description = models.TextField( default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
+	meta_tc_title = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
+	meta_tc_description = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
 	has_domain = models.BooleanField(default=False)
 	has_payment_gw = models.BooleanField(default=False)
 	show_brands = models.BooleanField(default=False)
@@ -57,6 +57,7 @@ class Store(models.Model):
 	domain_msg = models.BooleanField(default=False)
 	gw_msg = models.BooleanField(default=False)
 	has_notif = models.BooleanField(default=False) 
+	domain = models.CharField(max_length=250, null=True, blank=True)
 
 	
 	@property
@@ -748,8 +749,8 @@ class Banner(models.Model):
 	index = models.PositiveIntegerField(default=1)
 	image = models.ImageField(upload_to=banner_upload_path, default='media/11.png')
 	created = models.DateTimeField(auto_now_add=True)
-	tag = models.ManyToManyField(Tag)
-	category = models.ManyToManyField(Category)
+	tag = models.ManyToManyField(Tag, blank=True)
+	category = models.ManyToManyField(Category, blank=True)
 	size = models.CharField(max_length=250, default='small')
 	
 	class Meta:
@@ -902,7 +903,6 @@ def brand_upload_path(instance):
 
 class Brand(models.Model):
 	name = models.CharField(max_length=250)
-	logo = models.ImageField(upload_to=brand_upload_path,null=True ,blank=True)
 
 	def __str__(self):
 		return self.name

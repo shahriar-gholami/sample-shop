@@ -380,32 +380,21 @@
  <!--============ start banner ==============-->
  
  <section class="banner">
-     <div class="container-fluid">
-         <div class="row gy-4">
-             <div class="col-md-4">
-                 <div class="banner-item running-top">
-                     <a href="">
-                         <img src="{% static 'assets4/image/banner/banner-1.webp' %}" class="w-100 rounded-3" alt="">
-                     </a>
-                 </div>
-             </div>
-             <div class="col-md-4">
-                 <div class="banner-item running-top">
-                     <a href="">
-                         <img src="{% static 'assets4/image/banner/banner-2.webp' %}" class="w-100 rounded-3" alt="">
-                     </a>
-                 </div>
-             </div>
-             <div class="col-md-4">
-                 <div class="banner-item running-top">
-                     <a href="">
-                         <img src="{% static 'assets4/image/banner/banner-3.webp' %}" class="w-100 rounded-3" alt="">
-                     </a>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+    <div class="container-fluid">
+        <div class="row gy-4">
+           {% for banner in triple_banners %}
+            <div class="col-md-4">
+                <div class="banner-item running-top">
+                    <a href="{% url 'shop:featured_products' banner.id %}">
+                        <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</section>
  
  <!--============ end banner ==============-->
  

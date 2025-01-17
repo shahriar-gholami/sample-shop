@@ -151,7 +151,7 @@
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="position-relative me-3">
                         <span class="position-absolute top-0 bg-white rounded-circle wh-20 border-2 border border-primary z-2">{{cart_items_count}}</span>
-                        <a href="{% if request.user.is_authenticated %}{% url 'shop:cart_view' cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="btn main-color-green rounded-circle btn-float-cart"><i class="bi bi-bag"></i></a>
+                        <a href="{% if request.user.is_authenticated %}{% url 'shop:cart_view' cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="btn main-color-one-bg rounded-circle btn-float-cart"><i class="bi bi-bag"></i></a>
                     </div>
                     <div class="bg-white header-btn-group shadow-sm rounded-pill">
                         <div class="dropdown">
@@ -439,7 +439,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="footer-desc-item">
-                        <h3 class="font-16 my-3">فروشگاه {{store.name}} ، بررسی ، انتخاب و خرید آنلاین</h3>
+                        <h3 class="font-16 my-3">{{store.name}} ، بررسی ، انتخاب و خرید آنلاین</h3>
                         <p class="text-muted font-14">
                             {{store.about_description}}
                         </p>

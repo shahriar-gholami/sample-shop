@@ -30,19 +30,19 @@ html {
 
 :root {
     /* theme color */
-    --main-color-one: #0070FF;
-    --main-color-one-shadow: #0070ff14;
-    --main-color-one-hover: #015bd0;
-    --main-color-one-light: #2483FF;
-    --main-color-two: #FF9100;
-    --main-color-two-light: #f3a128;
+    --main-color-one: #4f0064;
+    --main-color-one-shadow: #31003a14;
+    --main-color-one-hover: #630079;
+    --main-color-one-light: #55005d;
+    --main-color-two: #9500cb;
+    --main-color-two-light: #9401d8;
     --main-color-two-shadow: #FF910031;
-    --main-color-two-hover: #e28100;
-    --main-color-three: #4caf50;
-    --main-color-three-shadow: #4caf5031;
-    --main-color-three-hover: #2d8431;
-    --main-color-green: #3bd230;
-    --main-color-green-hover: #27a81d;
+    --main-color-two-hover: #e200b9;
+    --main-color-three: #c200c8;
+    --main-color-three-shadow: #af4ca59d;
+    --main-color-three-hover: #742d84;
+    --main-color-green: #a230d2;
+    --main-color-green-hover: #c34db7;
     --bg-site: #f4f4f4;
     /* typography */
     --font-size: 14px;

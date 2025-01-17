@@ -132,10 +132,6 @@
                                             <img src="{{brand.logo.url}}" alt="" class="img-fluid">
                                         </a>
                                         {% endif %}
-                                        <!-- <a href=""
-                                           class="btn no-highlight bs-bg-gray-300 rounded-pill font-14 d-flex align-items-center ms-3"
-                                           data-bs-toggle="modal" data-bs-target="#shareModal"><i
-                                                class="bi font-18 bi-share me-2"></i>اشتراک گذاری</a> -->
                                     </div>
                                 </div>
                             </div>
@@ -145,14 +141,6 @@
                                 {% for category in product.category.all|slice:":2" %}
                                 <a href="{% url 'shop:category_products' category.slug %}" class="badge danger-label btn btn-lg rounded-pill font-12">{{category.name}}</a>
                                 {% endfor %}
-                                <div class="d-flex align-items-center ms-4">
-                                    <div class="d-flex flex-column me-3">
-                                        <h6 class="text-end">4/5</h6>
-                                        <p class="text-muted lh-sm font-14">میانگین امتیاز</p>
-                                    </div>
-                                    <div class="rating-star"><i class="bi bi-star-fill bs-text-orange-500 font-16"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="row gy-4 my-4">
@@ -165,82 +153,6 @@
                                         {% endfor %}
                                     </ul>
                                 </div>
-                                <!-- <div class="product-meta-color mt-4">
-                                    <h5 class="font-16 icon-circle">
-                                        انتخاب رنگ کالا
-                                    </h5>
-                                    <div class="product-meta-color-items">
-                                        <input type="radio" class="btn-check" name="options" id="option1"
-                                               autocomplete="off"
-                                               checked>
-                                        <label class="btn " for="option1">
-                                            <span style="background-color: #c00;"></span>
-                                            قرمز
-                                        </label>
-
-                                        <input type="radio" class="btn-check" name="options" id="option2"
-                                               autocomplete="off">
-                                        <label class="btn " for="option2">
-                                            <span style="background-color: #111;"></span>
-                                            مشکی
-                                        </label>
-
-                                        <input type="radio" class="btn-check" name="options" id="option3"
-                                               autocomplete="off"
-                                               disabled>
-                                        <label class="btn " for="option3">
-                                            <span style="background-color: #00cc5f;"></span>
-                                            سبز
-                                        </label>
-
-                                        <input type="radio" class="btn-check" name="options" id="option4"
-                                               autocomplete="off">
-                                        <label class="btn " for="option4">
-                                            <span style="background-color: #1b69f0;"></span>
-                                            آبی
-                                        </label>
-                                    </div>
-                                </div> -->
-                                
-                                
-                                
-                                
-                                <!-- <div class="product-meta-color mt-4">
-                                    <h5 class="font-16 icon-circle">
-                                        انتخاب سایز
-                                    </h5>
-                                    <div class="product-meta-color-items">
-                                        <input type="radio" class="btn-check" name="options-two" id="option11"
-                                               autocomplete="off"
-                                               checked>
-                                        <label class="btn px-4 rounded-3 " for="option11">
-                                            sm
-                                        </label>
-
-                                        <input type="radio" class="btn-check" name="options-two" id="option12"
-                                               autocomplete="off"
-                                               checked>
-                                        <label class="btn px-4 rounded-3 " for="option12">
-                                            md
-                                        </label>
-
-                                        <input type="radio" class="btn-check" name="options-two" id="option13"
-                                               autocomplete="off"
-                                               checked>
-                                        <label class="btn px-4 rounded-3" for="option13">
-                                            lg
-                                        </label>
-
-                                        <input type="radio" class="btn-check" name="options-two" id="option14"
-                                               autocomplete="off"
-                                               checked>
-                                        <label class="btn px-4 rounded-3 " for="option14">
-                                            xl
-                                        </label>
-
-                                    </div>
-                                </div> -->
-                                
                             </div>
                             <div class="col-lg-6">
                                 <form method="post" action="{% url 'shop:add_to_cart'  product.id %}">
@@ -250,7 +162,6 @@
                                         <div class="col-lg-12">
                                             <div class="product-meta-rating mt-2 text-lg-center text-center">
                                                 <div class=" w-100 d-flex flex-column justify-content-center align-items-center mt-3">
-                                                    {% if product.get_product_varieties.count > 1 %}
                                                     <div class="bs-bg-gray-200 product-meta-info-item rounded-3 p-3 border border-dark-subtle d-flex flex-column align-items-center justify-content-center">
                                                         <div class="col-lg-12">
                                                             <div class="product-meta-rating  text-lg-center text-center">
@@ -265,6 +176,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="product-meta-color">
+                                                        {% if product.get_product_varieties.count > 1 %}
                                                         <h5 class="font-16">
                                                             انتخاب تنوع کالا
                                                         </h5>
@@ -277,46 +189,24 @@
                                                                 {% endfor %}
                                                             </select>
                                                         </div>
+                                                        {% endif %}
                                                     </div>
-                                                    {% endif %}
                                                     {% if product.off_active == True %}
-                                                        {% if product.ref_class != None %}
-                                                            <div >
-                                                                <div class="d-flex align-items-center m-2">
-                                                                    <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                                        {{ product.get_class_price|intcomma }}</p>
-                                                                    <h6 class="font-30 title-font new-price  main-color-one-color">{{product.sales_price|intcomma}}
-                                                                        تومان</h6>
-                                                                </div>
+                                                        <div>
+                                                            <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
+                                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                                                    {{ product.price|intcomma }}</p>
+                                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                                    تومان</h6>
                                                             </div>
-                                                        {% else %}
-                                                            <div >
-                                                                <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
-                                                                    <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                                        {{ product.price|intcomma }}</p>
-                                                                    <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                                        تومان</h6>
-                                                                </div>
-                                                            </div>
-                                                        {% endif %}
+                                                        </div>
                                                     {% else %}
-                                                        {% if product.ref_class != None %}
-                                                            <div >
-                                                                <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
-                                                                    
-                                                                    <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_class_price|intcomma}}
-                                                                        تومان</h6>
-                                                                </div>
+                                                        <div >
+                                                            <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
+                                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
+                                                                    تومان</h6>
                                                             </div>
-                                                        {% else %}
-                                                            <div >
-                                                                <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
-                                                                    
-                                                                    <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
-                                                                        تومان</h6>
-                                                                </div>
-                                                            </div>
-                                                        {% endif %}
+                                                        </div>
                                                     {% endif %}
                                        
                                                     <div class="counter">
@@ -334,14 +224,11 @@
                                                 </div>
                                                 </div>
                                             </div>
-                                            
                                         </form>
                             </div>
                         </div>
-                    
-                                </div>
-                                </form>
-                            </div>
+                    </div>
+                 </div>
             </div>
         </div>
     </div>

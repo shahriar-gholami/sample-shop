@@ -32,24 +32,24 @@ import re
 
 
 
-MERCHANT = Store.objects.all().first().merchant
+
 ZP_API_REQUEST = "https://api.zarinpal.com/pg/v4/payment/request.json"
 ZP_API_VERIFY = "https://api.zarinpal.com/pg/v4/payment/verify.json"
 ZP_API_STARTPAY = "https://www.zarinpal.com/pg/StartPay/{authority}"
 description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"
 # CallbackURL = 'http://127.0.0.1:8000/shop//orders/verify/'
 
-store_name = Store.objects.all().first().name
-store = Store.objects.all().first()
+
 current_app_name = apps.get_containing_app_config(__name__).name
 
 
 class IndexView(View):
 
 	def get(self, request):
+		store_name = Store.objects.all().first().name
 		store = Store.objects.all().first()
-		current_page = request.path
 		slides = Slide.objects.all()
+		triple_banners = [banner for banner in Banner.objects.filter(size='1/3')]
 		small_banners = Banner.objects.filter(size='small')
 		big_banners = Banner.objects.filter(size='big')
 		posts = BlogPost.objects.all()
@@ -66,52 +66,53 @@ class IndexView(View):
 																				   'products':products ,
 																				   'store_name':store_name, 
 																				   'slides':slides, 
+																				   'triple_banners':triple_banners,
 																				   'small_banners':small_banners, 
 																				   'big_banners':big_banners,
 																				   'most_viewed_products':most_viewed_products})
 
-class OwnerView(View):
+# class OwnerView(View):
 
-	form_class = OwnerForm
-	template_name = 'shop/owner.html'
+# 	form_class = OwnerForm
+# 	template_name = 'shop/owner.html'
 
-	def get(self, request):
-		form = self.form_class()
-		return render(request, self.template_name, {'form':form})
+# 	def get(self, request):
+# 		form = self.form_class()
+# 		return render(request, self.template_name, {'form':form})
 
-	def post(self, request, *args, **kwargs):
-		form = self.form_class(request.POST)
-		store = Store.objects.get(name=store_name)
-		if form.is_valid():
-			phone_number = form.cleaned_data['phone_number']
-			if len(phone_number) != 11:
-				return render(request, self.template_name, {'message':'شماره تماس صحیح نیست'})
+# 	def post(self, request, *args, **kwargs):
+# 		form = self.form_class(request.POST)
+# 		store = Store.objects.get(name=store_name)
+# 		if form.is_valid():
+# 			phone_number = form.cleaned_data['phone_number']
+# 			if len(phone_number) != 11:
+# 				return render(request, self.template_name, {'message':'شماره تماس صحیح نیست'})
 
-			# 2. بررسی شروع با '09'
-			if not phone_number.startswith('09'):
-				return render(request, self.template_name, {'message':'شماره تماس صحیح نیست'})
-			full_name = form.cleaned_data['full_name']
-			owner = Owner.objects.filter(phone_number=phone_number).first()
-			if owner != None:
-				previous_codes = OtpCode.objects.filter(phone_number = phone_number)
-				previous_codes.delete()
-				random_code = random.randint(100000,999999)
-				send_otp_code(phone_number,random_code)
-				new_otp = OtpCode.objects.create(phone_number = phone_number, code = random_code) 
-				return redirect('shop:verify-owner', phone_number)
+# 			# 2. بررسی شروع با '09'
+# 			if not phone_number.startswith('09'):
+# 				return render(request, self.template_name, {'message':'شماره تماس صحیح نیست'})
+# 			full_name = form.cleaned_data['full_name']
+# 			owner = Owner.objects.filter(phone_number=phone_number).first()
+# 			if owner != None:
+# 				previous_codes = OtpCode.objects.filter(phone_number = phone_number)
+# 				previous_codes.delete()
+# 				random_code = random.randint(100000,999999)
+# 				send_otp_code(phone_number,random_code)
+# 				new_otp = OtpCode.objects.create(phone_number = phone_number, code = random_code) 
+# 				return redirect('shop:verify-owner', phone_number)
 			
-			owner = Owner.objects.create(phone_number = phone_number,full_name=full_name)
-			user, create = User.objects.get_or_create(phone_number = phone_number)
-			user.full_name= full_name
-			user.save()
-			previous_codes = OtpCode.objects.filter(phone_number = phone_number)
-			previous_codes.delete()
-			random_code = random.randint(100000,999999)
-			send_otp_code(phone_number,random_code)
-			new_otp = OtpCode.objects.create(phone_number = phone_number, code = random_code) 
-			return redirect('shop:verify-owner', phone_number=phone_number)
-		message = 'ورودی نا معتبر'
-		return render(request, self.template_name, {'message':message, 'form':form})
+# 			owner = Owner.objects.create(phone_number = phone_number,full_name=full_name)
+# 			user, create = User.objects.get_or_create(phone_number = phone_number)
+# 			user.full_name= full_name
+# 			user.save()
+# 			previous_codes = OtpCode.objects.filter(phone_number = phone_number)
+# 			previous_codes.delete()
+# 			random_code = random.randint(100000,999999)
+# 			send_otp_code(phone_number,random_code)
+# 			new_otp = OtpCode.objects.create(phone_number = phone_number, code = random_code) 
+# 			return redirect('shop:verify-owner', phone_number=phone_number)
+# 		message = 'ورودی نا معتبر'
+# 		return render(request, self.template_name, {'message':message, 'form':form})
 
 class VerifyOwnerView(View):
 	form_class = VerifyOwnerForm
@@ -142,23 +143,11 @@ class VerifyOwnerView(View):
 			return render(request, self.template_name, {'form':form, 'message':'کد تایید اشتباه است.'})
 		return render(request, self.template_name, {'form':form, 'message':'ورودی نامعتبر'})
 	
-class AnswerMessageView(IsOwnerUserMixin, View):
-
-	def get(self, request, message_id, status_id, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		message = ContactMessage.objects.get(id=message_id)
-		if status_id == 1:
-			message.is_answered = True
-			message.save()
-		else:
-			message.is_answered = False
-			message.save()
-		
-		return redirect(f'{current_app_name}:owner_dashboard_messages')
-
 class CustomerDashboardView(View):
 
 	def get(self, request, *args, **kwargs):
+		store_name = Store.objects.all().first().name
+		store = Store.objects.all().first()
 		if isinstance(request.user, AnonymousUser):
 			return redirect(f'{current_app_name}:customer_authentication')
 		customer = Customer.objects.get(phone_number = request.user.phone_number)
@@ -184,6 +173,7 @@ class CustomerDashboardView(View):
 class CustomerDashboardOrdersView(IsCustomerUserMixin, View):
 
 	def get(self, request):
+		store_name = Store.objects.all().first().name
 		store = Store.objects.all().first()
 		customer = Customer.objects.get(phone_number=request.user.phone_number)		
 		paid_status = OrderStatus.objects.get(id=1)
@@ -201,21 +191,23 @@ class CustomerDashboardOrdersView(IsCustomerUserMixin, View):
 class CustomerDashboardOrderDatailView(IsCustomerUserMixin, View):
 	
 	def get(self, request, order_id):
-		store= Store.objects.all().first()
+
+		store = Store.objects.all().first()
 		order = get_object_or_404(Order, id=order_id)
 		return render(request, f'{current_app_name}/order-detail-customer_{store.template_index}.html',
-				 {'order':order, 'store_name':store_name})
+				 {'order':order, 'store_name':store.name})
 
 class CustomerDashboardFavoritesView(IsCustomerUserMixin, View):
 
 	def get(self, request):
+		store = Store.objects.all().first()
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
 		products = customer.favorites.all()
 		to_products = f'{current_app_name}:product_detail'
 	
 
 		return render(request, f'{current_app_name}/customer-dashboard-favorites_{store.template_index}.html',
-				 {'store_name':store_name,
+				 {'store_name':store.name,
 				'products':products,
 				'to_products':to_products,
 				'customer':customer,
@@ -226,6 +218,7 @@ class CustomerDashboardInfoView(IsCustomerUserMixin, View):
 	form_class = CustomerForm
 	def get(self, request):
 		store = Store.objects.all().first()
+		store_name = store.name
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
 		form = CustomerForm
 		return render(request, f'{current_app_name}/customer-dashboard-info_{store.template_index}.html', 
@@ -246,477 +239,19 @@ class CustomerDashboardInfoView(IsCustomerUserMixin, View):
 class CustomerDashboardCommentsView(IsCustomerUserMixin, View):
 
 	def get(self, request):
-		store = get_object_or_404(Store, name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
 		comments = Comment.objects.filter(sender=customer)
 		return render(request, f'{current_app_name}/customer-dashboard-comments_{store.template_index}.html',
 				 {'comments': comments, 'customer':customer})
 
-class DeliveryListCreateView(IsOwnerUserMixin ,View):
-
-	template_name = f'{current_app_name}/owner-dashboard-delivery.html'
-
-	def get(self, request, *args, **kwargs):
-		form = DeliveryForm
-		store = Store.objects.get(name=store_name)
-		delivery_methods = Delivery.objects.all()
-		create_delivery_url = f'{current_app_name}:owner_dashboard_delivery'
-		edit_delivery_url = f'{current_app_name}:edit_delivery'
-		return render(request, self.template_name, {'edit_delivery_url':edit_delivery_url,
-													'create_delivery_url':create_delivery_url,
-													'form': form, 
-													'delivery_methods':delivery_methods,
-													'store_name':store_name})
-
-	def post(self, request, *args, **kwargs):
-		form = DeliveryForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name=store_name)
-			delivery = Delivery.objects.create(
-				
-				name = form.cleaned_data['name'],
-				price = form.cleaned_data['price'],
-			)
-			delivery_methods = Delivery.objects.all()
-			create_delivery_url = f'{current_app_name}:delivery-list-and-create'
-			edit_delivery_url = f'{current_app_name}:edit_delivery'
-			return redirect(f'{current_app_name}:owner_dashboard_delivery')
-		create_delivery_url = f'{current_app_name}:delivery-list-and-create'
-		edit_delivery_url = f'{current_app_name}:edit_delivery'
-		return render(request, self.template_name, {'edit_delivery_url':edit_delivery_url,
-													'create_delivery_url':create_delivery_url,
-													'form': form, 
-													'delivery_methods':delivery_methods,
-													'store_name':store_name})
-
-class DeliveryEditView(IsOwnerUserMixin ,View):
-
-	def post(self, request, pk, *args, **kwargs):
-		delivery = get_object_or_404(Delivery, pk=pk)
-		form = DeliveryForm(request.POST)
-		if form.is_valid():
-			delivery.price = form.cleaned_data['price']
-			delivery.save()
-			return redirect('shop:owner_dashboard_delivery') 
-		store = Store.objects.filter(name = store_name).first()
-		delivery_methods = Delivery.objects.all()
-		create_delivery_url = f'{current_app_name}:delivery-list-and-create'
-		edit_delivery_url = f'{current_app_name}:edit_delivery'
-		return render(request, self.template_name, {'edit_delivery_url':edit_delivery_url,
-													'create_delivery_url':create_delivery_url,
-													'form': form, 
-													'delivery_methods':delivery_methods,
-													'store_name':store_name})
-
-class DeliveryDeleteView(IsOwnerUserMixin, View):
-		
-	def get(self, request, pk, *args, **kwargs):
-		delivery = Delivery.objects.get(pk=pk)
-		delivery.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_delivery')
-
-class CategoryCreateView(IsOwnerUserMixin, View):
-
-	def post(self, request):
-		form = CategoryForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name=store_name)
-			name = form.cleaned_data['name']
-			parent_id = form.cleaned_data['parent']
-			is_sub = form.cleaned_data['is_sub']
-			# translator = Translator()
-			# translation = translator.translate(name)
-			# slug = re.sub(r'\s+', '-', translation.text)
-			# slug = slug.lower()
-			slug = name.lower().replace(' ','-')
-			category = Category.objects.create(
-											   name=name,
-											   is_sub=is_sub,
-											   slug=slug)
-			if parent_id != []:
-				parent = Category.objects.filter(id=int(parent_id[0])).first()
-				if parent != None:
-					category.parent = parent
-					category.save()
-
-			return redirect(f'{current_app_name}:owner_dashboard_categories') 	 
-		return render(request, f'{current_app_name}/category_list.html', {'form': form})
-	
-class CategoryListView(IsOwnerUserMixin, View):
-
-	template_name = 'shop/owner-dashboard-categories.html'
-
-	def get(self, request):
-		store = Store.objects.get(name=store_name)
-		categories = Category.objects.all()
-		create_category_url = f'{current_app_name}:create_category'
-		edit_category_url = f'{current_app_name}:edit_category'
-		return render(request, self.template_name, {'create_category_url':create_category_url,
-											  		'edit_category_url':edit_category_url,
-													'categories':categories,
-													'store_name':store_name})
-
-class CategoryDetailView(IsOwnerUserMixin, View):
-
-	template_name = 'shop/category_detail.html'
-
-	def get(self, request, pk):
-		store = Store.objects.get(name=store_name)
-		category = Category.objects.get( pk=pk)
-
-		return render(request, self.template_name, {'category':category})
-	
-class CategoryUpdateView(IsOwnerUserMixin, View):
-
-	template_name = 'shop/editcategory.html'
-
-	def get(self, request, pk):
-		store = Store.objects.get(name = store_name)
-		categories = Category.objects.all()
-		category = Category.objects.get(id=pk)
-
-		return render(request, self.template_name, {'category':category, 'categories':categories})
-
-	def post(self, request, pk, *args, **kwargs):
-		category = Category.objects.filter(id=pk).first()
-		form = CategoryForm(request.POST)
-		if form.is_valid():
-			category = Category.objects.get(id = pk)
-			category.store = Store.objects.get(name=store_name)
-			category.name = form.cleaned_data['name']
-			parent_id = form.cleaned_data['parent']
-			if parent_id != '0':
-				category.parent = Category.objects.get(id=parent_id)
-				category.is_sub = True
-			slug = category.name.lower().replace(' ','-')
-			category.slug = slug
-			if parent_id != []:
-				parent = Category.objects.filter(id=int(parent_id[0])).first()
-				if parent != None:
-					category.parent = parent
-			category.save()
-			return redirect('shop:owner_dashboard_categories') 	 
-		return render(request, self.template_name, {'form': form})
-
-class CategoryDeleteView(IsOwnerUserMixin, DeleteView):
-
-	def get(self, request, pk, *args, **kwargs):
-		category = Category.objects.get(pk=pk)
-		category.delete()
-		return redirect(f'{current_app_name}:owner_dashboard_categories') 
-
-class UploadProductImagesView(IsOwnerUserMixin, View):
-
-	form_class = ProductImageForm
-	template_name = f'{current_app_name}/editproduct.html'
-
-	def post(self, request, pk, *args, **kwargs):
-		product = Product.objects.get(pk=pk)
-		form = ProductImageForm(request.POST, request.FILES)
-		images = ProductImage.objects.filter(product=product)
-		if form.is_valid():
-			alt_name = form.cleaned_data['alt_name']
-			print(form.cleaned_data)
-			if alt_name == None:
-				alt_name = f'{product.name}'
-			images = request.FILES.getlist('images')
-			store = Store.objects.get(name=store_name)
-			for image in images:
-				ProductImage.objects.create(alt_name=alt_name, image=image, product=product)
-				new_upload = UploadedImages.objects.create(
-				
-				image = image,
-				alt_name = alt_name,
-			)
-			return redirect(f'{current_app_name}:product_update', product.id)
-		return render(request, self.template_name, {'images':images, 'form': form, 'product':product, 'store_name':store_name})
-
-class DeleteProductImageView(IsOwnerUserMixin, View):
-
-	def get(self, request, product_id, image_id):
-		product = Product.objects.get(id=product_id)
-		image = ProductImage.objects.get(id = image_id)
-		image.delete()		
-		return redirect(f'{current_app_name}:product_update', product.id)
-
-class CopyProductView(IsOwnerUserMixin, View):
-
-	def get(self, request, product_id):
-		store = Store.objects.get(name = store_name)
-		product = Product.objects.get(id = product_id)
-		new_product = Product.objects.create(
-			name = product.name + 'copy',
-			
-			slug = product.slug + str(randint(999, 10000)),
-			price = product.price,
-			description = product.description,
-			brand = product.brand,
-			sales_price = product.sales_price,
-			off_active = product.off_active,
-			available = product.available, 
-			features = product.features,
-		)
-		default_variety = Variety.objects.create(
-				
-				name = 'default variety',
-				product = new_product, 
-				stock = 2,
-			)
-
-		for category in product.category.all():
-			new_product.category.add(category)
-		for tag in product.tags.all():
-			new_product.tags.add(tag)
-		product.save()
-
-		return redirect(f'{current_app_name}:owner_dashboard_products')
-
-class ProductCreateView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/addproduct.html'
-
-	def get(self, request):
-		store = Store.objects.get(name=store_name)
-		form = ProductForm
-		categories = Category.objects.all()
-		product_update_url = f'{current_app_name}:product_update'
-		add_variety_url = f'{current_app_name}:add_variety'
-		update_variety_url = f'{current_app_name}:update_variety'
-		image_delete_url = f'{current_app_name}:product_image_delete'
-		delete_variety_url = f'{current_app_name}:delete_variety'
-		return render(request, self.template_name, {'form': form, 
-													'categories': categories, 
-													'store_name':store_name, 
-													'product_update_url':product_update_url,
-													'add_variety_url':add_variety_url,
-													'update_variety_url':update_variety_url,
-													'image_delete_url':image_delete_url,
-													'delete_variety_url':delete_variety_url})
-
-	def post(self, request):
-		form = ProductForm(request.POST)
-		store = Store.objects.get(name = store_name)
-		categories = Category.objects.all()
-		if form.is_valid():
-			store = Store.objects.get(name=store_name)
-			print(form.cleaned_data)
-			name = form.cleaned_data['name']
-			if not name:
-				return render(request, self.template_name, {'form': form, 'categories':categories, 'name_message':'لطفا نام محصول را وارد نمایید.'})
-			slug = name.lower().replace(' ','-')
-			price = form.cleaned_data['price']
-			if not price:
-				price = 0
-			description = form.cleaned_data['description']
-			tags = form.cleaned_data['tags']
-			brand = form.cleaned_data['brand']
-			processed_tags = [line for line in tags.splitlines()]
-			new_brand, create = Brand.objects.get_or_create( name=brand)			
-			sales_price = form.cleaned_data['sales_price']
-			sales_price = sales_price
-			off_active = form.cleaned_data['off_active']
-			if off_active == ['1']:
-				off_active = True
-			if off_active == ['0']:
-				off_active = False
-			features = form.cleaned_data['features'].replace('\r\n', '<br>')
-
-			product = Product.objects.create(
-											 name = name,
-											 slug = slug,
-											 price = price, 
-											 brand = brand,
-											 description = description,
-											 sales_price =sales_price,
-											 off_active = off_active, 
-											 features = features,
-											 )
-			category = form.cleaned_data['category']
-				
-			for cat in category:
-				if cat == '0':
-					product_cat, create = Category.objects.get_or_create(name='دسته‌بندی نشده', is_sub=False,slug='uncategorized')
-				else:
-					product_cat = Category.objects.get(id = int(cat))
-				product.category.add(product_cat)
-
-			product.tags.clear()
-
-			for tag in processed_tags:
-				name = tag
-				slug = tag.replace(' ','-')
-				new_tag, create = Tag.objects.get_or_create(name=name, slug=slug)
-				product.tags.add(new_tag)
-			
-			product.save()
-
-			default_variety = Variety.objects.create(
-				
-				name = 'default variety',
-				product = product, 
-				stock = 2,
-			)
-
-			return redirect(f'{current_app_name}:product_update', product.id)
-		return render(request, self.template_name, {'form': form, 'categories':categories})
-	
-class ProductMetaTagsUpdateView(IsOwnerUserMixin, View):
-
-	def post(self, request, product_slug):
-		form = MetaForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name = store_name)
-			product = Product.objects.get(slug = product_slug)
-			product.meta_description = form.cleaned_data['meta_description']
-			product.meta_keywords = form.cleaned_data['meta_keywords']
-			product.meta_og_title = form.cleaned_data['meta_og_title']
-			product.meta_og_description = form.cleaned_data['meta_og_description']
-			product.meta_tc_title = form.cleaned_data['meta_tc_title']
-			product.meta_tc_description = form.cleaned_data['meta_tc_description']
-			product.save()
-			return redirect(f'{current_app_name}:product_update', product.id)
-
-class ProductUpdateView(IsOwnerUserMixin, View):
-
-	template_name = f'{current_app_name}/editproduct.html'
-
-	def get(self, request, product_id):
-		store = Store.objects.get(name=store_name)
-		product = Product.objects.get(id=product_id)
-		form = ProductForm
-		form2 = ProductImageForm
-		form3 = MetaForm
-		form4 = VarietyForm
-		form5 = VarietyUpdateForm
-		categories = Category.objects.all()
-		images = ProductImage.objects.filter(product=product)
-		varieties = Variety.objects.filter(product=product)
-		filters = Filter.objects.all()
-		filter_values = FilterValue.objects.filter(product = product)
-		upload_img_url = f'{current_app_name}:product_image_upload'
-		product_update_url = f'{current_app_name}:product_update'
-		add_variety_url = f'{current_app_name}:add_variety'
-		update_variety_url = f'{current_app_name}:update_variety'
-		image_delete_url = f'{current_app_name}:product_image_delete'
-		delete_variety_url = f'{current_app_name}:delete_variety'
-		colors = ProductColor.objects.all()
-		return render(request, self.template_name, {'form': form,
-											  		'colors': colors, 
-													'categories': categories, 
-													'store_name':store_name, 
-													'product': product, 
-													'images':images, 
-													'varieties':varieties,
-													'form2':form2,
-													'form3':form3,
-													'form4':form4,
-													'form5':form5,
-													'filter_values':filter_values,
-													'upload_img_url':upload_img_url,
-													'product_update_url':product_update_url,
-													'add_variety_url':add_variety_url,
-													'update_variety_url':update_variety_url,
-													'image_delete_url':image_delete_url,
-													'delete_variety_url':delete_variety_url,
-													'filters':filters})
-
-	def post(self, request, product_id, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
-		product = Product.objects.get(id = product_id)
-		form = ProductForm(request.POST)
-		categories = Category.objects.all()
-		if form.is_valid():
-			print('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')
-			print(form.cleaned_data)
-			color_codes = request.POST.getlist('color')
-			print(color_codes)
-			if color_codes != []:
-				for code in color_codes:
-					new_color = ProductColor.objects.get(id = int(code))
-					product.color.add(new_color)
-			name = form.cleaned_data['name']
-			product.name = name
-			price = form.cleaned_data['price']
-			product.price = price
-			sales_price = form.cleaned_data['sales_price']
-			product.sales_price = sales_price
-			off_active = form.cleaned_data['off_active']
-			if off_active == '1':
-				product.off_active = True
-			if off_active == '0':
-				product.off_active = False
-			original = form.cleaned_data['is_original']
-			if original == '0':
-				product.is_original = False
-			if original == '1':
-				product.is_original = True
-			brand = form.cleaned_data['brand']
-			new_brand, create = Brand.objects.get_or_create(name=brand)
-			product.brand = brand
-			category = form.cleaned_data['category']
-			if category != None:
-				product.category.clear()
-				product.save()
-				if category == '0':
-					product_cat, create = Category.objects.get_or_create(name='دسته‌بندی نشده', is_sub=False,slug='uncategorized')
-				else:
-					product_cat = Category.objects.get(id = int(category))
-				product.category.add(product_cat)
-				product.save()
-			description = form.cleaned_data['description']
-			product.description = description
-			features = form.cleaned_data['features']
-			product.features = features.replace('\r\n', '<br>')
-			tags = form.cleaned_data['tags']
-			processed_tags = [line for line in tags.splitlines()]
-			product.tags.clear()
-
-			for tag in processed_tags:
-				name = tag
-				slug = tag.replace(' ','-')
-				new_tag, create = Tag.objects.get_or_create(name=name, slug=slug)
-				product.tags.add(new_tag)
-			
-			product.save()
-			
-			return redirect(f'{current_app_name}:product_update', product.id)
-		else:
-			categories = Category.objects.all()
-			images = ProductImage.objects.filter(product=product)
-			varieties = Variety.objects.filter(product=product)
-			form = ProductForm
-			form2 = ProductImageForm
-			form3 = MetaForm
-			form4 = VarietyForm
-			form5 = VarietyUpdateForm
-			upload_img_url = f'{current_app_name}:product_image_upload'
-			product_update_url = f'{current_app_name}:product_update'
-			add_variety_url = f'{current_app_name}:add_variety'
-			update_variety_url = f'{current_app_name}:update_variety'
-			image_delete_url = f'{current_app_name}:product_image_delete'
-			delete_variety_url = f'{current_app_name}:delete_variety'
-			return render(request, self.template_name, {'form': form, 
-														'categories': categories, 
-														'store_name':store_name, 
-														'product': product, 
-														'images':images, 
-														'form2':form2,
-														'form3':form3,
-														'form4':form4,
-														'form5':form5,
-														'varieties':varieties,
-														'upload_img_url':upload_img_url,
-														'product_update_url':product_update_url,
-														'add_variety_url':add_variety_url,
-														'update_variety_url':update_variety_url,
-														'image_delete_url':image_delete_url,
-														'delete_variety_url':delete_variety_url})
-
 class ProductListView(View):
 
 	def get(self, request):
+		store = Store.objects.all().first()
+		store_name = store.name
 		items_per_page = 12
-		store = Store.objects.get(name=store_name)
 		categories = Category.objects.all()
 		products = Product.objects.all()
 		paginator = Paginator(products, items_per_page)
@@ -743,6 +278,8 @@ class ProductListView(View):
 				'price_ranges':price_ranges})
 	
 	def post(self, request, *args, **kwargs):
+		store = Store.objects.all().first()
+		store_name = store.name
 		main_filters = {}
 		filters = []
 		product_cat = None
@@ -897,6 +434,8 @@ class ProductListView(View):
 class FilterTagProducts(View):
 
 	def get(self, request, tag_slug):
+		store = Store.objects.all().first()
+		store_name = store.name
 		items_per_page = 12
 		store = Store.objects.get(name=store_name)
 		categories = Category.objects.all()
@@ -925,6 +464,8 @@ class FilterTagProducts(View):
 class FeaturedProductListView(View):
 
 	def get(self, request, featured_products_id):
+		store = Store.objects.all().first()
+		store_name = store.name
 		products = set()
 		slide = Slide.objects.get(id = featured_products_id)
 		if slide.tag:
@@ -937,7 +478,6 @@ class FeaturedProductListView(View):
 					products.add(product)
 		products = list(products)
 		categories = Category.objects.all()
-		# products = products.filter(verified = True)
 		paginator = Paginator(products, 12)
 		page = request.GET.get('page', 1)
 		try:
@@ -973,6 +513,8 @@ class FeaturedProductListView(View):
 class SpecialProductsListView(View):
 
 	def get(self, request, featured_products_id):
+		store = Store.objects.all().first()
+		store_name = store.name
 		products = set()
 		banner = Banner.objects.get(id = featured_products_id)
 		if banner.tag:
@@ -1021,6 +563,8 @@ class SpecialProductsListView(View):
 class AddToFavoritesView(View):
 
 	def get(self, request, product_id, ref, *args, **kwargs):
+		store = Store.objects.all().first()
+		store_name = store.name
 		if isinstance(request.user, AnonymousUser):
 			return redirect(f'{current_app_name}:customer_authentication')
 		store = Store.objects.get(name=store_name)
@@ -1045,7 +589,8 @@ class AddToFavoritesView(View):
 class CategoryBlogPostList(View):
 
 	def get(self, request, category_slug):
-
+		store = Store.objects.all().first()
+		store_name = store.name
 		category = Category.objects.bet(slug = category_slug)
 		blog_posts= BlogPost.objects.filter(category=category)
 		recent_posts = BlogPost.objects.all()[:4]
@@ -1054,7 +599,8 @@ class CategoryBlogPostList(View):
 class CategoryProductsListView(View):
 
 	def get(self, request, category_slug, *args, **kwargs):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		filters = Filter.objects.all()
 		my_forms = []
 		for filter in filters:
@@ -1083,20 +629,6 @@ class CategoryProductsListView(View):
 				for product in sub_products:
 					products.add(product)
 
-		# selected_values = []
-		# active_filters = []
-		# for key, value in request.session.items():
-		# 	# بررسی آیا کلید با الگوی مورد نظر شروع می‌شود
-		# 	if key.startswith('filter-'):
-				
-		# 		filter_name = key.replace('filter-', '')
-		# 		selected_filter = Filter.objects.get( name = filter_name)
-		# 		for posi_value in selected_filter.value.all():
-		# 			if posi_value.value in value:
-		# 				new_active_filter = {'filter':selected_filter,'value':posi_value}
-		# 				active_filters.append(new_active_filter)
-		# 				selected_values.append(posi_value.id)
-		# products = Product.get_filtered_products(Product ,selected_values)
 		products = list(products)
 		products_urls = f'{current_app_name}:product_detail'
 		sizes = Size.objects.all()
@@ -1131,7 +663,8 @@ class CategoryProductsListView(View):
 class ProductDetailView(View):
 
 	def get(self, request, product_slug ):
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		product = Product.objects.filter(slug = product_slug).first()
 		if product.views:
 			product.views = product.views + 1
@@ -1181,7 +714,8 @@ class CommentCreateView(IsCustomerUserMixin, View):
 	
 
 	def get(self, request, comment_id, status_id, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		comment = Comment.objects.get(id=comment_id)
 		product = comment.product
 		
@@ -1197,7 +731,8 @@ class CommentCreateView(IsCustomerUserMixin, View):
 class CartView(IsCustomerUserMixin, View):
 
 	def get(self, request, cart_id):
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		customer = Customer.objects.filter(phone_number=request.user.phone_number).first()
 		cart = Cart.objects.filter(id=cart_id).first()
 		form = PurchaseForm
@@ -1207,7 +742,8 @@ class CartView(IsCustomerUserMixin, View):
 
 	def post(self, request, cart_id, *args, **kwargs):
 		item_id = kwargs['item_id']
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		form = CartEditForm(request.POST)
 		cart = Cart.objects.filter(id=cart_id).first()
 		cart_item = cart.items.filter(id=item_id).first()
@@ -1226,7 +762,8 @@ class AddToCartView(View):
 
 	def post(self, request, pk, *args, **kwargs):
 		form = PurchaseForm(request.POST)
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		if form.is_valid():
 			replicate = False
 			product = Product.objects.get(pk = pk)
@@ -1288,7 +825,6 @@ class CustomerRegisterLoginView(View):
 
 	def post(self, request):
 		form = RequestNumberForm(request.POST)
-		store = Store.objects.get(name = store_name)
 		if form.is_valid():
 			phone_number = form.cleaned_data['phone_number']
 			customer = Customer.objects.filter(phone_number=phone_number).first()
@@ -1322,7 +858,6 @@ class CustomerloginView(View):
 		form = AuthenticationCodeForm(request.POST)
 		if form.is_valid():
 			customer_phone = phone_number
-			store = Store.objects.get(name=store_name)
 			customer = Customer.objects.filter(phone_number = customer_phone).first()
 			user = User.objects.filter(phone_number = customer_phone).first()
 			request.user = user
@@ -1358,7 +893,8 @@ class CustomerloginView(View):
 class CustomerOrdersView(IsCustomerUserMixin, View):
 
 	def get(self, request):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		customer = Customer.objects.filter(phone_number=request.user.phone_number).first()
 		orders = Order.objects.filter(customer=customer)
 		return render(request, f'{current_app_name}/customer-dashboard-orders_{store.template_index}.html', {'orders':orders})
@@ -1367,7 +903,8 @@ class CustomerFavoritesView(IsCustomerUserMixin, View):
 
 	def get(self, request):
 		fav_products = None
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		customer = Customer.objects.filter(phone_number=request.user.phone_number).first()
 		if customer != None:
 			fav_products = customer.favorites.all()
@@ -1387,7 +924,8 @@ class OrderWrongCouponView(IsCustomerUserMixin, View):
 
 	def get(self, request, order_id,wrong_code):
 		order = get_object_or_404(Order, id=order_id)
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		order_detail_url = f"{current_app_name}:apply_coupon"
 		delivery_methods = Delivery.objects.all()
 		form2 = DeliveryApplyForm
@@ -1404,7 +942,6 @@ class CouponApplyView(IsCustomerUserMixin, View):
 		form = self.form_class(request.POST)
 		if form.is_valid():
 			code = form.cleaned_data['code']
-			store = Store.objects.get(name = store_name)
 			coupon = Coupon.objects.filter(code__exact=code).first()
 			if order.used_coupon == True:
 				order.delivery_description = order.delivery_description + f'<p class="text-danger">برای این سفارش قبلا کد تخفیف وارد شده است</p><br>' 
@@ -1424,12 +961,11 @@ class CouponApplyView(IsCustomerUserMixin, View):
 		order.save()
 		return redirect(f'{current_app_name}:order_final_check', order_id)
 	
-	template_name = f'{current_app_name}/owner-dashboard-coupons.html'
-
 class AboutUsPageView(View):
 
 	def get(self, request):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		logo = StoreLogoImage.objects.all().first()
 		return render(request, f'{current_app_name}/about_{store.template_index}.html', {'logo':logo,'description':store.about_description})
 
@@ -1441,7 +977,8 @@ class ContactUsPageView(View):
 
 	def post(self, request, *args, **kwargs):
 		form = ContactUsForm(request.POST)
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		if form.is_valid():
 			
 			name = form.cleaned_data['name']
@@ -1466,21 +1003,21 @@ class ContactUsPageView(View):
 class SearchResultsView(View):
 
 	def get(self, request, search_item, *args, **kwargs):
-		print('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		products = Product.objects.filter(name__icontains=search_item)
 		products_urls = f'{current_app_name}:product_detail'
 		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
 		categories = Category.objects.all()
-		# paginator = Paginator(products, 12)
-		# page = request.GET.get('page', 1)
-		# try:
-		# 	products = paginator.page(page)
-		# except PageNotAnInteger:
-		# 	products = paginator.page(1)
-		# except EmptyPage:
-		# 	products = paginator.page(paginator.num_pages)
+		paginator = Paginator(products, 12)
+		page = request.GET.get('page', 1)
+		try:
+			products = paginator.page(page)
+		except PageNotAnInteger:
+			products = paginator.page(1)
+		except EmptyPage:
+			products = paginator.page(paginator.num_pages)
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', {'products': products, 
 													'to_products':products_urls, 
 													'store_name':store_name, 
@@ -1498,14 +1035,16 @@ class SearchView(View):
 class FaqView(View):
 
 	def get(self, request, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		faqs = Faq.objects.all()
 		return render(request, f'{current_app_name}/faq_{store.template_index}.html', {'store_name':store_name, 'faqs':faqs})
 	
 class BlogView(View):
 
 	def get(self, request, *args, **kwargs):
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		posts = BlogPost.objects.all()
 		products = Product.objects.all()
 		blog_categories = BlogCategory.objects.all()
@@ -1520,7 +1059,8 @@ class BlogView(View):
 class BlogPostDetailView(View):
 
 	def get(self, request, post_slug, *args, **kwargs):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		post = BlogPost.objects.get(slug = post_slug)
 		posts = BlogPost.objects.all()
 		blog_categories = BlogCategory.objects.all()
@@ -1535,62 +1075,22 @@ class SubscribeView(IsCustomerUserMixin, View):
 		form = SubscriptionForm(request.POST)
 		if form.is_valid():
 			email = form.cleaned_data['email']
-			store = Store.objects.get(name = store_name)
+			store = Store.objects.all().first()
 			new_subscriber, create = Subscription.objects.get_or_create( email=email)
 			return redirect(f'{current_app_name}:index')
 
 class PoliciesView(View):
 
 	def get(self, request):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		policy = Policy.objects.all().first()
-		return render(request, f'{current_app_name}/policies_{store.template_index}.html', {'policy':policy,'store':store})
-	
-class FilterView(View):
-
-	template_name = f'{current_app_name}/owner-dashboard-filters.html'
-
-	def get(self, request):
-		form = AddFilterForm
-		store = Store.objects.get(name = store_name)
-		categories = Category.objects.all()
-		filters = Filter.objects.all()
-		return render(request, self.template_name, {'store':store, 'store_name':store_name, 'filters':filters, 'form':form, 'categories':categories})
-
-	def post(self, request, *args, **kwargs):
-		form = AddFilterForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name = store_name)
-			category = Category.objects.get( name=form.cleaned_data['category'])
-			new_filter, create = Filter.objects.get_or_create(
-				category = category,
-				name = form.cleaned_data['name'],
-				store = store
-			)
-			return redirect(f'{current_app_name}:owner_dashboard_filters')
-		
-class AsignFilterToProductView(View):
-
-	def post(self, request, product_id, *args, **kwargs):
-		form = AsignFilterToProductForm(request.POST)
-		if form.is_valid():
-			store = Store.objects.get(name = store_name)
-			product = Product.objects.get(id = product_id)
-			filter = Filter.objects.get(store = store , name = form.cleaned_data['filter'])
-			new_filter_asign , create= FilterValue.objects.get_or_create(
-				 
-				value = form.cleaned_data['value'] 
-			)
-			new_filter_asign.product.add(product)
-			filter.value.add(new_filter_asign)
-			filter.save()
-			return redirect(f'{current_app_name}:product_update', product.id)
-
-form_classes = [type(f'FeatureFilterForm{i}', (FeatureFilterForm,), {}) for i in range(1, 4)]
+		return render(request, f'{current_app_name}/policies_{store.template_index}.html', {'policy':policy,'store':store})		
 
 class FeatureFilterView(View):
 	def post( self , request, category_slug, form_name):
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		category = Category.objects.get( slug = category_slug)
 		filter = Filter.objects.filter( name = form_name).first()
 		values = filter.get_values()
@@ -1602,7 +1102,6 @@ class FeatureFilterView(View):
 		if form.is_valid():
 			products = Product.objects.filter(category=category)
 			categories = Category.objects.all()
-			sizes = Size.objects.all()
 			price_ranges  = PriceRange.objects.all()
 			filters = Filter.objects.all()
 			request.session.modified = True
@@ -1618,13 +1117,10 @@ class FeatureFilterView(View):
 					فیلترها = forms.MultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple)
 				new_form = FeatureFilterForm
 				my_forms.append(new_form)
-			
 			selected_values = []
 			active_filters = []
 			for key, value in request.session.items():
-				# بررسی آیا کلید با الگوی مورد نظر شروع می‌شود
 				if key.startswith('filter-'):
-					
 					filter_name = key.replace('filter-', '')
 					selected_filter = Filter.objects.get( name = filter_name)
 					for posi_value in selected_filter.get_values():
@@ -1633,13 +1129,51 @@ class FeatureFilterView(View):
 							active_filters.append(new_active_filter)
 							selected_values.append(posi_value.id)
 			products = [value.product for value in FilterValue.objects.filter(id__in=selected_values)]
-			colors = ProductColor.objects.all() 
+			paginator = Paginator(products, 12)
+			page = request.GET.get('page', 1)
+			try:
+				products = paginator.page(page)
+			except PageNotAnInteger:
+				products = paginator.page(1)
+			except EmptyPage:
+				products = paginator.page(paginator.num_pages)
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
-	 			'colors':colors,
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
+				'price_ranges':price_ranges,
+				'category':category,
+				'filters':filters,
+				'my_forms':my_forms,
+				'active_filters':active_filters,
+				})
+		
+		categories = Category.objects.all()
+		products = Product.objects.filter(category=category)
+		price_ranges  = PriceRange.objects.all()
+		filters = Filter.objects.all()
+		my_forms = []
+		for filter in filters:
+			values = filter.get_values()
+			class FeatureFilterForm(forms.Form):
+				name = filter.name
+				choices = tuple([(value.value, value.value) for value in values])
+				فیلترها = forms.MultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple)
+			new_form = FeatureFilterForm
+			my_forms.append(new_form)
+		active_filters = []
+		paginator = Paginator(products, 12)
+		page = request.GET.get('page', 1)
+		try:
+			products = paginator.page(page)
+		except PageNotAnInteger:
+			products = paginator.page(1)
+		except EmptyPage:
+			products = paginator.page(paginator.num_pages)
+		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
+				{'products': products, 
+				'store_name':store_name, 
+				'categories':categories,
 				'price_ranges':price_ranges,
 				'category':category,
 				'filters':filters,
@@ -1650,6 +1184,8 @@ class FeatureFilterView(View):
 class ClearActiveFilterValueView(View):
 
 	def get(self, request, filter_id, value_id):
+		store = Store.objects.all().first()
+		store_name = store.name
 		active_filter = Filter.objects.get(id = filter_id)
 		category = active_filter.category
 		active_value = FilterValue.objects.get(id = value_id)
@@ -1795,7 +1331,8 @@ class SpecialProductListView(View):
 		tag = Tag.objects.filter(name=tag_name).first()
 		products = tag.get_products()
 		items_per_page = 12
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		categories = Category.objects.all()
 		paginator = Paginator(products, items_per_page)
 		page = request.GET.get('page', 1)
@@ -1830,8 +1367,8 @@ class SpecialProductListView(View):
 		products = tag.get_products()
 		form = FilterProductsForm(request.POST)
 		if form.is_valid():
-			print(form.cleaned_data)
-			store = Store.objects.get(name=store_name)
+			store = Store.objects.all().first()
+			store_name = store.name
 			category = form.cleaned_data['category']
 			if category != '':
 				product_cat = Category.objects.filter(id = int(category)).first()
@@ -1946,7 +1483,8 @@ class BrandProductListView(View):
 	def get(self, request, brand_name):
 		products = Product.objects.filter(brand=brand_name)
 		items_per_page = 12
-		store = Store.objects.get(name=store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		categories = Category.objects.all()
 		paginator = Paginator(products, items_per_page)
 		page = request.GET.get('page', 1)
@@ -1982,8 +1520,8 @@ class BrandProductListView(View):
 		selected_brand = brand
 		form = FilterProductsForm(request.POST)
 		if form.is_valid():
-			print(form.cleaned_data)
-			store = Store.objects.get(name=store_name)
+			store = Store.objects.all().first()
+			store_name = store.name
 			category = form.cleaned_data['category']
 			if category != '':
 				product_cat = Category.objects.filter(id = int(category)).first()
@@ -2097,7 +1635,8 @@ class CreateOrderView(IsCustomerUserMixin, View):
 
 	def get(self, request):
 		message = ''
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		customer = Customer.objects.filter(phone_number=request.user.phone_number).first()
 		cart = Cart.objects.filter(customer=customer).first()
 		if cart.items.all().first() != None:
@@ -2117,6 +1656,7 @@ class OrderDetailView(IsCustomerUserMixin ,View):
 
 	def get(self, request, order_id):
 		store = Store.objects.all().first()
+		store_name = store.name
 		form = OrderDeliveryOptionsForm
 		order = Order.objects.get(id=order_id)
 		order_detail_url = f"{current_app_name}:apply_coupon"
@@ -2177,14 +1717,14 @@ class RecieverDetailsView(View):
 
 	def get(self, request, order_id):
 		form = RecieverDetailsForm
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		order = Order.objects.get(id = order_id)
 		return render(request, f'{current_app_name}/reciever_details_{store.template_index}.html', {'order':order, 'store':store, 'form':form})
 
 	def post(self, request, order_id):
 
 		form = RecieverDetailsForm(request.POST)
-		store = Store.objects.get(name = store_name)
 		order = Order.objects.get(id = order_id)
 		if form.is_valid():
 			order.reciever_name = form.cleaned_data['name']
@@ -2215,12 +1755,11 @@ class OrderFinalCheckView(View):
 			order.save()
 		return render(request, f'{current_app_name}/order_final_check_{store.template_index}.html', {'store':store, 'order':order})
 	
-
 class OrderPayView(IsCustomerUserMixin, View):
 	
 	def get(self, request, order_id, *args, **kwargs):
-
-		store = Store.objects.get(name = store_name)
+		store = Store.objects.all().first()
+		store_name = store.name
 		order = Order.objects.get(id=order_id)
 		request.session['order_pay'] = {
 			'order_id': order.id,
