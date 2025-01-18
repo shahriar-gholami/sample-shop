@@ -54,120 +54,73 @@
 
 <!-- start content -->
 
-<div class="content">
-    <div class="container-fluid">
-
-        <div class="payment_navigtions">
-            <div class="checkout-headers">
-                <nav class="navbar navbar-expand">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a href="" class="nav-link">
-                                <span>1</span>
-                                <p>سبد خرید</p>
-                            </a>
-                        </li>
-                        <li class="nav-item active">
-                            <a href="" class="nav-link">
-                                <span>2</span>
-                                <p>صورتحساب</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <span>3</span>
-                                <p>جزییات پرداخت</p>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <h2 class="title-font main-color-one-color mt-4 h4">سبد خرید شما <span class="main-color-three-color">({{cart.items.count}} محصول)</span>
-            </h2>
-        </div>
-
-    </div>
-
-    <div class="container-fluid">
-        <div class="cart-product">
-            <div class="row gy-4">
-                <div class="col-12">
-                    <div class="cart-product-item">
-                        <div class="content-box">
-                            <div class="container-fluid">
-                                
-                                {% for item in order.items.all %}
-                                <div class="blog-item">
-                                    <div class="blog-item-parent">
-                                        <div class="shadow-box">
-                                            <a href="{% url 'shop:product_detail' item.variety.product.slug %}"><img src="{{item.variety.product.get_main_image}}" alt="" style="height: 150px;"></a>
+<form method="post" action="{% url 'shop:order_detail' order.id %}">
+    {% csrf_token %}
+    <div class="container-fluid mt-2 mb-4">
+        <div class="col-12">
+            <div class="container-fluid content-box p-4">
+                <h6 class="title-font mb-3 h6">کالاهای سفارش داده شده</h6>
+                
+                <div class="product-row-parent mt-5">
+                    <div class="row g-4">
+                        {% for item in order.items.all %}
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="product-row-item">
+                                <a href="">
+                                    <div class="row align-items-center shadow-box m-1 p-2">
+                                        <div class="col-4">
+                                            <img src="{{ item.variety.product.get_main_image }}" alt="">
                                         </div>
-                                        <div class="blog-item-desc">
-                                            <div class="blog-item-desc-parent">
-                                                <div class="blog-item-title">
-                                                    <h5 class="title-font text-overflow-2">{{item.variety.product.name}}</h5>
-                                                    <div class="saller-name text-muted">
-                                                        <div class="product-meta-color-items mt-3" style="line-height: 1">
-                                                        تعداد: {{item.quantity}} عدد
-                                                        </div>
-                                                    </div>
-                                                    <div class="saller-name text-muted">
-                                                        <div class="product-meta-color-items mt-3" style="line-height: 1">
-                                                        قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان
-                                                        </div>
-                                                    </div>
-                                                    <div class="saller-name text-muted">
-                                                        <div class="product-meta-color-items mt-3" style="line-height: 1">
-                                                        مجموع: {{item.get_item_price|intcomma}} تومان
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div class="col-8">
+                                            <h3 class="text-overflow-1 title-font font-14">{{item.variety.product.name}}</h3>
+                                            <div class="cart-canvas-price my-3 d-flex align-items-center">
+                                                <p>قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان <br>
+                                                    تعداد: {{item.quantity}}<br>
+                                                    مجموع: {{item.get_item_price|intcomma}} تومان</p>
                                             </div>
+                                            
                                         </div>
                                     </div>
-                                </div>
-                                {% endfor %}
-                                        
+                                </a>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="row gy-4">
-                        
-                        <div class="col-xl-12">
-                            <div class="content-box">
-                                <div class="container-fluid">
-                                    <div class="item">
-                                        <div class="factor">
-                                            <div class="form-group mt-4">
-                                                <form method="post" action="{% url 'shop:order_detail' order.id %}">
-                                                {% csrf_token %}
-                                                <label class="label-float fw-bold">شیوه ارسال <span class="text-danger">*</span></label>
-            
-                                                <select name="delivery_method" id="floatingInputOstan" class="form-control form-label label-float">
-                                                    {% for delivery in delivery_mthods %}
-                                                    <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                
-                                            </div>
-                                            <div class="action mt-3 d-flex align-items-center justify-content-center mb-3">
-                                                <button type="submit" class="btn-flat dark text-center lg w-100">تایید سفارش</button>
-                                            </div>
-                                            </form>
-                                        </div>
+                 
+                <div class="factor-item mt-4">
+                    <h5 class="title-font h6">شیوه ارسال</h5>
+                    <div class="row gy-3">
+                        <div class="col-sm-12">
+                            <div class="bank-item">
+                                <div class="comment-item w-100 mt-2" for="floatingInputOstan">
+                                    <div class="row mb-3 form-group">
+                                        <div class="col-md-12">   
+                                        <!-- <label class="label-float fw-bold">بازه زمانی ارسال <span class="text-danger">*</span></label> -->
+                                        <p class="p-0 m-0">انتخاب روش‌های ارسال</p>
+                                        <select name="delivery_method" class="form-select width-200 form-group">
+                                            {% for delivery in delivery_mthods %}
+                                            <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="mt-2">
+                    <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">تایید و ادامه فرایند خرید</button> 
+                    <p class="text-danger">{{multi_choice_error}}</p>
+                </div>
+
             </div>
         </div>
     </div>
-
-</div>
+    
+    </form>
 
 <!-- end content -->
 

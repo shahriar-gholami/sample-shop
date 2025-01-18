@@ -85,34 +85,35 @@
                 </div>
             </div>
              
-            <div class="factor-item pb-3 mt-4">
+            <div class="factor-item  mt-4">
                 <h5 class="title-font  h6">شیوه ارسال</h5>
                 <div class="row gy-3">
-                    
-                            <div class="comment-item w-100 mt-4" for="floatingInputOstan">
-                                <div class="row mb-3 form-group">
-                                    
-                                    <div class="col-md-12">   
-                                    <!-- <label class="label-float fw-bold">بازه زمانی ارسال <span class="text-danger">*</span></label> -->
-                                    <p class="p-0 m-0">انتخاب روش‌های ارسال</p>
-                                    <select name="delivery_method" class="form-select width-200 form-group">
-                                        {% for delivery in delivery_mthods %}
-                                        <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
-                                        {% endfor %}
-                                    </select>
-                                    </div> 
-                                </div>
-                            </div>
-                        
+                    <div class="comment-item w-100 mt-4" for="floatingInputOstan">
+                        <div class="row mb-3 form-group">
+                            
+                            <div class="col-md-12">   
+                            <!-- <label class="label-float fw-bold">بازه زمانی ارسال <span class="text-danger">*</span></label> -->
+                            <p class="p-0 m-0">انتخاب روش‌های ارسال</p>
+                            <select name="delivery_method" class="form-select width-200 form-group">
+                                {% for delivery in delivery_mthods %}
+                                <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
+                                {% endfor %}
+                            </select>
+                            </div> 
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div>
+                <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">تایید و ادامه فرایند خرید</button> 
+                <p class="text-danger">{{multi_choice_error}}</p>
+            </div>
+
         </div>
     </div>
 </div>
-<div class="container-fluid mt-4">
-    <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">تایید و ادامه فرایند خرید</button> 
-    <p class="text-danger">{{multi_choice_error}}</p>
-</div>
+
 </form>
 
 {% endblock %}

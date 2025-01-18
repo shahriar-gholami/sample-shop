@@ -58,32 +58,8 @@
     <div class="container-fluid">
 
         <div class="payment_navigtions">
-            <div class="checkout-headers">
-                <nav class="navbar navbar-expand">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a href="" class="nav-link">
-                                <span>1</span>
-                                <p>سبد خرید</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <span>2</span>
-                                <p>صورتحساب</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <span>3</span>
-                                <p>جزییات پرداخت</p>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <h2 class="title-font main-color-one-color mt-4 h4">سبد خرید شما <span class="main-color-three-color">({{cart.items.count}} محصول)</span>
-            </h2>
+            
+            <h2 class="title-font main-color-one-color mt-4 h4">سبد خرید شما </h2>
         </div>
 
     </div>
@@ -140,7 +116,7 @@
                                                         <h5 class="title-font main-color-one-color h2 mb-0">{{item.get_item_price|intcomma}}<span class="mb-0 text-muted-two font-14 fw-lighter"> تومان</span></h5>
                                                     </td>
                                                     <td class="text-center align-middle">
-                                                        <a href="" data-bs-toggle="tooltip" class="p-4" data-bs-placement="top" data-bs-title="حذف محصول از سبد خرید">
+                                                        <a href="{% url 'shop:cart_item_delete' cart.id item.id %}" data-bs-toggle="tooltip" class="p-4" data-bs-placement="top" data-bs-title="حذف محصول از سبد خرید">
                                                             <i class="bi bi-x-lg"></i>
                                                         </a>
                                                     </td>
