@@ -73,7 +73,9 @@
                                             <h6>پیشنهاد لحظه ای</h6>
                                         </div>
                                         <div class="product-box-image mt-3">
-                                            <a href="{% url 'shop:product_detail' product.slug %}"><img src="{{product.get_main_image}}" width="30" alt=""></a>
+                                            <a href="{% url 'shop:product_detail'  product.slug %}">
+                                                <img src='{% if product.get_main_image == False %}{% static "assets\images\11.jpg" %}{% else %}{{product.get_main_image}}{% endif %}' width="30" alt="">
+                                            </a>
                                         </div>
                                         <div class="product-box-title">
                                             <a href="{% url 'shop:product_detail' product.slug %}"><h5 class="text-overflow-2">{{ product.name }}</h5></a>
@@ -238,7 +240,8 @@
                     <div class="site-category-items p-2 shadow-box rounded-3 mt-4">
                         <a href="{% url 'shop:category_products' f_cat.slug %}">
                             <div class="site-category-items-icon">
-                                <img class="rounded-4" src="{{f_cat.get_image_url}}" alt="">
+                                <img class="rounded-4" 
+                                src='{% if f_cat.get_main_image == False %}{% static "assets\images\11.jpg" %}{% else %}{{f_cat.get_main_image}}{% endif %}' alt="">
                             </div>
                             <!-- <h6 class="text-center">{{ f_cat.name }}</h6> -->
                         </a>
@@ -297,7 +300,7 @@
                         <div class="product-box">
                             <a href="{% url to_products product.slug %}">
                                 <div class="product-box-image">
-                                    <img src="{{product.get_main_image}}" alt="">
+                                    <img src='{% if product.get_main_image == False %}{% static "assets\images\11.jpg" %}{% else %}{{product.get_main_image}}{% endif %}' alt="">
                                 </div>
                                 <div class="product-box-title">
                                     <h5 class="text-overflow-2">{{ product.name }}</h5>
@@ -416,7 +419,7 @@
                     <div class="product-box">
                         <a href="{% url to_products product.slug %}">
                             <div class="product-box-image">
-                                <img src="{{product.get_main_image}}" alt="">
+                                <img src='{% if product.get_main_image == False %}{% static "assets\images\11.jpg" %}{% else %}{{product.get_main_image}}{% endif %}' alt="">
                             </div>
                             <div class="product-box-title">
                                 <a href="{% url to_products product.slug %}"><h5 class="text-overflow-2">{{ product.name }}</h5></a>

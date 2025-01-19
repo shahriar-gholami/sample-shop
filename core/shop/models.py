@@ -259,6 +259,20 @@ class Category(models.Model):
 		image = CategoryImage.objects.get(category=self)
 		image_url = image.image.url
 		return image_url
+	
+	def get_main_image(self):
+		images = CategoryImage.objects.filter(category=self)
+		main_image = images.first()
+		if main_image == None:
+			main_image_url = False
+			return main_image_url
+		else:
+			main_image_url = main_image.image.url
+			response = requests.get(main_image_url)
+			if response.status_code == 200: 
+				return main_image_url
+			else:
+				return False
 
 	def __str__(self):
 		return f'{self.name}'
