@@ -11,6 +11,8 @@ import jdatetime
 from datetime import timedelta
 from django_jalali.db import models as jmodels
 from datetime import date
+import requests
+
 
 def date2jalali(g_date):
 	return jdatetime.date.fromgregorian(date=g_date) if g_date else None
@@ -385,10 +387,15 @@ class Product(models.Model):
 		images = ProductImage.objects.filter(product=self)
 		main_image = images.first()
 		if main_image == None:
-			main_image_url = 'https://marketplace-bucket.storage.iran.liara.space/shop/default-product-image.png'
+			main_image_url = False
+			return main_image_url
 		else:
 			main_image_url = main_image.image.url
-		return main_image_url
+			response = requests.get(main_image_url)
+			if response.status_code == 200: 
+				return main_image_url
+			else:
+				return False
 
 	def get_gallery(self):
 		images = ProductImage.objects.filter(product=self)

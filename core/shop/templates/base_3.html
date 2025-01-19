@@ -221,69 +221,11 @@
                             <ul class="navbar-nav align-items-center">
                                 <li class="position-relative m-0"></li>
                                 
-                                <!-- <li class="nav-item"><a href="" class="nav-link header-top-menu-link-a  ">مگا
-                                    لیست منو
-                                    <i class="bi bi-tablet"></i></a>
-                                    <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
-                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;background-size: 400px !important;">
-                                        <li><a href="" class="title">بـرند</a></li>
-                                        <li><a href="">سامـسونگ</a></li>
-                                        <li><a href="">اپـل</a></li>
-                                        <li><a href="">شیـائومی</a></li>
-                                        <li><a href="">ال جی</a></li>
-                                        <li><a href="">وان پـلاس</a></li>
-                                        <li><a href="">جی ال ایـکس</a></li>
-                                        <li><a href="">هـو آوی</a></li>
-                                        <li><a href="">بلک بـری</a></li>
-                                        <li><a href="">توشـیبا</a></li>
-                                        <li><a href="">دایـناکورد</a></li>
-                                        <li><a href="" class="title">براساس رده بندی </a>
-                                        </li>
-                                        <li><a href="">دکـمه ای</a></li>
-                                        <li><a href="">لـمسـی</a></li>
-                                        <li><a href="">نـظـامی</a></li>
-                                        <li><a href="">ضـد آب</a></li>
-                                        <li><a href="">مسـافرتی</a></li>
-                                        <li><a href="">خـارنی</a></li>
-                                        <li><a href="" class="title">براساس کشور </a></li>
-                                        <li><a href="">ایران</a></li>
-                                        <li><a href="">ژاپن</a></li>
-                                        <li><a href="">فرانسه</a></li>
-                                        <li><a href="">کره جنوبی</a></li>
-                                        <li><a href="">آمریکا</a></li>
-                                        <li><a href="">سوئد</a></li>
-                                        <li><a href="">تایوان</a></li>
-                                        <li><a href="" class="title">براساس رنگ</a></li>
-                                        <li><a href="">قرمز</a></li>
-                                        <li><a href="">قهوه ای</a></li>
-                                        <li><a href="">سبز</a></li>
-                                        <li><a href="">بنفش</a></li>
-                                        <li><a href="">نارنجی</a></li>
-                                        <li><a href="">نیلی</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item"><a href="" class="nav-link  header-top-menu-link-a ">منو
-                                    ساده<i class="bi bi-menu-app"></i></a>
-                                    <ul class="level-one">
-                                        <li><a href="">منو شماره 1</a></li>
-                                        <li><a href="">منو شماره 2</a></li>
-                                        <li class="position-relative"><a href="">منو شماره 3 <i
-                                                class="bi bi-chevron-left"></i></a>
-                                            <ul class="level-two">
-                                                <li><a href="">زیر منو شماره 1</a></li>
-                                                <li><a href="">2 زیر منو شماره </a></li>
-                                                <li><a href="">3 زیر منو شماره </a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="">منو شماره 4</a></li>
-                                        <li><a href="">منو شماره 5</a></li>
-                                        <li><a href="">منو شماره 6</a></li>
-                                    </ul>
-                                </li> -->
+                                
                                 <li class="nav-item">
                                     <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">دسته‌بندی‌ها<i class="bi bi-columns-gap"></i></a>
                                     <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
-                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                                        style="background: #fff ;height: 600px;background-size: 300px;">
                                         {% for t_category in top_categories.all %}
                                             {% if t_category.is_sub == False %}
                                             <li><a class="title" href="{% url 'shop:category_products'  t_category.slug %}">{{t_category.name}}</a></li>
@@ -299,7 +241,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">ویژه‌ها<i class="bi bi-award"></i></a>
                                     <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
-                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                                        style="background: #fff ;height: 600px;background-size: 300px;">
                                         {% for tag in special_tags %}
                                             <li><a class="title" href="{% url 'shop:special_tag_products' tag.name %}">{{tag.name}}</a></li>
                                         {% endfor %}
@@ -309,7 +251,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link header-top-menu-link-a fw-bold-hover" href="{% url 'shop:product_list'  %}">برندها<i class="bi bi-suit-spade"></i></a>
                                     <ul class="list-unstyled shadow-lg back-menu sub-menu mega-container"
-                                        style="background: #fff url('assets/img/mega-img-1.jpg') no-repeat;height: 600px;background-size: 300px;">
+                                        style="background: #fff ;height: 600px;background-size: 300px;">
                                         {% for brand in store.get_brands %}
                                             <li><a class="title" href="{% url 'shop:special_brand_products' brand.name %}">{{brand.name}}</a></li>
                                         {% endfor %}

@@ -63,7 +63,7 @@
                     <div class="col-md-6 col-sm-12 col-lg-6 mb-2">
                         <form method="post" action="{% url 'shop:cart_item_update' cart.pk item.pk %}">
                         {% csrf_token %}
-                        <div class="product-row-item">
+                        <div class="product-row-item mt-2">
                             <div class="row align-items-center">
                                 <div class="col-md-3 col-lg-3 col-sm-12">
                                 <a href="{% url 'shop:product_detail' item.variety.product.slug %}">

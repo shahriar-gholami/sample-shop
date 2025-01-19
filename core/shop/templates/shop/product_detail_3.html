@@ -47,6 +47,7 @@
         <nav aria-label="breadcrumb" class="my-lg-0 my-2">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a class="font-14 text-muted-two" href="{% url 'shop:index'  %}">خانه</a></li>
+                <li class="breadcrumb-item"><a class="font-14 text-muted-two" href="{% url 'shop:product_list'  %}">فروشگاه</a></li>
                 <li class="breadcrumb-item"><a class="font-14 text-muted-two" href="#">{{ product.name }}</a></li>
                 </li>
             </ol>
@@ -125,94 +126,45 @@
                     <div class="col-lg-8">
                         <div class="product-mete-title bottom-border">
                             <h3 class="title-font h4">{{ product.name }}</h3>
-                            <!-- <p class="mb-0 mt-3">{{product.slug}}</p> -->
+                            <p class="mb-0 mt-3">{{product.slug}}</p>
                         </div>
                         <div class="product-meta-overal my-3 bottom-border">
                             <div class="row gy-3 align-items-center">
-                                
-                                <div class="col-md-5">
-                                    <div class="d-flex align-items-center">
-                                        <span class="text-muted-two me-2">دسته بندی</span>
-                                        {% for category in product.category.all|slice:":2" %}
-                                        <div class="label-site rounded-pill p-2">
-                                            <a href="{% url 'shop:category_products' category.slug %}">{{category.name}}</a>
-                                        </div>
-                                        {% endfor %}
+                                <div class="col-md-4">
+                                    <div class="label-site rounded-pill label-success">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        موجود در انبار
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <span class="text-muted-two me-2">دسته بندی</span>{% for category in product.category.all %}
+                                        <div class="label-site rounded-pill">
+                                            {{category.name}}
+                                        </div>{% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <span class="text-muted-two me-2">کد محصول</span>
                                     <span>sku-{{product.id}}</span>
                                 </div>
-                                {% if product.is_original %}
-                                <div class="col-md-3">
-                                    <div class="label-site rounded-pill label-success">
-                                        <i class="bi bi-check-circle me-1"></i>
-                                        کالای اورجینال
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% if brand.logo %}
-                                
-                                <div class="col-md-2">
-                                    <a href="{% url 'shop:special_brand_products' brand.name %}">
-                                        <div class="d-flex align-items-center panel-profile">
-                                            <img src="{{brand.logo.url}}" class="img-fluid img-profile-panel rounded me-3 shadow-md" alt="" height="35px">
-                                            <div class="d-grid gap-2">
-                                                <div class="d-flex align-items-center">
-                                                    <h6 class="font-14">{{brand.name}}</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                
-                                {% endif %}
                             </div>
                         </div>
-                        <form method="post" action="{% url 'shop:add_to_cart'  product.id %}">
+                        <form method="post" action="{% url 'shop:add_to_cart' product.id %}">
                             {% csrf_token %}
                         
                         <div class="product-meta-feature bottom-border">
-                            
-                                <div class="row gy-3">
-                                    <div class="col-lg-8">
-                                        <div class="product-meta-feature-items">
-                                            <h5 class="title font-16 mb-2">ویژگی های کالا</h5>
-                                            <ul class="navbar-nav">
-                                                <li class="nav item"><strong class="text-danger"> {{age}}</strong></li>
-                                                {% for line in product.get_brief_features %}    
-                                                <li class="nav item"><strong> {{line|safe}}</strong></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
+                            <div class="row gy-3">
+                                <div class="col-lg-8">
+                                    <div class="product-meta-feature-items">
+                                        <h5 class="title font-16 mb-2">ویژگی های کالا</h5>
+                                        <ul class="navbar-nav">
+                                            {% for line in product.get_brief_features %}    
+                                            <li class="nav item"><strong> {{line|safe}}</strong></li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <div class="row gy-3 text-start">
-                                            
-                                            
-                                            <div class="col-lg-12">
-                                                <div class="product-meta-rating mt-2 text-lg-start text-start">
-                                                    <div class="shadow-box rounded p-3 text-center m-4">
-                                                        ارسال امن و سریع
-                                                        <i class="bi bi-truck ms-2"></i><hr>
-                                                    
-                                                        تضمین اصالت کالا
-                                                        <i class="bi bi-bookmark-star ms-2"></i><hr>
-                                                    
-                                                        پشتیبانی ۲۴ ساعته
-                                                        <i class="bi bi-clock ms-2"></i><hr>
-                                                    
-                                                        امکان عودت کالا
-                                                        <i class="bi bi-arrow-repeat ms-2"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                           
-                                        </div>
-                                    </div>
-                                
+                                </div>
                                 {% if product.get_product_varieties.count > 1 %}
                                     <div class="product-meta-color">
                                         <h5 class="font-16">
@@ -236,43 +188,22 @@
                         <div class="product-meta-action mt-4 bottom-border">
                             <div class="row  gy-3">
                                 {% if product.off_active == True %}
-                                    {% if product.ref_class != None %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                    {{ product.get_class_price|intcomma }}</p>
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                    {{ product.price|intcomma }}</p>
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
+                                            {{ product.price|intcomma }}</p>
+                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
                                 {% else %}
-                                    {% if product.ref_class != None %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_class_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        
+                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
+                                            تومان</h6>
+                                    </div>
+                                </div>
                                 {% endif %}
                                 <div >
                                     <div>
@@ -282,14 +213,6 @@
                             </div>
                         </div>
                         <div class="product-meta-add-to-cart mt-4">
-                            {% if product.express == True %}
-                            <div class="col-lg-6">
-                                <p>
-                                    ارسال فوری در تهران
-                                    <i class="bi bi-truck ms-2"></i>
-                                </p>
-                            </div>
-                            {% endif %}
                             <button class="btn product-meta-add-to-cart-btn main-color-one-bg rounded-pill" type="submit">افزودن محصول</button> 
                         </div>
                         <div>
@@ -376,7 +299,7 @@
                                             نمایید. اگر این محصول را قبلا خریده باشید، نظر شما به عنوان خریدار
                                             ثبت خواهد
                                             شد.</p>
-                                        <form method="post" action="{% url 'shop:comment_create'  product.id %}" >
+                                        <form method="post" action="{% url 'shop:comment_create' product.id %}" >
                                             {% csrf_token %}
                                             <div class="row gy-4">
                                                 <!-- <div class="col-md-4">
@@ -693,59 +616,42 @@
         <div class="swiper mt-4 product-slider-swiper">
 
             <div class="swiper-wrapper ">
-                {% for product in product.get_related_products %}
+                {% for product in products|dictsortreversed:"views" %}
                 <div class="swiper-slide">
                     <div class="product-box">
-                        <a href="{% url 'shop:product_detail'  product.slug %}">
+                        <a href="{% url 'shop:product_detail' product.slug %}">
                             <div class="product-box-image">
                                 <img src="{{product.get_main_image}}" alt="">
                             </div>
                             <div class="product-box-title">
-                                <a href="{% url 'shop:product_detail'  product.slug %}"><h5 class="text-overflow-2">{{ product.name }}</h5></a>
+                                <a href="{% url 'shop:product_detail' product.slug %}"><h5 class="text-overflow-2">{{ product.name }}</h5></a>
                             </div>
                             {% if product.off_active == True %}
-                                    {% if product.ref_class != None %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                    {{ product.get_class_price|intcomma }}</p>
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                    {{ product.price|intcomma }}</p>
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                <div class="product-box-price">
+                                    <div class="product-box-price-discount">
+                                        <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
+                                        <del>{{ product.price|intcomma }}</del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.sales_price|intcomma}}</h5>
+                                        <p class="mb-0 text-muted">تومان</p>
+                                    </div>
+                                </div>
                                 {% else %}
-                                    {% if product.ref_class != None %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_class_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                
-                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                <div class="product-box-price">
+                                    <div class="product-box-price-discount">
+                                        <del></del>
+                                    </div>
+                                    <div class="product-box-price-price">
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.price|intcomma}}</h5>
+                                        <p class="mb-0 text-muted">تومان</p>
+                                    </div>
+                                </div>
                                 {% endif %}
                             <div class="product-box-hover">
                                 <nav class="navbar navbar-expand justify-content-center">
                                     <ul class="navbar-nav align-items-center">
-                                        <li class="nav-item"><a href="{% url 'shop:product_detail'  product.slug %}"
+                                        <li class="nav-item"><a href="{% url 'shop:product_detail' product.slug %}"
                                                                 class="nav-item product-box-hover-item me-3">مشاهده
                                             محصول</a></li>
                                         <!-- <li class="nav-item"><a href=""
@@ -753,7 +659,7 @@
                                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                                 data-bs-title="افزودن به سبد خرید"><i
                                                 class="bi bi-basket"></i></a></li> -->
-                                        <li class="nav-item"><a href="{% url 'shop:add_to_favorites'  product_id=product.id ref='index' %}"
+                                        <li class="nav-item"><a href="{% url 'shop:add_to_favorites' product_id=product.id ref='index' %}"
                                                                 class="nav-item product-box-hover-item product-box-hover-item-btn"
                                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                                 data-bs-title="افزودن به علاقه ها"><i

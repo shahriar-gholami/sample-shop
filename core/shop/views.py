@@ -1688,7 +1688,7 @@ class OrderDetailView(IsCustomerUserMixin ,View):
 			delivery_description = ''
 			delivery_description = delivery_description+'اقلام سفارش: <br>'
 			for item in order.items.all():
-				delivery_description = delivery_description+f'{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>'
+				delivery_description = delivery_description+f"{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>"
 			delivery_description = delivery_description+'شیوه ارسال: <br>'
 			if order.total_price <= delivery_method.min_cart_free:
 				delivery_description = delivery_description+f'{delivery_method.name} + {delivery_method.price:,} تومان  <br>'

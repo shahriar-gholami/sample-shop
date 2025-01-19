@@ -31,76 +31,62 @@
 
 <div class="main-content app-content mt-0">
     <div class="side-app">
-
-        <!-- CONTAINER -->
         <div class="main-container container-fluid">
 
-            <!-- PAGE-HEADER -->
             <div class="page-header">
-                <h1 class="page-title">جزییات سفارش</h1>
+                <h1 class="page-title">جزئیات سفارش</h1>
                 <div>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'shop:index' %}">فروشگاه</a></li>
-                        <li aria-current="page" class="breadcrumb-item active">جزییات سفارش</li>
+                        <li aria-current="page" class="breadcrumb-item active">جزئیات سفارش</li>
                     </ol>
                 </div>
             </div>
             <!-- PAGE-HEADER END -->
 
             <!-- ROW-1 OPEN -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="card cart">
-                        <div class="card-header">
-                            <h3 class="card-title">سبد خرید</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                {% for item in order.items.all %}
-                                <div class="col-md-12  col-xl-6">
-                                    <div class="card">
-                                        <div class="row g-0">
-
-                                            <div class="col-md-4">
-                                                <img alt="img" class="card-img-left" src="{{item.variety.product.get_main_image}}" style="width: 150px;">
+                    <div class="row">
+                        {% for item in order.items.all %}
+                        <div class="col-md-12 col-xl-6">
+                            <div class="card p-4">
+                                <div class="row g-0">
+                                    <div class="col-md-4 text-center">
+                                        <img alt="img" class="card-img-left" src="{{item.variety.product.get_main_image}}" style="width: 150px;">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{% url 'shop:product_detail' item.variety.product.slug %}">
+                                            <div class="card-body">
+                                                <h5 class="card-title m-0">{{item.variety.product.name}}</h5>
+                                                <p class="card-text m-0">تنوع: {{item.variety.name}}</p>
+                                                <p class="card-text m-0">قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان</p>
+                                                <p class="card-text m-0">تعداد: {{item.quantity}} عدد</p>
+                                                <p class="card-text m-0">مجموع: {{item.get_item_price|intcomma}} تعداد</p>
                                             </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title m-0">{{item.variety.product.name}}</h5>
-                                                    <p class="card-text m-0">تنوع: {{item.variety.name}}</p>
-                                                    <p class="card-text m-0">قیمت هر عدد: {{item.variety.product.get_active_price|intcomma}} تومان</p>
-                                                    <p class="card-text m-0">تعداد: {{item.quantity}} عدد</p>
-                                                    <p class="card-text m-0">مجموع: {{item.get_item_price|intcomma}} تعداد</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 </div>
-                                {% endfor %}
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <form method="post" action="{% url 'shop:order_detail' order.id %}">
-                                {% csrf_token %}
-                                <label class="col-md-12 form-label">شیوه‌ی ارسال</label>
-                                <select name="delivery_method" type="text" class="form-control form-select select2" id="select-beast">
-                                    {% for delivery in delivery_mthods %}
-                                        <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="login100-form-btn btn-primary mt-2">تایید و ادامه</button> 
-                                <p class="text-danger">{{message2}}</p>
-                            </form>
-                        </div>
+                        {% endfor %}
                     </div>
-                </div>
+                    <div class="card p-4">
+                        <form method="post" action="{% url 'shop:order_detail' order.id %}">
+                            {% csrf_token %}
+                            <label class="col-md-12 form-label">شیوه‌ی ارسال</label>
+                            <select name="delivery_method" type="text" class="form-control form-select select2" id="select-beast">
+                                {% for delivery in delivery_mthods %}
+                                    <option value= "{{delivery.id}}">{{ delivery.name }} - هزینه: {{delivery.price}}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="login100-form-btn btn-primary mt-2">تایید و ادامه</button> 
+                            <p class="text-danger">{{message2}}</p>
+                        </form>
+                    </div>
             </div>
-        </div>
     </div>
 </div>
-
+        
 {% endblock %}
-
 {% block js %}
 <script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
 <script src="{% static 'assets/js/select2.js' %}"></script>

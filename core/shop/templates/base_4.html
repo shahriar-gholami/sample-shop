@@ -200,7 +200,7 @@
                                                  <i class="bi bi-ui-checks-grid main-color-one-color fix-icon me-2"></i>
                                              </span>    فروشگاه</a>
                                 <ul class="list-unstyled mage-list-menu shadow-lg back-menu sub-menu mega-container"
-                                    style="background: #fff url('assets/image/mega-img-1.jpg')">
+                                    style="background: #fff">
                                     {% for t_category in top_categories.all %}
                                         {% if t_category.get_sub_categories.all.first != None %}
                                             {% if t_category.is_sub != True %}
@@ -224,7 +224,7 @@
                             {% if store.show_brands == True %}
                             <li class="nav-item"><a href="{% url 'shop:index' %}" class="nav-link border-animate fromCenter"><i class="bi bi-chevron-left"></i>  برندها</a>
                                 <ul class="list-unstyled mage-list-menu shadow-lg back-menu sub-menu mega-container"
-                                    style="background: #fff url('assets/image/mega-img-1.jpg')">
+                                    style="background: #fff">
                                     {% for brand in store.get_brands %}
                                     <li><a href="{% url 'shop:special_brand_products'  brand.name %}" class="title">{{ brand.name }}</a></li>
                                     {% endfor %}
@@ -234,7 +234,7 @@
 
                             <li class="nav-item"><a href="{% url 'shop:index' %}" class="nav-link border-animate fromCenter"><i class="bi bi-menu-app"></i>  ویژه‌ها</a>
                                 <ul class="list-unstyled mage-list-menu shadow-lg back-menu sub-menu mega-container"
-                                    style="background: #fff url('assets/image/mega-img-1.jpg')">
+                                    style="background: #fff">
                                     {% for tag in special_tags %}
                                     <li><a href="{% url 'shop:special_tag_products'  tag.name %}" class="title">{{ tag.name }}</a></li>
                                     {% endfor %}
