@@ -84,22 +84,12 @@
                             </div>
                             <div class="swiper product-gallery">
                                 <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
-                                    {% if product.get_gallery != None %}
-                                        {% for image in product.get_gallery %}
-                                            <div class="swiper-slide">
-                                                <div class="swiper-zoom-container">
-                                                    <img src="{{product.get_main_image}}" alt="">
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    {% else %}
-                                        <div class="swiper-slide">
-                                            <div class="swiper-zoom-container">
-                                                <img class="img-fluid" src="{% static 'assets\images\11.jpg' %}"/>
-                                            </div>
+                                    <div class="swiper-slide">
+                                        <div class="swiper-zoom-container">
+                                            <img class="img-fluid" src="{{product.get_main_image}}"
+                                                alt=""/>
                                         </div>
-                                    {% endif %}
-                                    
+                                    </div>
                                 </div>
                                 <div class="swiper-pagination d-none d-lg-block"></div>
                             </div>
@@ -437,7 +427,7 @@
                     <button aria-selected="false" class="d-flex waves-effect waves-light"
                             data-bs-target="#productComment-pane" data-bs-toggle="tab" id="productComment"
                             role="button" type="button">
-                        نظرات <span class="badge main-color-two-bg ms-2 lh-sm">{{comments.count}}</span>
+                        نظرات <span class="badge main-color-two-bg ms-2 lh-sm">17</span>
                     </button>
                 </li>
                 <!-- <li class="nav-item">
@@ -970,13 +960,17 @@
     <div class="container-fluid">
         <div class="product-slider-box-title">
             <div class="row align-items-center">
-                <div class="col-lg-12 col-12">
+                <div class="col-lg-8 col-6">
                     <h4 class="title-font product-slider-box-title-title dot">
                         <span class="main-color-one-color">محصولات</span>
                         <span>مرتبط</span>
                     </h4>
                 </div>
-                
+                <div class="col-lg-4 col-6">
+                    <div class="text-end">
+                        <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="swiper pro-slider">

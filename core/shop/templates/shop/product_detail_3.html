@@ -73,7 +73,7 @@
                                 </div> -->
                                 <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
                                      data-bs-title="افزودن به علاقه مندی">
-                                    <a href="{% url 'shop:add_to_favorites' product_id=product.id ref='products' %}"><i class="bi bi-heart"></i></a>
+                                    <a href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"><i class="bi bi-heart"></i></a>
                                 </div>
                                 <!-- <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
                                      data-bs-title="مقایسه محصول">
@@ -87,21 +87,11 @@
                             <div class="pro-gallery-parent">
                                 <div class="swiper product-gallery">
                                     <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
-                                        {% if product.get_gallery != None %}
-                                        {% for image in product.get_gallery %}
-                                        <div class="swiper-slide">
-                                            <div class="swiper-zoom-container">
-                                                <img class="img-fluid" src="{{image.image.url}}"/>
+                                        
+                                            <div class="swiper-slide">
+                                                <img class="img-fluid" src="{{product.get_main_image}}"/>
                                             </div>
-                                        </div>
-                                        {% endfor %}
-                                        {% else %}
-                                        <div class="swiper-slide">
-                                            <div class="swiper-zoom-container">
-                                                <img class="img-fluid" src="https://marketplace-bucket.storage.iran.liara.space/shop/default-product-image.png"/>
-                                            </div>
-                                        </div>
-                                        {% endif %}
+                                        
                                         
                                     </div>
                                     <div class="swiper-button-next d-none d-lg-flex"></div>
