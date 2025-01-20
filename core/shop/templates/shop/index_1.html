@@ -146,9 +146,8 @@
                             <ul class="">
                                 {% for f_cat in featured_categories.categories.all|slice:":8" %}
                                 <a  href="{% url 'shop:category_products' f_cat.slug %}"><img
-                                    alt="img" class="br-5 m-1" src="{{f_cat.get_image_url}}" width="140"></a>
+                                    alt="img" class="br-5 m-1" src="{{f_cat.get_main_image}}" width="140"></a>
                                 {% endfor %}
-                                
                             </ul>
                         </div>
 

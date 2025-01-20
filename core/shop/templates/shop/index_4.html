@@ -266,7 +266,7 @@
                     <a href="{% url 'shop:category_products' f_cat.slug %}">
                         <div class="category-card-item running-top">
                             <div class="category-card-item-image">
-                                <img src="{{f_cat.get_image_url}}" alt="{{ f_cat.name }}">
+                                <img src="{{f_cat.get_main_image}}" alt="{{ f_cat.name }}">
                             </div>
                             <div class="category-card-item-title">
                                 <h3 class="fw-bold text-overflow-1 h6">
@@ -425,7 +425,7 @@
                      <div class="product-box text-center">
                          <div class="product-image text-center">
                              <img alt="" class="img-fluid"
-                                  src="{{ product.get_main_image }}">
+                                  src="{{product.get_main_image}}">
                          </div>
                          <div class="product-title">
                              <div class="title">

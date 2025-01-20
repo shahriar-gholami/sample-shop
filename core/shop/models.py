@@ -11,7 +11,9 @@ import jdatetime
 from datetime import timedelta
 from django_jalali.db import models as jmodels
 from datetime import date
-import requests
+from django.templatetags.static import static
+from PIL import Image
+
 
 
 def date2jalali(g_date):
@@ -264,15 +266,10 @@ class Category(models.Model):
 		images = CategoryImage.objects.filter(category=self)
 		main_image = images.first()
 		if main_image == None:
-			main_image_url = False
-			return main_image_url
+			return static('assets/images/11.jpg')
 		else:
 			main_image_url = main_image.image.url
-			response = requests.get(main_image_url)
-			if response.status_code == 200: 
-				return main_image_url
-			else:
-				return False
+		return main_image_url
 
 	def __str__(self):
 		return f'{self.name}'
@@ -401,15 +398,10 @@ class Product(models.Model):
 		images = ProductImage.objects.filter(product=self)
 		main_image = images.first()
 		if main_image == None:
-			main_image_url = False
-			return main_image_url
+			return static('assets/images/11.jpg')
 		else:
 			main_image_url = main_image.image.url
-			response = requests.get(main_image_url)
-			if response.status_code == 200: 
-				return main_image_url
-			else:
-				return False
+		return main_image_url
 
 	def get_gallery(self):
 		images = ProductImage.objects.filter(product=self)
@@ -511,11 +503,16 @@ class ProductImage(models.Model):
 		return self.image.url
 
 	def save(self, *args, **kwargs):
-		if not self.custom_name:
-			product_name = self.product.name.replace(" ", "_")
-			timestamp = timezone.now().strftime("%Y%m%d")
-			self.custom_name = f"{product_name}_{timestamp}"
 		super().save(*args, **kwargs)
+
+		# باز کردن تصویر اصلی
+		img = Image.open(self.image.path)
+
+		# بررسی اندازه و تغییر سایز
+		if img.height > 800 or img.width > 800:
+			output_size = (800, 800)
+			img.thumbnail(output_size)  # تغییر اندازه با حفظ نسبت
+			img.save(self.image.path, quality=80)
 
 class StoreLogoImage(models.Model):
 	alt_name = models.CharField(max_length=250, null=True, blank=True)
