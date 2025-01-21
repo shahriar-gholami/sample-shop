@@ -125,15 +125,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="product-meta-rating my-3">
-                            <div class="d-flex align-items-center">
-                                {% for category in product.category.all|slice:":2" %}
-                                <a href="{% url 'shop:category_products' category.slug %}" class="badge danger-label btn btn-lg rounded-pill font-12">{{category.name}}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row gy-4 my-4">
+                        
+                        <div class="row gy-4 my-2">
                             <div class="col-lg-6">
+                                <div class="product-meta-rating my-3">
+                                    <div class="d-flex align-items-center">
+                                        {% for category in product.category.all|slice:":2" %}
+                                        <a href="{% url 'shop:category_products' category.slug %}" class="badge danger-label btn btn-lg rounded-pill font-12">{{category.name}}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
                                 <div class="product-meta-feature-items">
                                     <h5 class="title font-16 mb-2 icon-circle">ویژگی های کالا</h5>
                                     <ul class="navbar-nav">
@@ -427,7 +428,7 @@
                     <button aria-selected="false" class="d-flex waves-effect waves-light"
                             data-bs-target="#productComment-pane" data-bs-toggle="tab" id="productComment"
                             role="button" type="button">
-                        نظرات <span class="badge main-color-two-bg ms-2 lh-sm">17</span>
+                        نظرات <span class="badge main-color-two-bg ms-2 lh-sm">{{comments.count}}</span>
                     </button>
                 </li>
                 <!-- <li class="nav-item">

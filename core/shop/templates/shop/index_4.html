@@ -386,7 +386,7 @@
             <div class="col-md-4">
                 <div class="banner-item running-top">
                     <a href="{% url 'shop:featured_products' banner.id %}">
-                        <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
+                        <img src="{{banner.get_main_image}}" class="w-100 rounded-3" alt="">
                     </a>
                 </div>
             </div>
@@ -622,7 +622,7 @@
              <div class="col-lg-12">
                  <div class="banner-item running-top">
                      <a href="{% url 'shop:featured_products' banner.id %}">
-                         <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
+                         <img src="{{banner.get_main_image}}" class="w-100 rounded-3" alt="">
                      </a>
                  </div>
              </div>
@@ -1262,7 +1262,7 @@
              <div class="col-sm-6">
                  <div class="banner-item running-top">
                      <a href="{% url 'shop:featured_products' banner.id %}">
-                         <img src="{{banner.image.url}}" class="w-100 rounded-3" alt="">
+                         <img src="{{banner.get_main_image}}" class="w-100 rounded-3" alt="">
                      </a>
                  </div>
              </div>

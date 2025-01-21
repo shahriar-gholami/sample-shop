@@ -50,8 +50,8 @@ class IndexView(View):
 		store = Store.objects.all().first()
 		slides = Slide.objects.all()
 		triple_banners = [banner for banner in Banner.objects.filter(size='1/3')]
-		small_banners = Banner.objects.filter(size='small')
-		big_banners = Banner.objects.filter(size='big')
+		small_banners = Banner.objects.filter(size='1/2')
+		big_banners = Banner.objects.filter(size='1')
 		posts = BlogPost.objects.all()
 		services = Services.objects.all().first()
 		products = Product.objects.all()

@@ -365,7 +365,7 @@
             <div class="col-lg-6">
                 <div class="advert-banner-item img-tilt" data-tilt>
                     <a href="{% url 'shop:special_products' banner.id %}">
-                        <img src="{{banner.image.url}}" alt="">
+                        <img src="{{banner.get_main_image}}" alt="">
                     </a>
                 </div>
             </div>
@@ -488,7 +488,7 @@
             <div class="col-12">
                 <div class="advert-banner-item img-tilt" data-tilt>
                     <a href="{% url 'shop:special_products' banner.id %}">
-                        <img src="{{banner.image.url}}" alt="">
+                        <img src="{{banner.get_main_image}}" alt="">
                     </a>
                 </div>
             </div>

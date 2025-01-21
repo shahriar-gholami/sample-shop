@@ -20,10 +20,13 @@ def date2jalali(g_date):
 	return jdatetime.date.fromgregorian(date=g_date) if g_date else None
 
 class Policy(models.Model):
-	delivery = models.TextField(default='توضیحات لازم در مورد شیوه‌های ارسال، مدت زمان انتظار و هزینه ارسال کالا')
-	payment = models.TextField(default='معرفی شیوه‌های پرداختی که در فروشگاه امکان‌پذیر است')
-	returns = models.TextField(default='توضیح صریح سیاست‌های مرجوعی و بازپرداخت وجه کالاهای عودت داده شده')
-	rules_and_policies = models.TextField(default='قوانین و مقررات کلی سایت و سیاست‌های حریم خصوصی')
+	delivery = models.TextField(default='توضیحات لازم در مورد شیوه‌های ارسال، مدت زمان انتظار و هزینه ارسال کالا', verbose_name='شیوه ارسال')
+	payment = models.TextField(default='معرفی شیوه‌های پرداختی که در فروشگاه امکان‌پذیر است', verbose_name='شیوه‌های پرداخت')
+	returns = models.TextField(default='توضیح صریح سیاست‌های مرجوعی و بازپرداخت وجه کالاهای عودت داده شده', verbose_name='سیاست‌های مرجوعی')
+	rules_and_policies = models.TextField(default='قوانین و مقررات کلی سایت و سیاست‌های حریم خصوصی', verbose_name='قوانین و مقررات')
+
+	class Meta:
+		verbose_name = _("قوانین و سیاست‌ها")
 
 class Store(models.Model):
 	name = models.CharField(max_length=250, unique=True)
@@ -773,6 +776,14 @@ class Banner(models.Model):
 	
 	class Meta:
 		ordering = ('created',)
+
+	def get_main_image(self):
+		main_image = self.image
+		if main_image == None:
+			return static('assets/images/default_banner.jpg')
+		else:
+			main_image_url = main_image.url
+		return main_image_url
 
 	def save(self, *args, **kwargs):
 		if not self.custom_name:

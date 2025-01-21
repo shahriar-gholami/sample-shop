@@ -171,7 +171,7 @@
             <div class="col-lg-6">
                 <div class="advert-item ">
                     <a href="{% url 'shop:special_products' banner.id %}">
-                        <img alt="" class="mb-2" src="{{banner.image.url}}" style="object-fit:contain">
+                        <img alt="" class="mb-2" src="{{banner.get_main_image}}" style="object-fit:contain">
 
                     </a>
                 </div>
@@ -352,7 +352,7 @@
             <div class="col-lg-12">
                 <div class="advert-item ms-2">
                     <a href="{% url 'shop:special_products' banner.id %}">
-                        <img alt="" src="{{banner.image.url}}" style="object-fit: cover">
+                        <img alt="" src="{{banner.get_main_image}}" style="object-fit: cover">
                     </a>
                 </div>
             </div>

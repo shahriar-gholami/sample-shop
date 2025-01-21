@@ -370,17 +370,12 @@
             </div>
             <div class="col-lg-2 mt-md-5 mt-2 col-6">
                 <div class="small-slider">
-                    <div class="d-flex">
-                        <div class="item text-center align-items-center">
-                            <a href="">
-                                <img src="{% static 'assets4/image/namad/enamad.png' %}" class="img-fluid" alt="">
-                            </a>
-                        </div>
-                        <div class="item text-center">
-                            <a href="">
-                                <img src="{% static 'assets4/image/namad/rezi.png' %}" class="img-fluid" alt="">
-                            </a>
-                        </div>
+                    <div class="text-center">
+                        {% if store.enamad_code != 'none' %}
+                            {{store.enamad_code|safe}}
+                        {% else %}
+                            <img class="rounded" alt="logo" src="https://marketplace-bucket.storage.iran.liara.space/test%20enamad.png" style="width: 120px; height: 120px">
+                        {% endif %}
                     </div>
                 </div>
             </div>
