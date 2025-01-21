@@ -665,7 +665,7 @@ class ProductDetailView(View):
 	def get(self, request, product_slug ):
 		store = Store.objects.all().first()
 		store_name = store.name
-		product = Product.objects.filter(slug = product_slug).first()
+		product = Product.objects.get(slug = product_slug)
 		if product.views:
 			product.views = product.views + 1
 		else:

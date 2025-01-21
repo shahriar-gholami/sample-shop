@@ -81,9 +81,9 @@
                 <div class="swiper-wrapper ">
                     {% for product in products %}
                     <div class="swiper-slide">
-                        <div class="product-box">
+                        <div class="product-box text-center">
                             <div>
-                                <a href="{% url 'shop:product_detail' product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}" alt="{{product.name}}" ></a>
+                                <a href="{% url 'shop:product_detail' product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}" alt="{{product.name}}" style="height: 250px;"></a>
                                 
                                 <!-- <div class="color-box">
                                     <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
@@ -117,7 +117,7 @@
                             <div class="product-box-price">
 
                                 {% if product.off_active == True %}
-                                <div class="product-box-offer-discount">
+                                <div>
                                     <del>{{product.price|intcomma}} </del>
                                 </div>
                                 <div class="product-box-price-price">
@@ -205,19 +205,14 @@
             </div>
         </div>
         <div class="main-category-items mt-5">
-
-
-
             <div class="swiper free-mode">
                 <div class="swiper-wrapper">
                     {% for f_cat in featured_categories.categories.all %}
                     <div class="swiper-slide">
                         <div>
-                                <a href="{% url 'shop:category_products' f_cat.slug %}">
-                                    <img src="{{f_cat.get_main_image}}" alt="" width="180" height="180">
-                                </a>
-                           
-                            
+                            <a href="{% url 'shop:category_products' f_cat.slug %}">
+                                <img src="{{f_cat.get_main_image}}" alt="" width="180" height="180">
+                            </a>
                         </div>
                     </div>
                     {% endfor %}
@@ -260,9 +255,9 @@
                 <div class="swiper-wrapper ">
                     {% for product in most_viewed_products %}
                     <div class="swiper-slide">
-                        <div class="product-box">
+                        <div class="product-box text-center">
                             <div>
-                                <a href="{% url 'shop:product_detail' product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}"  alt="{{product.name}}" ></a>
+                                <a href="{% url 'shop:product_detail' product.slug %}"><img class="rounded-3" src="{{ product.get_main_image }}"  alt="{{product.name}}" style="height: 250px;"></a>
                                 
                                 <!-- <div class="color-box">
                                     <div class="color-box-item" data-hint="نام رنگ مورد نظر" data-toggle="tooltip">
@@ -296,7 +291,7 @@
                             <div class="product-box-price">
 
                                 {% if product.off_active == True %}
-                                <div class="product-box-offer-discount">
+                                <div>
                                     <del>{{product.price|intcomma}} </del>
                                 </div>
                                 <div class="product-box-price-price">

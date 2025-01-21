@@ -136,7 +136,7 @@
                                     <div class="tags">
                                         <h5>برچسب‌ها</h5>
                                         {% for tag in product.tags.all %}
-                                        <a class="tag" href="{% url 'shop:filter_tag_products'  tag.slug %}">{{ tag.name }}</a>
+                                        <a class="tag" href="{% url 'shop:filter_tag_products'  tag.name %}">{{ tag.name }}</a>
                                         {% endfor %}
                                     </div>
                                 </div>

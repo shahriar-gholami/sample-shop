@@ -7,6 +7,8 @@ from .models import Product, Category
 from utils import erase_stock_volume, update_slugs
 import django_jalali.admin as jadmin
 from django_jalali.admin.filters import JDateFieldListFilter
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 
 @admin.register(ProductRefClass)
 class ProductRefClassAdmin(admin.ModelAdmin):
@@ -106,10 +108,10 @@ class ProductAdmin(admin.ModelAdmin):
 	@admin.display(description='Active Price')
 	def active_price(self, obj):
 		return obj.get_active_price()
-	list_display = ('name' ,'price','sales_price','off_active', 'active_price','stock_alarm', 'view_on_site_icon')
+	list_display = ('name' ,'slug','price','sales_price','off_active', 'active_price','stock_alarm', 'view_on_site_icon')
 	list_editable = ('price','off_active','sales_price')
 	search_fields = ['name', 'slug']
-	autocomplete_fields = ['category',]
+	autocomplete_fields = ['category', 'tags']
 	prepopulated_fields = {'slug': ('name',)}  
 	inlines = [ProductImageInline, VarietyInline, FilterValueInline]
 

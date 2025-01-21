@@ -13,6 +13,8 @@ from django_jalali.db import models as jmodels
 from datetime import date
 from django.templatetags.static import static
 from PIL import Image
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 
 
 
@@ -298,7 +300,7 @@ class ProductColor(models.Model):
 class Product(models.Model):
 	category = models.ManyToManyField(Category)
 	name = models.CharField(max_length=200)
-	slug = models.CharField(max_length=200, )
+	slug = models.CharField(max_length=200, unique=True,default='محصول-جدید' ,blank=True)
 	description = RichTextField()
 	features = RichTextField()
 	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه')
@@ -309,14 +311,12 @@ class Product(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
 	views = models.IntegerField(default = 0)
-	meta_description = models.CharField(max_length=500, null=True, blank = True)
-	meta_keywords = models.CharField(max_length=500, null=True, blank = True)
-	meta_og_title = models.CharField(max_length=250,  null=True, blank = True)
-	meta_og_description = models.CharField(max_length=1000,  null=True, blank = True)
-	meta_tc_title = models.CharField(max_length=250,  null=True, blank = True)
-	meta_tc_description = models.CharField(max_length=250,  null=True, blank = True)
-	ref_class = models.ForeignKey(ProductRefClass, null=True, blank=True, on_delete=models.SET_NULL)
-	ref_price = models.IntegerField(default=0, null=True, blank=True)
+	meta_description = models.TextField(null=True, blank = True)
+	meta_keywords = models.TextField(null=True, blank = True)
+	meta_og_title = models.TextField( null=True, blank = True)
+	meta_og_description = models.TextField(  null=True, blank = True)
+	meta_tc_title = models.TextField( null=True, blank = True)
+	meta_tc_description = models.TextField( null=True, blank = True)
 	stock_alarm_volume = models.IntegerField(default=0, null=True, blank=True)
 
 	def get_varieties(self):
@@ -421,16 +421,10 @@ class Product(models.Model):
 		return class_price
 	
 	def get_active_price(self):
-		if self.ref_class == None:
-			if self.off_active == True and self.sales_price != None:
-				active_price = self.sales_price
-			else:
-				active_price = self.price
+		if self.off_active == True and self.sales_price != None:
+			active_price = self.sales_price
 		else:
-			if self.off_active == True and self.sales_price != None:
-				active_price = self.sales_price
-			else:
-				active_price = self.ref_price*self.ref_class.price_coef/100
+			active_price = self.price
 		return active_price
 
 	def get_product_varieties(self):
@@ -476,6 +470,21 @@ class Product(models.Model):
 						if len(related_products)>=6:
 							return list(related_products)
 		return list(related_products)
+	
+	def save(self, *args, **kwargs):
+		# اگر اسلاگ خالی است، اسلاگ بساز
+		base_slug = slugify(self.name)
+		slug = base_slug
+		counter = 1
+		
+		# بررسی تکراری بودن اسلاگ
+		while Product.objects.filter(slug=slug).exists():
+			slug = f"{base_slug}-{counter}"  # اسلاگ را با عددی به انتهای آن تغییر بده
+			counter += 1
+		
+		self.slug = slug
+		
+		super().save(*args, **kwargs)  # ذخیره مدل
 
 	def __str__(self):
 		return f'{self.name}'
@@ -504,18 +513,6 @@ class ProductImage(models.Model):
 
 	def get_absolute_url(self):
 		return self.image.url
-
-	def save(self, *args, **kwargs):
-		super().save(*args, **kwargs)
-
-		# باز کردن تصویر اصلی
-		img = Image.open(self.image.path)
-
-		# بررسی اندازه و تغییر سایز
-		if img.height > 800 or img.width > 800:
-			output_size = (800, 800)
-			img.thumbnail(output_size)  # تغییر اندازه با حفظ نسبت
-			img.save(self.image.path, quality=80)
 
 class StoreLogoImage(models.Model):
 	alt_name = models.CharField(max_length=250, null=True, blank=True)

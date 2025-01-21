@@ -102,44 +102,21 @@
                                     </div>
                                     <div class="product-action flex-column mt-3">
                                         {% if product.off_active == True %}
-                                    {% if product.ref_class != None %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
-                                                    {{ product.get_class_price|intcomma }}</p>
-                                                <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                    تومان</h6>
+                                            <div >
+                                                <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                    <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
+                                                        {{ product.price|intcomma }}</p>
+                                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                        تومان</h6>
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% else %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
-                                                    {{ product.price|intcomma }}</p>
-                                                <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
-                                                    تومان</h6>
+                                        {% else %}
+                                            <div >
+                                                <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% endif %}
-                                {% else %}
-                                    {% if product.ref_class != None %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                
-                                                <h6 class="font-18 title-font new-price main-color-one-color">{{product.get_class_price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div >
-                                            <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                
-                                                <h6 class="font-18 title-font new-price">{{product.price|intcomma}}
-                                                    تومان</h6>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
+                                        {% endif %}
                                 <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
                                     <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="{% url 'shop:product_detail' product.slug %}">
                                         مشاهده
@@ -312,45 +289,22 @@
                              </div>
                          </div>
                          <div class="product-action flex-column mt-3">
-                        {% if product.off_active == True %}
-                            {% if product.ref_class != None %}
-                                <div >
-                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <p class="mb-0 old-price font-18 text-muted-two text-decoration-line-through me-3">
-                                            {{ product.get_class_price|intcomma }}</p>
-                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
-                                            تومان</h6>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div >
-                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <p class="mb-0 old-price font-18 text-muted-two text-decoration-line-through me-3">
-                                            {{ product.price|intcomma }}</p>
-                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
-                                            تومان</h6>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            {% if product.ref_class != None %}
-                                <div >
-                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        
-                                        <h6 class="font-18 title-font new-price">{{product.get_class_price|intcomma}}
-                                            تومان</h6>
-                                    </div>
-                                </div>
-                            {% else %}
+                            {% if product.off_active == True %}
                             <div >
                                 <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                    
-                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma}}
+                                    <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
+                                        {{ product.price|intcomma }}</p>
+                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
                                         تومان</h6>
                                 </div>
                             </div>
+                            {% else %}
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                    </div>
+                                </div>
                             {% endif %}
-                        {% endif %}
                              <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
                                  <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="{% url 'shop:product_detail' product.slug %}">
                                      مشاهده
@@ -434,44 +388,21 @@
                          </div>
                          <div class="product-action flex-column mt-3">
                             {% if product.off_active == True %}
-                            {% if product.ref_class != None %}
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <p class="mb-0 old-price font-18 text-muted-two text-decoration-line-through me-3">
-                                            {{ product.get_class_price|intcomma }}</p>
-                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
-                                            تومان</h6>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div >
-                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <p class="mb-0 old-price font-18 text-muted-two text-decoration-line-through me-3">
+                                        <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
                                             {{ product.price|intcomma }}</p>
-                                        <h6 class="font-18 title-font new-price">{{product.sales_price|intcomma}}
-                                            تومان</h6>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            {% if product.ref_class != None %}
-                                <div >
-                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        
-                                        <h6 class="font-18 title-font new-price">{{product.get_class_price|intcomma}}
+                                        <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
                                             تومان</h6>
                                     </div>
                                 </div>
                             {% else %}
-                            <div >
-                                <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                    
-                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma}}
-                                        تومان</h6>
+                                <div >
+                                    <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
+                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                    </div>
                                 </div>
-                            </div>
                             {% endif %}
-                        {% endif %}
                              <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
                                  <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="{% url 'shop:product_detail' product.slug %}">
                                      مشاهده
