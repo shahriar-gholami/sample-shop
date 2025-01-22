@@ -297,10 +297,14 @@ class ProductColor(models.Model):
 	def __str__(self):
 		return self.name
 
+from django.db import models
+from django.utils.text import slugify
+from ckeditor.fields import RichTextField  # فرض بر اینکه از این کتابخانه استفاده می‌کنید
+
 class Product(models.Model):
 	category = models.ManyToManyField(Category)
 	name = models.CharField(max_length=200)
-	slug = models.CharField(max_length=200,default='محصول-جدید' ,blank=True)
+	slug = models.CharField(max_length=200, unique=True, blank=True)
 	description = RichTextField()
 	features = RichTextField()
 	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه')
@@ -310,14 +314,20 @@ class Product(models.Model):
 	tags = models.ManyToManyField(Tag, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
-	views = models.IntegerField(default = 0)
-	meta_description = models.TextField(null=True, blank = True)
-	meta_keywords = models.TextField(null=True, blank = True)
-	meta_og_title = models.TextField( null=True, blank = True)
-	meta_og_description = models.TextField(  null=True, blank = True)
-	meta_tc_title = models.TextField( null=True, blank = True)
-	meta_tc_description = models.TextField( null=True, blank = True)
+	views = models.IntegerField(default=0)
+	meta_description = models.TextField(null=True, blank=True)
+	meta_keywords = models.TextField(null=True, blank=True)
+	meta_og_title = models.TextField(null=True, blank=True)
+	meta_og_description = models.TextField(null=True, blank=True)
+	meta_tc_title = models.TextField(null=True, blank=True)
+	meta_tc_description = models.TextField(null=True, blank=True)
 	stock_alarm_volume = models.IntegerField(default=0, null=True, blank=True)
+
+	def save(self, *args, **kwargs):
+		# تولید اسلاگ فارسی با پشتیبانی از یونیکد
+		self.slug = slugify(self.name, allow_unicode=True)
+		super().save(*args, **kwargs)
+
 
 	def get_varieties(self):
 		return Variety.objects.filter(product = self)
@@ -470,15 +480,6 @@ class Product(models.Model):
 						if len(related_products)>=6:
 							return list(related_products)
 		return list(related_products)
-	
-	def save(self, *args, **kwargs):
-		slug = self.name.replace(' ','-').replace('/','')
-		counter = 1
-		while Product.objects.filter(slug=slug).exists():
-			slug = f"{slug}-{counter}"
-			counter += 1
-		self.slug = slug
-		super().save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.name}'
