@@ -108,7 +108,7 @@ class ProductAdmin(admin.ModelAdmin):
 	@admin.display(description='Active Price')
 	def active_price(self, obj):
 		return obj.get_active_price()
-	list_display = ('name' ,'slug','price','sales_price','off_active', 'active_price','stock_alarm', 'view_on_site_icon')
+	list_display = ('name' ,'slug','price','sales_price','off_active', 'active_price','stock_alarm')
 	list_editable = ('price','off_active','sales_price')
 	search_fields = ['name', 'slug']
 	autocomplete_fields = ['category', 'tags']
@@ -117,12 +117,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 	actions = [erase_stock,update_slugs]
 
-	def view_on_site_icon(self, obj):
-		url = obj.get_absolute_url()  # اطمینان حاصل کنید متد get_absolute_url در مدل تعریف شده
-		return format_html('<a href="{}" target="_blank">View</a>', url)
+	# def view_on_site_icon(self, obj):
+	# 	url = obj.get_absolute_url()  # اطمینان حاصل کنید متد get_absolute_url در مدل تعریف شده
+	# 	return format_html('<a href="{}" target="_blank">View</a>', url)
 
-	view_on_site_icon.short_description = 'View on Site'  # عنوان ستون در ادمین
-	view_on_site_icon.allow_tags = True
+	# view_on_site_icon.short_description = 'View on Site'  # عنوان ستون در ادمین
+	# view_on_site_icon.allow_tags = True
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):

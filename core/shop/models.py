@@ -300,7 +300,7 @@ class ProductColor(models.Model):
 class Product(models.Model):
 	category = models.ManyToManyField(Category)
 	name = models.CharField(max_length=200)
-	slug = models.CharField(max_length=200, unique=True,default='محصول-جدید' ,blank=True)
+	slug = models.CharField(max_length=200,default='محصول-جدید' ,blank=True)
 	description = RichTextField()
 	features = RichTextField()
 	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه')
@@ -472,19 +472,13 @@ class Product(models.Model):
 		return list(related_products)
 	
 	def save(self, *args, **kwargs):
-		# اگر اسلاگ خالی است، اسلاگ بساز
-		base_slug = slugify(self.name)
-		slug = base_slug
+		slug = self.name.replace(' ','-').replace('/','')
 		counter = 1
-		
-		# بررسی تکراری بودن اسلاگ
 		while Product.objects.filter(slug=slug).exists():
-			slug = f"{base_slug}-{counter}"  # اسلاگ را با عددی به انتهای آن تغییر بده
+			slug = f"{slug}-{counter}"
 			counter += 1
-		
 		self.slug = slug
-		
-		super().save(*args, **kwargs)  # ذخیره مدل
+		super().save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.name}'
