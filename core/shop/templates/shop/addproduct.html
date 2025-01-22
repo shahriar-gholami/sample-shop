@@ -1,250 +1,211 @@
-{% extends "base.html" %}
 {% load static %}
+<!doctype html>
+<html dir="rtl" lang="fa-IR">
 
-{% block meta %}
-<meta charset="UTF-8">
-<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
-<meta content="IE=edge" http-equiv="X-UA-Compatible">
-<meta name="description" content="{{ store.meta_description }}">
-<meta content="PicoSite" name="author">
-<meta name="keywords" content="{{store.meta_keywords}}">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="{{store.get_canonical}}">
+<head>
 
-<!-- Open Graph tags -->
-<meta property="og:title" content="{{store.meta_og_title}}">
-<meta property="og:description" content="{{meta_og_description}}">
-<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
-<meta property="og:url" content="{{store.get_canonical}}">
-<meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="پیکوسایت بهترین سایت ساز و فروشگاه ساز آنلاین رایگان در ایران. با استفاده از سایت ساز پیکو سایت شما می‌توانید در کمتر از دو دقیقه سایت فروشگاهی حرفه‌ای داشته باشید.">
+    <meta content="PicoSite" name="author">
+    <meta name="keywords" content="سایت ساز رایگان, فروشگاه ساز رایگان, سایت ساز پیکوسایت,سایت ساز پیکو سایت,فروشگاه ساز پیکو سایت,طراحی سایت فروشگاهی,طراحی سایت رایگان,فروشگاه ساز آنلاین">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://picosite.ir">
 
-<!-- Twitter Card tags -->
-<meta name="twitter:card" content="Summary Card with Large Image">
-<meta name="twitter:title" content="{{store.meta_tc_title}}">
-<meta name="twitter:description" content="{{store.meta_tc_description}}">
-<meta name="twitter:image" content="{{store.get_logo_image}}">
-{% endblock %}
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="پیکوسایت فروشگاه ساز رایگان">
+    <meta property="og:description" content="Your Open Graph description here">
+    <meta property="og:image" content="https://marketplace-bucket.storage.iran.liara.space/%D9%81%D8%A7%D9%88%D8%A2%DB%8C%DA%A9%D9%88%D9%86%20%D9%BE%DB%8C%DA%A9%D9%88%D8%B3%D8%A7%DB%8C%D8%AA.png" rel="shortcut icon" type="image/x-icon">
+    <meta property="og:url" content="https://picosite.ir">
+    <meta property="og:type" content="website">
 
-{% block title %}افزودن محصول{% endblock %}
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="Summary Card with Large Image">
+    <meta name="twitter:title" content="پیکوسایت، فروشگاه ساز رایگان">
+    <meta name="twitter:description" content="با استفاده از پیکوسایت شما می‌توانید سایت فروشگاهی خودتان را در کمتر از دو دقیقه به رایگان راه اندازی نمایید">
+    <meta name="twitter:image" content="{{store.get_logo_image}}">
 
-{% block content %}
+    <!-- FAVICON -->
+    <link href="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon"/>
 
-    
-    <!--app-content open-->
-    <div class="main-content app-content mt-0">
-        <div class="side-app">
+    <!-- TITLE -->
+    <title>افزودن محصول</title>
 
-            <!-- CONTAINER -->
-            <div class="main-container container-fluid">
+    <!-- BOOTSTRAP CSS -->
+    <link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}" id="style" rel="stylesheet"/>
 
-                <!-- PAGE-HEADER -->
-                <div class="page-header">
-                    <h1 class="page-title">افزودن محصول</h1>
-                    <div>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">صفحات</a></li>
-                            <li aria-current="page" class="breadcrumb-item active">افزودن محصول</li>
-                        </ol>
-                    </div>
+    <!-- STYLE CSS -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/plugins.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/dark-style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/transparent-style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/skin-modes.css' %}" rel="stylesheet"/>
+
+    <!--- FONT-ICONS CSS -->
+    <link href="{% static 'assets/css/icons.css' %}" rel="stylesheet"/>
+
+    <!-- COLOR SKIN CSS -->
+    <link href="{% static 'assets/colors/color1.css' %}" id="theme" media="all" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'assets/switcher/css/switcher.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/switcher/demo.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/fonts/styles-fa-num/iran-yekan.css' %}" id="fonts" rel="stylesheet">
+    <link href="{% static 'assets/css/rtl.css' %}" rel="stylesheet"/>
+</head>
+
+<body class="app sidebar-mini rtl login-img">
+
+<!-- BACKGROUND-IMAGE -->
+<div class="">
+
+    <!-- GLOABAL LOADER -->
+    <div id="global-loader">
+        <img alt="Loader" class="loader-img" src="{% static 'assets/images/loader.svg' %}">
+    </div>
+    <!-- /GLOABAL LOADER -->
+
+    <!-- PAGE -->
+    <div class="page">
+        <div class="">
+
+            <!-- CONTAINER OPEN -->
+            <div class="col col-login mx-auto mt-7">
+                <div class="text-center">
+                    <img alt="" class="header-brand-img m-0" src="{{store.get_logo_image}}" height="85">
                 </div>
-                <!-- PAGE-HEADER END -->
-
-                <!-- ROW-1 OPEN -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="card-title">افزودن محصول از دیجی‌کالا</div>
-                            </div>
-                            <form method="post" action="{% url 'shop:add_product_from_dg' %}">
-                                {% csrf_token %}
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label">کد dkp محصول یا محصولات (با خط فاصله - از هم جدا نمایید) <span class="text-red">*</span></label>
-                                                <input name="dkp_code" class="form-control" placeholder="کد محصول یا لیست کد محصولات" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label">دسته‌بندی هدف<span class="text-red">*</span></label>
-                                                <select name="category" class="form-control select2" data-placeholder="انتخاب" type="text" multiple>
-                                                    <option selected="selected" value="0">دسته‌بندی نشده</option>
-                                                    {% for category in categories %}
-                                                    <option value="{{category.id}}">{{category.name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="container-login100-form-btn">
-                                            <button type="submit" class="login100-form-btn btn-primary">افزودن</button>    
-                                        </div>
+            </div>
+            <div class="container-login100">
+                <div class="wrap-login100 p-6">
+                    <form method="post" class="login100-form validate-form" onsubmit="return validateForm()">
+                        {% csrf_token %}
+                            <span class="login100-form-title">
+									استخراج محصول از دیجی‌کالا
+								</span>
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">کد dkp محصول یا محصولات (با خط فاصله - از هم جدا نمایید) <span class="text-red">*</span></label>
+                                        <input name="dkp_code" class="form-control" placeholder="کد محصول یا لیست کد محصولات" type="text">
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="card-title">افزودن محصول جدید</div>
-                            </div>
-                            <form method="post">
-                                {% csrf_token %}
-
-                                <div class="card-body">
-
-                                    <div class="row mb-4">
-                                        <label class="col-md-3 form-label">نام محصول :</label>
-                                        <div class="col-md-9">
-                                            <input name="name" class="form-control" placeholder="نام محصول" type="text">
-                                            <p class="text-danger">{{ name_message }}</p>
-                                        </div>
-                                    </div>
-
-                                    
-
-                                    <div class="row mb-4">
-                                        <label class="col-md-3 form-label">قیمت :</label>
-                                        <div class="col-md-9">
-                                            <input name="price" class="form-control" placeholder="قیمت به تومان" type="number">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-4">
-                                        <label class="col-md-3 form-label">قیمت تخفیف خورده :</label>
-                                        <div class="col-md-9">
-                                            <input name="sales_price" class="form-control" placeholder="در صورت فعال بودن تخفیف قیمت پس از تخفیف را به تومان وارد نمایید" type="number">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-4">
-                                        <label class="col-md-3 form-label">فعال بودن حراجی :</label>
-
-                                        <div class="col-md-9">
-                                            <p>در حال حاضر حراج {% if product.off_active == True %} فعال {% else %} غیر فعال {% endif %} است.</p>
-                                            <select name="off_active" class="single-select" multiple="multiple">
-                                                <option value="1">حراج فعال</option>
-                                                <option selected="selected" value="0">حراج غیرفعال</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <!-- <div class="row mb-4">
-                                        <label class="col-md-3 form-label">فعال :</label>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label class="custom-control custom-checkbox mb-0">
-                                                    <input class="custom-control-input" name="available"
-                                                        type="checkbox" value="option1">
-                                                    <span class="custom-control-label">اگر محصول فعال است این تیک را بزنید</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>   -->
-
-                                    <div class="row mb-4">
-                                        <label class="col-md-3 form-label">دسته‌بندی :</label>
-                                        <div class="col-md-9">
-                                            <select name="category" class="form-control select2-show-search form-select" data-placeholder="انتخاب" type="text">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">دسته‌بندی هدف<span class="text-red">*</span></label>
+                                        <select name="category" class="form-control select2" data-placeholder="انتخاب" type="text" multiple>
                                             <option selected="selected" value="0">دسته‌بندی نشده</option>
                                             {% for category in categories %}
                                             <option value="{{category.id}}">{{category.name}}</option>
                                             {% endfor %}
                                         </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row mb-4">
-                                        <label class="col-md-3 form-label">برند :</label>
-                                        <div class="col-md-9">
-                                            <input name="brand" class="form-control" placeholder="برند محصول - اگر محصول برند خاصی ندارد خالی گذاشته شود." type="text">
-                                        </div>
-                                    </div>
-
-                                    <div class="row" id="des">
-                                        <label class="col-md-3 form-label mb-4">معرفی محصول :</label>
-                                        <div class="col-md-9 mb-4">
-                                            <textarea ID="description" class="content" name="description">
-توضیحات محصول:
-در این بخش مشخصات محصول خود را در چند پاراگراف کوتاه و ساده شرح دهید.</textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <label class="col-md-3 form-label mb-4">ویژگی‌‌های محصول :</label>
-                                        <div class="col-md-9 mb-4">
-                                            <textarea class="form-control" rows="6" name="features">
-ویژگی‌های شاخص محصول را به این صورت وارد کنید:
-1. عنوان ویژگی اول: مقدار ویژگی اول
-2. عنوان ویژگی دوم: مقدار ویژگی دوم
-3. و الی آخر...
-                                            </textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <label class="col-md-3 form-label mb-4">تگ‌های محصول :</label>
-                                        <div class="col-md-9 mb-4">
-                                            <textarea class="form-control" rows="6" name="tags">‌تگ‌های محوصل خود را وارد نمایید. تگ‌ها را با فشردن دکمه Enter از هم جدا نمایید.</textarea>
-                                        </div>
-                                    </div>
-
-
-
-                                    
-
-                                    
-
-                                    
-
-                                    <!--Row-->
-                                    <!-- <div class="row">
-                                        <label class="col-md-3 form-label mb-4">بارگذاری محصول :</label>
-                                        <div class="col-md-9">
-                                            <input accept=".jpg, .png, image/jpeg, image/png" id="demo" multiple
-                                                name="files" type="file">
-                                        </div>
-                                    </div> -->
-                                    <!--End Row-->
-                                </div>
-
-                                <div class="card-footer">
-                                    <div class="row">
-                                        <div class="col-md-3"></div>
-                                        <div class="container-login100-form-btn">
-                                            <button type="submit" class="login100-form-btn btn-primary">ادامه</button>    
-                                        </div>
                                     </div>
                                 </div>
-
-                            </form>
+                        
+                        <div class="container-login100-form-btn">
+                            <button type="submit" class="login100-form-btn btn-primary" data-bs-target="#modaldemo4" data-bs-toggle="modal">ثبت نام</button>
+                            <a href="{% url 'admin:shop_product_changelist' %}">بازگشت به صفحه محصولات</a>
                         </div>
-                    </div>
+                        
+                        
+                        
+                    </form>
+                    <script>
+                        function validateForm() {
+                            var checkbox = document.getElementById('myCheckbox');
+                            
+                            if (checkbox.checked) {
+                                // Checkbox is checked, allow form submission
+                                return true;
+                            } else {
+                                // Checkbox is not checked, prevent form submission
+                                alert('شما باید قوانین و مقررات استفاده از پیکوسایت را تایید نمایید.');
+                                return false;
+                            }
+                        }
+                        </script>
                 </div>
-                <!-- /ROW-1 CLOSED -->
             </div>
             <!-- CONTAINER CLOSED -->
         </div>
     </div>
-{% endblock %}
+    <!-- END PAGE -->
 
+</div>
 
-{% block js %}
-<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
-<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<div class="modal fade" id="modaldemo4">
+    <div class="modal-dialog modal-dialog-centered text-center " role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-body text-center p-4 pb-5">
+                <button aria-label="Close" class="btn-close position-absolute" data-bs-dismiss="modal"><span
+                        aria-hidden="true">&times;</span></button>
+                <i class="icon icon-check fs-70 text-success lh-1 my-5 d-inline-block"></i>
+                <h4 class="text-success tx-semibold">عملیات در حال انجام!</h4>
+                <p class="mg-b-20 mg-x-20">اطلاعات و تصاویر محصول شما در حال بارگیری است و این فرایند ممکن است تا یک دقیقه به طول انجامد. لطفا تا تکمیل فرایند و انتقال به صفحه بعدی از رفرش کردن یا بستن این تب خودداری نمایید. به محض تکمیل فرایند، به صورت خودکار به صفحه بعدی منتقل خواهید شد.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- BACKGROUND-IMAGE CLOSED -->
+
+<!-- JQUERY JS -->
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<!-- BOOTSTRAP JS -->
 <script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
 <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- SHOW PASSWORD JS -->
+<script src="{% static 'assets/js/show-password.min.js' %}"></script>
+<!-- Perfect SCROLLBAR JS-->
+<script src="{% static 'assets/plugins/p-scroll/perfect-scrollbar.js' %}"></script>
+<!-- Color Theme js -->
+<script src="{% static 'assets/js/themeColors.js' %}"></script>
+<!-- CUSTOM JS -->
 <script src="{% static 'assets/js/custom.js' %}"></script>
+<!-- Custom-switcher -->
+<script src="{% static 'assets/js/custom-swicher.js' %}"></script>
+<!-- Switcher js -->
+<script src="{% static 'assets/switcher/js/switcher.js' %}"></script>
+<!-- MULTI SELECT JS-->
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<!-- Perfect SCROLLBAR JS-->
+<script src="{% static 'assets/plugins/p-scroll/perfect-scrollbar.js' %}"></script>
+<script src="{% static 'assets/plugins/p-scroll/pscroll.js' %}"></script>
+<script src="{% static 'assets/plugins/p-scroll/pscroll-1.js' %}"></script>
+<!-- SIDE-MENU JS -->
+<script src="{% static 'assets/plugins/sidemenu/sidemenu.js' %}"></script>
+<!-- SIDEBAR JS -->
+<script src="{% static 'assets/plugins/sidebar/sidebar.js' %}"></script>
+<!-- FORMELEMENTS JS -->
+<script src="{% static 'assets/js/formelementadvnced.js' %}"></script>
+<script src="{% static 'assets/js/form-elements.js' %}"></script>
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<!-- BOOTSTRAP-DATERANGEPICKER JS -->
+<script src="{% static 'assets/plugins/bootstrap-daterangepicker/moment.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- INTERNAL Bootstrap-Datepicker js-->
+<script src="{% static 'assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'assets/plugins/persian-date-picker/bootstrap-datepicker.min.js' %}"></script>
+<!-- INTERNAL Sumoselect js-->
+<script src="{% static 'assets/plugins/sumoselect/jquery.sumoselect.js' %}"></script>
+<!-- TIMEPICKER JS -->
+<script src="{% static 'assets/plugins/time-picker/jquery.timepicker.js' %}"></script>
+<script src="{% static 'assets/plugins/time-picker/toggles.min.js' %}"></script>
+<!-- INTERNAL intlTelInput js-->
+<script src="{% static 'assets/plugins/intl-tel-input-master/intlTelInput.js' %}"></script>
+<script src="{% static 'assets/plugins/intl-tel-input-master/country-select.js' %}"></script>
+<script src="{% static 'assets/plugins/intl-tel-input-master/utils.js' %}"></script>
+<!-- INTERNAL jquery transfer js-->
+<script src="{% static 'assets/plugins/jQuerytransfer/jquery.transfer.js' %}"></script>
+<!-- INTERNAL multi js-->
+<script src="{% static 'assets/plugins/multi/multi.min.js' %}"></script>
 <script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'assets/plugins/wysiwyag/jquery.richtext.js' %} "></script>
 <script src="{% static 'assets/plugins/wysiwyag/wysiwyag.js' %} "></script>
-<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
-<script src="{% static 'assets/js/select2.js' %}"></script>
-{% endblock %}
+
+</body>
+
+
+</html>
+
+
+
+

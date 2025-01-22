@@ -328,7 +328,6 @@ class Product(models.Model):
 		self.slug = slugify(self.name, allow_unicode=True)
 		super().save(*args, **kwargs)
 
-
 	def get_varieties(self):
 		return Variety.objects.filter(product = self)
 	

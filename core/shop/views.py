@@ -1238,6 +1238,12 @@ def download_and_save_main_image(image_url, product_id):
 
 class AddProductFromDigikalaView(View):
 
+	def get(self, request):
+		form = AddingProductFromDigiForm
+		store = Store.objects.first()
+		categories = Category.objects.all()
+		return render(request, 'shop/addproduct.html', {'form':form, 'categories':categories, 'store':store})
+	
 	def post(self, request):
 
 		form = AddingProductFromDigiForm(request.POST)
@@ -1261,6 +1267,7 @@ class AddProductFromDigikalaView(View):
 					tags = []
 					images = []
 					main_image = ''
+					print('SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
 
 					if item['specifications'][0] == [] or item['specifications'][0] == None:
 						features = []
@@ -1284,7 +1291,7 @@ class AddProductFromDigikalaView(View):
 				except Exception as err:
 					print(f'Other error occurred: {err}')
 
-				store = Store.objects.all().first()
+				store = Store.objects.first()
 				if not description:
 					description = '-'
 				slug = title.replace(' ','-')
@@ -1293,13 +1300,11 @@ class AddProductFromDigikalaView(View):
 				brand = brand
 				product_brand, create = Brand.objects.get_or_create(
 					name = brand,
-					store = store
 				)
 				price = price/10
 				tags = tags
 				new_product = Product.objects.create(
 					name = title,
-					
 					slug = slug,
 					description = description,
 					features = format_features(features),

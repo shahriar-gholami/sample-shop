@@ -9,6 +9,8 @@ import django_jalali.admin as jadmin
 from django_jalali.admin.filters import JDateFieldListFilter
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from django.urls import path
+from . import views
 
 @admin.register(ProductRefClass)
 class ProductRefClassAdmin(admin.ModelAdmin):
@@ -102,6 +104,7 @@ class FilterInline(admin.StackedInline):  # یا admin.TabularInline
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+	change_list_template = 'shop/change_list.html'
 	@admin.display(boolean=True, description='Stock Alarm')
 	def stock_alarm(self, obj):
 		return obj.get_stock_alarm_status()
