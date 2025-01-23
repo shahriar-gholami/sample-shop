@@ -12,20 +12,12 @@ from django.core.exceptions import ValidationError
 from django.urls import path
 from . import views
 
-@admin.register(ProductRefClass)
-class ProductRefClassAdmin(admin.ModelAdmin):
-	list_display = ('name', 'price_coef')
 
 class OtpCodeAdmin(admin.ModelAdmin):
 	list_display = ('phone_number', 'code', 'created')
 	search_fields = ('phone_number',)
 
 admin.site.register(OtpCode, OtpCodeAdmin)
-
-@admin.register(ProductColor)
-class ProductColorAdmin(admin.ModelAdmin):
-	list_display = ('name', 'color_code')  # نمایش فیلدهای اصلی در پنل ادمین
-	search_fields = ('name', 'color_code')
 
 @admin.register(Policy)
 class PolicyAdmin(admin.ModelAdmin):
@@ -41,11 +33,11 @@ class FilterAdmin(admin.ModelAdmin):
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
-	list_display = ('name', 'get_owner_name', 'phone_number', 'shamsi_created_date', 'has_domain','domain_msg', 'has_payment_gw', 'gw_msg', 'has_notif')
-	fields = ('name', 'is_active', 'active_days', 'address', 'country', 'city', 
+	list_display = ('name', 'get_owner_name', 'phone_number', 'shamsi_created_date', 'has_domain', 'has_payment_gw')
+	fields = ('name', 'is_active', 'address', 'country', 'city', 
 			  'about_description', 'instagram', 'telegram', 'linkedin', 'merchant', 
-			  'independent', 'phone_number', 'balance', 'email','show_brands' , 'Layout_body', 'layout_sticky', 
-			  'layout_container', 'color', 'meta_description', 'meta_keywords', 'meta_og_title', 
+			  'phone_number', 'email','show_brands' , 'color', 
+			  'meta_description', 'meta_keywords', 'meta_og_title', 
 			  'meta_og_description', 'meta_tc_title', 'meta_tc_description', 'has_domain', 'has_payment_gw',
 			  'template_index', 'index_title', 'enamad_code')
 
@@ -81,7 +73,7 @@ def erase_stock(modeladmin, request, queryset):
 class ProductImageInline(admin.TabularInline):
 	model = ProductImage
 	extra = 0
-	fields = ('image', 'preview', 'alt_name', 'custom_name')  # افزودن فیلد preview
+	fields = ('image', 'preview', 'alt_name')  # افزودن فیلد preview
 	readonly_fields = ('preview',)  # فقط خواندنی بودن پیش‌نمایش
 
 	def preview(self, obj):
@@ -161,8 +153,8 @@ class CouponAdmin(admin.ModelAdmin):
 	search_fields = ('code',)
 
 class StoreLogoImageAdmin(admin.ModelAdmin):
-	list_display = ('alt_name', 'custom_name', 'created')
-	search_fields = ('alt_name', 'custom_name')
+	list_display = ('alt_name', 'created')
+	search_fields = ('alt_name',)
 	list_filter = ('created',)
 	date_hierarchy = 'created'
 
@@ -184,8 +176,8 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Slide)
 class SlideAdmin(admin.ModelAdmin):
-	list_display = ('index', 'alt_name', 'custom_name', 'image_preview', 'created')
-	search_fields = ['alt_name', 'custom_name']
+	list_display = ('index', 'alt_name', 'image_preview', 'created')
+	search_fields = ['alt_name', ]
 	autocomplete_fields = ['category', 'tag']
 
 	def image_preview(self, obj):
@@ -196,8 +188,8 @@ class SlideAdmin(admin.ModelAdmin):
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-	list_display = ('index', 'alt_name', 'custom_name', 'image_preview', 'size','created')
-	search_fields = ['alt_name', 'custom_name']
+	list_display = ('index', 'alt_name', 'image_preview', 'size','created')
+	search_fields = ['alt_name',]
 	autocomplete_fields = ['category', 'tag']
 
 	def image_preview(self, obj):
@@ -255,13 +247,11 @@ admin.site.register(FeaturedCategories, FeaturedCategoriesAdmin)
 class SubscriptionAdmin(admin.ModelAdmin):
 	list_display = ('email',)
 
-@admin.register(Services)
-class ServicesAdmin(admin.ModelAdmin):
-	list_display = ('delivery', 'originality', 'payments')
 
 class CustomerAdmin(admin.ModelAdmin):
 	list_display = ('phone_number', 'email', 'full_name', 'is_active', 'is_verified', 'city', 'zip_code', 'created_date', 'updated_date')
 	search_fields = ['phone_number', 'full_name']
+	autocomplete_fields = ['favorites',]
 
 admin.site.register(Customer, CustomerAdmin)
 

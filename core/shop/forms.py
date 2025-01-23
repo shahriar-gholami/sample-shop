@@ -2,7 +2,7 @@
 from django import forms
 from django.utils import timezone
 from django.forms import modelformset_factory
-from .models import Store, Slide, Delivery, Category, ProductImage, Comment, Product, Variety, Coupon, OrderStatus, Size
+from .models import *
 from ckeditor.widgets import CKEditorWidget
 from django.core import validators
 
@@ -87,14 +87,8 @@ class EditFilterTitleForm(forms.Form):
         
 class FilterProductsForm(forms.Form):
     category = forms.CharField(required=False)
-    # size = forms.MultipleChoiceField(
-    #     choices = [(size.id, size.name) for size in Size.objects.all()],
-    #     widget=forms.SelectMultiple(attrs={'class': 'filter-multi'},),
-    #     required=False
-    # )
     price_range = forms.CharField(required=False)
     brand = forms.CharField(required=False)
-    color = forms.CharField(required=False)
 
 class CartEditForm(forms.Form):
     count = forms.IntegerField()

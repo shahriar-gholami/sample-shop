@@ -1,7 +1,6 @@
 {% extends "base_4.html" %}
 {% load static %}
 {% load humanize %}
-
 {% block meta %}
 <meta charset="UTF-8">
 <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
@@ -26,16 +25,8 @@
 <meta name="twitter:image" content="{{store.get_logo_image}}">
 {% endblock %}
 
-{% block title %}صفحه نخست{% endblock %}
+{% block title %}{{store.index_title}}{% endblock %}
 {% block content %}
-{% if store.has_domain == True %}
-<script>
-    // Replace the common part of the URL with an empty string
-    var currentUrl = window.location.href;
-    var newUrl = currentUrl.replace('/shop/{{store.name}}/', '/');
-    history.replaceState(null, null, newUrl);
-</script>
-{% endif %}
 
  
  <!--============ start main slider ==============-->
@@ -106,14 +97,14 @@
                                                 <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                                     <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
                                                         {{ product.price|intcomma }}</p>
-                                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma }}
                                                         تومان</h6>
                                                 </div>
                                             </div>
                                         {% else %}
                                             <div >
                                                 <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                                    <h6 class="font-18 title-font new-price">{{product.price|intcomma }} تومان</h6>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -230,11 +221,6 @@
                          <span>بندی</span>
                      </h4>
                  </div>
-                 <div class="col-lg-4 col-6">
-                     <div class="text-end">
-                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
-                     </div>
-                 </div>
              </div>
          </div>
          <div class="row g-4">
@@ -271,37 +257,41 @@
                  <div class="swiper-slide ml-0">
                      <div class="d-flex justify-content-center align-items-center flex-column">
                          <img src="{% static 'assets4/image/amazingv2.png' %}" class="img-fluid amazing-image" alt="">
-                         <a href="" class="mt-2 text-white">مشاهده همه <i class="bi bi-arrow-left-short"></i></a>
+                         <a href="{% url 'shop:product_list' %}" class="mt-2 text-white">مشاهده همه <i class="bi bi-arrow-left-short"></i></a>
                      </div>
                  </div>
                  {% for product in products %}
                  {% if product.off_active == True %}
                  <div class="swiper-slide">
                      <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{{product.get_main_image}}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">{{product.name}}
-                                 </p>
-                             </div>
-                         </div>
+                        <a href="">
+                            <div class="product-image">
+                                <img alt="" class="img-fluid"
+                                    src="{{product.get_main_image}}">
+                            </div>
+                        </a>
+                         <a href="{% url 'shop:product_detail' product.slug %}">
+                            <div class="product-title">
+                                <div class="title">
+                                    <p class="title-font font-14">{{product.name}}
+                                    </p>
+                                </div>
+                            </div>
+                         </a>
                          <div class="product-action flex-column mt-3">
                             {% if product.off_active == True %}
                             <div >
                                 <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                     <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
-                                        {{ product.price|intcomma }}</p>
-                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                        {{ product.price|intcomma  }}</p>
+                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma }}
                                         تومان</h6>
                                 </div>
                             </div>
                             {% else %}
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma }} تومان</h6>
                                     </div>
                                 </div>
                             {% endif %}
@@ -391,15 +381,15 @@
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                         <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
-                                            {{ product.price|intcomma }}</p>
-                                        <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                            {{ product.price|intcomma  }}</p>
+                                        <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma }}
                                             تومان</h6>
                                     </div>
                                 </div>
                             {% else %}
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma }} تومان</h6>
                                     </div>
                                 </div>
                             {% endif %}
@@ -1131,8 +1121,8 @@
                                             <div >
                                                 <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
                                                     <p class="mb-0 old-price font-10 text-muted-two text-decoration-line-through me-3">
-                                                        {{ product.get_class_price|intcomma }}</p>
-                                                    <p class="title-font fs-10 new-price">{{product.sales_price|intcomma}}
+                                                        {{ product.get_class_price|intcomma  }}</p>
+                                                    <p class="title-font fs-10 new-price">{{product.sales_price|intcomma }}
                                                         تومان</p>
                                                 </div>
                                             </div>
@@ -1140,8 +1130,8 @@
                                             <div >
                                                 <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
                                                     <p class="mb-0 old-price font-10 text-muted-two text-decoration-line-through me-3">
-                                                        {{ product.price|intcomma }}</p>
-                                                    <p class="title-font fs-10 new-price">{{product.sales_price|intcomma}}
+                                                        {{ product.price|intcomma  }}</p>
+                                                    <p class="title-font fs-10 new-price">{{product.sales_price|intcomma }}
                                                         تومان</p>
                                                 </div>
                                             </div>
@@ -1151,7 +1141,7 @@
                                             <div >
                                                 <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
                                                     
-                                                    <p class="title-font fs-10 new-price">{{product.get_class_price|intcomma}}
+                                                    <p class="title-font fs-10 new-price">{{product.get_class_price|intcomma }}
                                                         تومان</p>
                                                 </div>
                                             </div>
@@ -1159,7 +1149,7 @@
                                         <div >
                                             <div class="cart-canvas-price my-3 d-flex align-items-center justify-content-between">
                                                 
-                                                <h6 class="title-font fs-10 new-price">{{product.price|intcomma}}
+                                                <h6 class="title-font fs-10 new-price">{{product.price|intcomma }}
                                                     تومان</h6>
                                             </div>
                                         </div>

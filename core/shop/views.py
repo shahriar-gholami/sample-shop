@@ -53,12 +53,11 @@ class IndexView(View):
 		small_banners = Banner.objects.filter(size='1/2')
 		big_banners = Banner.objects.filter(size='1')
 		posts = BlogPost.objects.all()
-		services = Services.objects.all().first()
 		products = Product.objects.all()
 		to_products = f'{current_app_name}:product_detail'
 		featured_categories = FeaturedCategories.objects.all().first()
 		most_viewed_products = Product.objects.order_by('-views')[:8]
-		return render(request, f'{current_app_name}/index_{store.template_index}.html', {'services':services,
+		return render(request, f'{current_app_name}/index_{store.template_index}.html', {
 																				   'store':store,
 																				   'posts':posts,
 																				   'featured_categories':featured_categories,
@@ -264,17 +263,13 @@ class ProductListView(View):
 			products = paginator.page(paginator.num_pages)
 		brands = Brand.objects.all()
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
-		colors = ProductColor.objects.all()
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
-	 			'colors': colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
 				'brands':brands,
-				'sizes':sizes,
 				'price_ranges':price_ranges})
 	
 	def post(self, request, *args, **kwargs):
@@ -343,26 +338,10 @@ class ProductListView(View):
 			if filtered_products != []:
 				products = products.filter(id__in=filtered_products)
 			if selected_price_range != None and filtered_products == []:
-				products = []
-
-			filtered_products = []
-			color = form.cleaned_data['color']
-			if color != '0' and color != '':
-				selected_color = ProductColor.objects.filter(id = int(form.cleaned_data['color'])).first()
-			else:
-				selected_color = None
-			if selected_color != None:
-				for product in products:
-					if selected_color in product.color.all():
-						filtered_products.append(product.id)
-			if filtered_products != []:
-				products = products.filter(id__in=filtered_products)
-			if selected_color != None and filtered_products == []:
-				products = []
+				products = []			
 			
 			store = Store.objects.get(name=store_name)
 			products_urls = f'{current_app_name}:product_detail'
-			sizes = Size.objects.all()
 			price_ranges = PriceRange.objects.all()
 
 			my_forms = []
@@ -406,16 +385,12 @@ class ProductListView(View):
 				# اگر شماره صفحه بیشتر از تعداد کل صفحات است
 				products = paginator.page(paginator.num_pages)
 
-			colors = ProductColor.objects.all()
-
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				 {'products': products, 
-	  			'colors': colors,
 				'brands':brands,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
 				'price_ranges':price_ranges,
 				'selected_brand':selected_brand,
 				'selected_price_range':selected_price_range,
@@ -450,7 +425,6 @@ class FilterTagProducts(View):
 			products = paginator.page(paginator.num_pages)
 		brands = Brand.objects.all()
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
@@ -458,7 +432,6 @@ class FilterTagProducts(View):
 				'store_name':store_name, 
 				'categories':categories,
 				'brands':brands,
-				'sizes':sizes,
 				'price_ranges':price_ranges})
 
 class FeaturedProductListView(View):
@@ -487,7 +460,6 @@ class FeaturedProductListView(View):
 		except EmptyPage:
 			products = paginator.page(paginator.num_pages)
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
 		items_per_page = 12
 		paginator = Paginator(products, items_per_page)
@@ -499,15 +471,12 @@ class FeaturedProductListView(View):
 		except EmptyPage:
 			products = paginator.page(paginator.num_pages)
 		brands = Brand.objects.all()
-		colors = ProductColor.objects.all() 		
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html',
-				 {'products': products, 
+				{'products': products, 
 	  			'brands': brands,
-				'colors': colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
 				'price_ranges':price_ranges})
 	
 class SpecialProductsListView(View):
@@ -537,7 +506,6 @@ class SpecialProductsListView(View):
 		except EmptyPage:
 			products = paginator.page(paginator.num_pages)
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
 		items_per_page = 12
 		paginator = Paginator(products, items_per_page)
@@ -549,15 +517,12 @@ class SpecialProductsListView(View):
 		except EmptyPage:
 			products = paginator.page(paginator.num_pages)
 		brands = Brand.objects.all()
-		colors = ProductColor.objects.all() 		
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html',
 				 {'products': products, 
 	  			'brands': brands,
-				'colors': colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
 				'price_ranges':price_ranges})
 
 class AddToFavoritesView(View):
@@ -631,7 +596,6 @@ class CategoryProductsListView(View):
 
 		products = list(products)
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
 		paginator = Paginator(products, 12)
 		page = request.GET.get('page', 1)
@@ -643,14 +607,11 @@ class CategoryProductsListView(View):
 		except EmptyPage:
 			products = paginator.page(paginator.num_pages)
 
-		colors = ProductColor.objects.all()
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
-	 			'colors': colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
 				'price_ranges':price_ranges,
 				'category':category,
 				'filters':filters,
@@ -675,7 +636,6 @@ class ProductDetailView(View):
 		message = ''
 		form = PurchaseForm()
 		comments = Comment.objects.filter(product=product)
-		services = Services.objects.all()
 		if isinstance(request.user, AnonymousUser):
 			for key, value in request.session.items():
 					if str(product.id)==key:
@@ -691,7 +651,7 @@ class ProductDetailView(View):
 		products = product.get_related_products()
 		brand = product.brand
 		return render(request, f'{current_app_name}/product_detail_{store.template_index}.html', 
-				{'brand':brand,'services':services,'products':products,'product': product,'comments':comments ,'varieties':varieties,'form':form, 'message':message, 'add_to_cart':add_to_cart_url, 'store_name':store_name})
+				{'brand':brand,'products':products,'product': product,'comments':comments ,'varieties':varieties,'form':form, 'message':message, 'add_to_cart':add_to_cart_url, 'store_name':store_name})
 
 class CommentCreateView(IsCustomerUserMixin, View):
 
@@ -1007,7 +967,6 @@ class SearchResultsView(View):
 		store_name = store.name
 		products = Product.objects.filter(name__icontains=search_item)
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
 		categories = Category.objects.all()
 		paginator = Paginator(products, 12)
@@ -1022,7 +981,6 @@ class SearchResultsView(View):
 													'to_products':products_urls, 
 													'store_name':store_name, 
 													'categories':categories,
-													'sizes':sizes,
 													'price_ranges':price_ranges})
 class SearchView(View):
 
@@ -1210,7 +1168,6 @@ def format_features(features_list):
 
 def download_and_save_images(image_urls, product_id):
 	product = Product.objects.get(id=product_id)
-	store = product.store
 	for url in image_urls:
 		response = requests.get(url)
 		if response.status_code == 200:
@@ -1224,7 +1181,6 @@ def download_and_save_images(image_urls, product_id):
 
 def download_and_save_main_image(image_url, product_id):
 	product = Product.objects.get(id=product_id)
-	store = product.store
 	url = image_url
 	response = requests.get(url)
 	if response.status_code == 200:
@@ -1305,7 +1261,6 @@ class AddProductFromDigikalaView(View):
 				tags = tags
 				new_product = Product.objects.create(
 					name = title,
-					slug = slug,
 					description = description,
 					features = format_features(features),
 					brand = product_brand.name,
@@ -1349,17 +1304,13 @@ class SpecialProductListView(View):
 			products = paginator.page(paginator.num_pages)
 		brands = Brand.objects.all()
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
-		colors = ProductColor.objects.all() 
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
-	 			'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
 				'brands':brands,
-				'sizes':sizes,
 				'price_ranges':price_ranges})
 	
 	def post(self, request, tag_name, *args, **kwargs):
@@ -1411,7 +1362,6 @@ class SpecialProductListView(View):
 			categories = Category.objects.all()
 			store = Store.objects.get(name=store_name)
 			products_urls = f'{current_app_name}:product_detail'
-			sizes = Size.objects.all()
 			price_ranges = PriceRange.objects.all()
 			brands = Brand.objects.all()
 			if brand != '0':
@@ -1459,15 +1409,12 @@ class SpecialProductListView(View):
 			except EmptyPage:
 				# اگر شماره صفحه بیشتر از تعداد کل صفحات است
 				products = paginator.page(paginator.num_pages)
-			colors = ProductColor.objects.all() 
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				 {'products': products, 
 				'brands':brands,
-				'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
 				'price_ranges':price_ranges,
 				'selected_brand':selected_brand,
 				'selected_price_range':selected_price_range,
@@ -1501,17 +1448,13 @@ class BrandProductListView(View):
 			products = paginator.page(paginator.num_pages)
 		brands = Brand.objects.all()
 		products_urls = f'{current_app_name}:product_detail'
-		sizes = Size.objects.all()
 		price_ranges = PriceRange.objects.all()
-		colors = ProductColor.objects.all() 
 		return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				{'products': products, 
-	 			'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
 				'brands':brands,
-				'sizes':sizes,
 				'price_ranges':price_ranges})
 	
 	def post(self, request, brand_name, *args, **kwargs):
@@ -1564,7 +1507,6 @@ class BrandProductListView(View):
 			categories = Category.objects.all()
 			store = Store.objects.get(name=store_name)
 			products_urls = f'{current_app_name}:product_detail'
-			sizes = Size.objects.all()
 			price_ranges = PriceRange.objects.all()
 			brands = Brand.objects.all()
 			if brand != '0':
@@ -1612,15 +1554,12 @@ class BrandProductListView(View):
 			except EmptyPage:
 				# اگر شماره صفحه بیشتر از تعداد کل صفحات است
 				products = paginator.page(paginator.num_pages)
-			colors = ProductColor.objects.all() 
 			return render(request, f'{current_app_name}/product_list_{store.template_index}.html', 
 				 {'products': products, 
 				'brands':brands,
-				'colors':colors,
 				'to_products':products_urls, 
 				'store_name':store_name, 
 				'categories':categories,
-				'sizes':sizes,
 				'price_ranges':price_ranges,
 				'selected_brand':selected_brand,
 				'selected_price_range':selected_price_range,

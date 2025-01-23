@@ -1,4 +1,6 @@
 from django.db import models
+from ckeditor.fields import RichTextField
+from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
 from khayyam import JalaliDatetime
@@ -8,14 +10,11 @@ from django.utils.translation import gettext_lazy as _
 from ckeditor.fields import RichTextField
 from bs4 import BeautifulSoup
 import jdatetime
-from datetime import timedelta
 from django_jalali.db import models as jmodels
 from datetime import date
 from django.templatetags.static import static
 from PIL import Image
 from django.utils.text import slugify
-from django.core.exceptions import ValidationError
-
 
 
 def date2jalali(g_date):
@@ -28,60 +27,56 @@ class Policy(models.Model):
 	rules_and_policies = models.TextField(default='قوانین و مقررات کلی سایت و سیاست‌های حریم خصوصی', verbose_name='قوانین و مقررات')
 
 	class Meta:
-		verbose_name = _("قوانین و سیاست‌ها")
+		verbose_name = "قوانین و سیاست‌ها"
+		verbose_name_plural = "قوانین و سیاست‌ها"
 
 class Store(models.Model):
-	name = models.CharField(max_length=250, unique=True)
-	is_active = models.BooleanField(default = False)
-	active_days = models.PositiveIntegerField(default=0)
-	address = models.CharField(max_length = 500, null=True, blank=True)
-	country = models.CharField(max_length = 250, default = 'iran')
-	city = models.CharField(max_length = 250, default='tehran')
-	about_description = models.TextField(default = "درباره فروشگاه، خدمات و سوابق آن")
-	instagram = models.CharField(max_length=250, null=True, blank=True)
-	telegram = models.CharField(max_length=250, null=True, blank=True)
-	linkedin = models.CharField(max_length=250, null=True, blank=True)
-	merchant = models.CharField(max_length=250, null=True, blank=True)
-	independent = models.BooleanField(default=False)
-	phone_number = models.CharField(max_length = 250, null=True, blank = True)
-	balance = models.IntegerField(default=0)
-	email = models.EmailField(blank=True)
-	Layout_body = models.CharField(max_length = 250, default='app rtl light-mode scrollable-layout color-menu horizontal')
-	layout_sticky = models.CharField(max_length = 250, default = 'header sticky hor-header')
-	layout_container = models.CharField(max_length = 250, default= 'main-container container')
-	color = models.CharField(max_length = 250, default = '0,0,0')
-	created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-	meta_description = models.TextField(default='فروشگاه اینترنتی ساخته شده با سایت ساز رایگان پیکوسایت')
-	meta_keywords = models.TextField(default='ساخته شده با فروشگاه ساز پیکوسایت, فروشگاه اینترنتی, فروشگاه آنلاین, سایت ساز پیکوسایت')
-	meta_og_title = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	meta_og_description = models.TextField( default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	meta_tc_title = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	meta_tc_description = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت')
-	has_domain = models.BooleanField(default=False)
-	has_payment_gw = models.BooleanField(default=False)
-	show_brands = models.BooleanField(default=False)
-	template_index = models.IntegerField(default = 1)
-	index_title = models.CharField(max_length=250, null=True, blank=True, default='خانه')
-	enamad_code = models.CharField(max_length=1000, null=True, blank=True, default='none')
-	domain_msg = models.BooleanField(default=False)
-	gw_msg = models.BooleanField(default=False)
-	has_notif = models.BooleanField(default=False) 
-	domain = models.CharField(max_length=250, null=True, blank=True)
+	name = models.CharField(max_length=250, unique=True, verbose_name='عنوان')
+	is_active = models.BooleanField(default = False, verbose_name='فعال')
+	address = models.CharField(max_length = 500, null=True, blank=True, verbose_name='آدرس')
+	country = models.CharField(max_length = 250, default = 'iran', verbose_name='کشور')
+	city = models.CharField(max_length = 250, default='tehran', verbose_name='شهر')
+	about_description = models.TextField(default = "درباره فروشگاه، خدمات و سوابق آن", verbose_name='توضیحات')
+	instagram = models.CharField(max_length=250, null=True, blank=True, verbose_name='اینستاگرام')
+	telegram = models.CharField(max_length=250, null=True, blank=True, verbose_name='تلگرام')
+	linkedin = models.CharField(max_length=250, null=True, blank=True, verbose_name='لینکدین')
+	merchant = models.CharField(max_length=250, null=True, blank=True, verbose_name='مرچنت کد')
+	phone_number = models.CharField(max_length = 250, null=True, blank = True, verbose_name='شماره تماس')
+	email = models.EmailField(blank=True, verbose_name='ایمیل')
+	# Layout_body = models.CharField(max_length = 250, default='app rtl light-mode scrollable-layout color-menu horizontal')
+	# layout_sticky = models.CharField(max_length = 250, default = 'header sticky hor-header')
+	# layout_container = models.CharField(max_length = 250, default= 'main-container container')
+	color = models.CharField(max_length = 250, default = '0,0,0', verbose_name='رنگ اصلی')
+	created = models.DateTimeField(auto_now_add=True, null=True, blank=True, verbose_name='تاریخ ایجاد')
+	meta_description = models.TextField(default='فروشگاه اینترنتی ساخته شده با سایت ساز رایگان پیکوسایت', verbose_name='توضیحات متا')
+	meta_keywords = models.TextField(default='ساخته شده با فروشگاه ساز پیکوسایت, فروشگاه اینترنتی, فروشگاه آنلاین, سایت ساز پیکوسایت', verbose_name='کلمات کلیدی')
+	meta_og_title = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت', verbose_name='عنوان OpenGrapg')
+	meta_og_description = models.TextField( default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت', verbose_name='توضیحات OpenGrapg')
+	meta_tc_title = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت', verbose_name='عنوان کارت توییتر')
+	meta_tc_description = models.TextField(default= 'فروشگاه اینترنتی ساخته شده با پیکوسایت', verbose_name='توضیحات کارت توییتر')
+	has_domain = models.BooleanField(default=False, verbose_name='دامنه فعال')
+	has_payment_gw = models.BooleanField(default=False, verbose_name='درگاه پرداخت فعال')
+	show_brands = models.BooleanField(default=False, verbose_name='نمایش برندها')
+	template_index = models.IntegerField(default = 1, verbose_name='شماره قالب')
+	index_title = models.CharField(max_length=250, null=True, blank=True, default='خانه', verbose_name='عنوان صفحه نخست')
+	enamad_code = models.CharField(max_length=1000, null=True, blank=True, default='none', verbose_name='کد ای‌نماد')
+	domain = models.CharField(max_length=250, null=True, blank=True, verbose_name='دامنه')
 
 	
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ راه‌اندازی"
 
 	def get_special_tags(self):
 		return [tag for tag in Tag.objects.filter(is_special = True)]
 
 	def get_special_tags_products(self):
-		special_products = []
+		special_products = set()
 		for tag in self.get_special_tags():
 			tag_products = tag.get_products()
 			for product in tag_products:
-				special_products.append(product)
+				special_products.add(product)
 		return special_products
 
 	def get_absolute_url(self):
@@ -126,45 +121,50 @@ class Store(models.Model):
 	
 	def __str__(self):
 		return f'{self.name}'
+	
+	class Meta:
+		verbose_name = "فروشگاه"
+		verbose_name_plural = "فروشگاه"
 
 class DefaultCategory(models.Model):
-	parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='scategory', null=True, blank=True)
-	is_sub = models.BooleanField(default=False)
-	name = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=200, unique=True)
+	parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='scategory', null=True, blank=True, verbose_name = 'دسته‌بندی مادر')
+	is_sub = models.BooleanField(default=False, verbose_name = 'آیا زیردسته است؟')
+	name = models.CharField(max_length=200, verbose_name = 'عنوان دسته')
+	slug = models.SlugField(max_length=200, unique=True, verbose_name = 'نامک')
 
 	class Meta:
 		ordering = ('name',)
-		verbose_name = 'category'
-		verbose_name_plural = 'categories'
+		verbose_name = 'دسته‌بندی‌های پیش‌فرض'
+		verbose_name_plural = 'دسته‌بندی‌های پیش‌فرض'
 
 	def __str__(self):
 		return self.name
 
-class Size(models.Model):
-	name = models.CharField(max_length=250)
-
 class PriceRange(models.Model):
-	min_value = models.IntegerField()
-	max_value = models.IntegerField()
+	min_value = models.IntegerField(verbose_name='کمترین مقدار')
+	max_value = models.IntegerField(verbose_name='بیشترین مقدار')
+
+	class Meta:
+		verbose_name = 'رنج‌های قیمتی'
+		verbose_name_plural = 'رنج‌های قیمتی'
 
 	def __str__(self):
 		return f'{self.min_value} - {self.max_value} تومان'
 
 class Customer(models.Model):
-	phone_number = models.CharField(max_length = 11)
-	email = models.EmailField(null=True, blank=True)
-	full_name = models.CharField(max_length = 250, default = 'کاربر میهمان')
-	otp_token = models.IntegerField(null=True, blank= True)
-	is_active = models.BooleanField(default=True)
-	is_verified = models.BooleanField(default=False)
-	city = models.CharField(max_length = 250, default = 'Tehran')
-	zip_code = models.CharField(max_length = 10, default = '1234567890')
-	address = models.CharField(max_length = 250, default = 'نام محله - بلوار اصلی - خیابان اصلی - خیابان فرعی - کوچه - پلاک - واحد')
-	favorites = models.ManyToManyField('Product', blank=True)
-	created_date = models.DateTimeField(auto_now_add=True, null=True, blank = True)
-	updated_date = models.DateTimeField(auto_now_add=True, null=True, blank = True)
-	wallet_balance = models.IntegerField(default=0, null=True, blank=True)
+	phone_number = models.CharField(max_length = 11, verbose_name = 'شماره تماس')
+	email = models.EmailField(null=True, blank=True, verbose_name = 'ایمیل')
+	full_name = models.CharField(max_length = 250, default = 'کاربر میهمان', verbose_name = 'نام و نام خانوادگی')
+	otp_token = models.IntegerField(null=True, blank= True, verbose_name = 'کد OTP')
+	is_active = models.BooleanField(default=True, verbose_name = 'فعال')
+	is_verified = models.BooleanField(default=False, verbose_name = 'تایید')
+	city = models.CharField(max_length = 250, default = 'Tehran', verbose_name = 'شهر')
+	zip_code = models.CharField(max_length = 10, default = '1234567890', verbose_name = 'کد پستی')
+	address = models.CharField(max_length = 250, default = 'نام محله - بلوار اصلی - خیابان اصلی - خیابان فرعی - کوچه - پلاک - واحد', verbose_name = 'آدرس')
+	favorites = models.ManyToManyField('Product', blank=True, verbose_name = 'علاقمندی‌ها')
+	created_date = models.DateTimeField(auto_now_add=True, null=True, blank = True, verbose_name = 'تاریخ ثبت‌نام')
+	updated_date = models.DateTimeField(auto_now_add=True, null=True, blank = True, verbose_name = 'آخرین بروزرسانی')
+	wallet_balance = models.IntegerField(default=0, null=True, blank=True, verbose_name = 'اعتبار کیف پول')
 
 	def get_total_purchase(self):
 		status = OrderStatus.objects.get(id=1)
@@ -178,43 +178,61 @@ class Customer(models.Model):
 		status = OrderStatus.objects.get(id=1)
 		orders_count = Order.objects.filter(customer=self, status=status).count()
 		return orders_count
+	
+	class Meta:
+		verbose_name = 'مشتریان'
+		verbose_name_plural = 'مشتریان'
 
 	
 	def __str__(self):
 		return self.phone_number
 		
 class Owner(models.Model):
-	phone_number = models.CharField(max_length=11)
-	full_name = models.CharField(max_length=250)
+	phone_number = models.CharField(max_length=11, verbose_name = 'شماره تماس')
+	full_name = models.CharField(max_length=250, verbose_name = 'نام و نام خانوادگی')
+
+	class Meta:
+		verbose_name = 'مدیران فروشگاه'
+		verbose_name_plural = 'مدیران فروشگاه'
 
 	def __str__(self):
 		return f'{self.full_name}'
 
 class OtpCode(models.Model):
-	phone_number = models.CharField(max_length=11)
-	code = models.PositiveSmallIntegerField()
-	created = models.DateTimeField(auto_now=True)
+	phone_number = models.CharField(max_length=11, verbose_name='شماره تماس')
+	code = models.PositiveSmallIntegerField(verbose_name='کد')
+	created = models.DateTimeField(auto_now=True, verbose_name='تاریخ ایجاد')
 
 	class Meta:
 		ordering = ['-created']
+		verbose_name = 'کدهای OTP'
+		verbose_name_plural = 'کدهای OTP'
 
 	def __str__(self):
 		return f'{self.phone_number} - {self.code} - {self.created}'	
 
 class Delivery(models.Model):
-	name = models.CharField(max_length = 250)
-	price = models.IntegerField()
-	min_cart_free = models.IntegerField(default=2000000) 
-	min_cart_free_active = models.BooleanField(default=False)
+	name = models.CharField(max_length = 250, verbose_name = 'عنوان')
+	price = models.IntegerField( verbose_name = 'هزینه (تومان)')
+	min_cart_free = models.IntegerField(default=2000000, verbose_name = 'حداقل مبلغ سبد برای ارسال رایگان') 
+	min_cart_free_active = models.BooleanField(default=False, verbose_name = 'فعال بودن ارسال رایگان برای مبالغ بالا')
+
+	class Meta:
+		verbose_name = 'شیوه‌های ارسال'
+		verbose_name_plural = 'شیوه‌های ارسال'
 
 	def __str__(self):
 		return f'{self.name} + {self.price} تومان '
 
 
 class Tag(models.Model):
-	name = models.CharField(max_length=200)
-	slug = models.CharField(max_length=200)
-	is_special = models.BooleanField(default=False)
+	name = models.CharField(max_length=200, verbose_name = 'عنوان')
+	slug = models.CharField(max_length=200, verbose_name = 'نامک')
+	is_special = models.BooleanField(default=False, verbose_name = 'تگ ویژه')
+
+	class Meta:
+		verbose_name = 'تگ‌ها'
+		verbose_name_plural = 'تگ‌ها'
 
 	def get_products(self):
 		return self.product_set.all()
@@ -223,15 +241,15 @@ class Tag(models.Model):
 		return f'{self.name} \n'
 
 class Category(models.Model):
-	parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='scategory', null=True, blank=True)
-	is_sub = models.BooleanField(default=False)
-	name = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=200)
+	parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='scategory', null=True, blank=True, verbose_name='دسته‌بندی مادر')
+	is_sub = models.BooleanField(default=False, verbose_name='معرفی به عنوان زیردسته')
+	name = models.CharField(max_length=200, verbose_name='عنوان')
+	slug = models.SlugField(max_length=200, verbose_name='نامک')
 
 	class Meta:
 		ordering = ('name',)
-		verbose_name = 'category'
-		verbose_name_plural = 'categories'	
+		verbose_name = 'دسته‌بندی‌های محصولات'
+		verbose_name_plural = 'دسته‌بندی‌های محصولات'	
 
 	def get_absolute_url(self):
 		return reverse('shop:category_products', kwargs={'category_slug':self.slug})
@@ -280,48 +298,35 @@ class Category(models.Model):
 		return f'{self.name}'
 	
 class Feature(models.Model):
-	name = models.CharField(max_length = 250)
-	value = models.CharField(max_length = 250)
-	
-class ProductRefClass(models.Model):
-	name = models.CharField(max_length=250)
-	price_coef = models.IntegerField(default=100)
+	name = models.CharField(max_length = 250, verbose_name='عنوان')
+	value = models.CharField(max_length = 250, verbose_name='مقدار')
 
-	def __str__(self):
-		return self.name
+	class Meta:
+		verbose_name = 'ویژگی‌ها'
+		verbose_name_plural = 'ویژگی‌ها'
 
-class ProductColor(models.Model):
-	name = models.CharField(max_length=250)
-	color_code = models.CharField(max_length=250)
-
-	def __str__(self):
-		return self.name
-
-from django.db import models
-from django.utils.text import slugify
-from ckeditor.fields import RichTextField  # فرض بر اینکه از این کتابخانه استفاده می‌کنید
 
 class Product(models.Model):
-	category = models.ManyToManyField(Category)
-	name = models.CharField(max_length=200)
-	slug = models.CharField(max_length=200, unique=True, blank=True)
-	description = RichTextField()
-	features = RichTextField()
-	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه')
-	price = models.IntegerField()
-	sales_price = models.IntegerField(null=True, blank=True)
-	off_active = models.BooleanField(default=False)
-	tags = models.ManyToManyField(Tag, blank=True)
-	created = models.DateTimeField(auto_now_add=True)
-	updated = models.DateTimeField(auto_now=True)
-	views = models.IntegerField(default=0)
-	meta_description = models.TextField(null=True, blank=True)
-	meta_keywords = models.TextField(null=True, blank=True)
-	meta_og_title = models.TextField(null=True, blank=True)
-	meta_og_description = models.TextField(null=True, blank=True)
-	meta_tc_title = models.TextField(null=True, blank=True)
-	meta_tc_description = models.TextField(null=True, blank=True)
-	stock_alarm_volume = models.IntegerField(default=0, null=True, blank=True)
+	category = models.ManyToManyField(Category, verbose_name= 'دسته‌بندی')
+	name = models.CharField(max_length=200, verbose_name = 'عنوان')
+	slug = models.CharField(max_length=200, unique=True, blank=True, verbose_name = 'نامک')
+	description = RichTextField(verbose_name = 'توضیحات')
+	features = RichTextField(verbose_name = 'ویژگی‌ها')
+	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه', verbose_name = 'برند')
+	price = models.IntegerField(verbose_name = 'قیمت')
+	sales_price = models.IntegerField(null=True, blank=True, verbose_name = 'قیمت تخفیف‌دار')
+	off_active = models.BooleanField(default=False, verbose_name = 'فعال بودن فروش با تخفیف')
+	tags = models.ManyToManyField(Tag, blank=True, verbose_name = 'تگ‌ها')
+	created = models.DateTimeField(auto_now_add=True, verbose_name = 'تاریخ ایجاد')
+	updated = models.DateTimeField(auto_now=True, verbose_name = 'آخرین بروزرسانی')
+	views = models.IntegerField(default=0, verbose_name = 'بازدیدها')
+	meta_description = models.TextField(null=True, blank=True, verbose_name = 'توضیحات متا')
+	meta_keywords = models.TextField(null=True, blank=True, verbose_name = 'کلمات کلیدی')
+	meta_og_title = models.TextField(null=True, blank=True, verbose_name = 'عنوان OpenGraph')
+	meta_og_description = models.TextField(null=True, blank=True, verbose_name = 'توضیحات OpenGraph')
+	meta_tc_title = models.TextField(null=True, blank=True, verbose_name = 'عنوان TwitterCard')
+	meta_tc_description = models.TextField(null=True, blank=True, verbose_name = 'توضیحات TwitterCard')
+	stock_alarm_volume = models.IntegerField(default=0, null=True, blank=True, verbose_name = 'هشدار اتمام موجودی')
 
 	def save(self, *args, **kwargs):
 		# تولید اسلاگ فارسی با پشتیبانی از یونیکد
@@ -404,6 +409,8 @@ class Product(models.Model):
 
 	class Meta:
 		ordering = ('name',)
+		verbose_name = 'محصولات'
+		verbose_name_plural = 'محصولات'
 		
 
 	def get_main_image(self):
@@ -496,56 +503,65 @@ def logo_upload_path(instance, filename):
 	return f"{filename}"
 
 class ProductImage(models.Model):
-	alt_name = models.CharField(max_length=2000, null=True, blank=True)
-	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	custom_name = models.CharField(max_length=2000, blank=True, null=True)
-	image = models.ImageField(upload_to=image_upload_path, default='media/11.png')
-	created = models.DateTimeField(auto_now_add=True)
+	alt_name = models.CharField(max_length=2000, null=True, blank=True, verbose_name = 'نام جایگزین')
+	product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name = 'محصول')
+	image = models.ImageField(upload_to=image_upload_path, default='media/11.png', verbose_name = 'تصویر')
+	created = models.DateTimeField(auto_now_add=True, verbose_name = 'تاریخ ایجاد')
 
 	class Meta:
+		verbose_name = 'تصاویر محصولات'
+		verbose_name_plural = 'تصاویر محصولات'
 		ordering = ('created',)
 
 	def get_absolute_url(self):
 		return self.image.url
 
 class StoreLogoImage(models.Model):
-	alt_name = models.CharField(max_length=250, null=True, blank=True)
-	custom_name = models.CharField(max_length=250, blank=True, null=True)
-	image = models.ImageField(upload_to=logo_upload_path, default='media/11.png')
-	created = models.DateTimeField(auto_now_add=True)
+	alt_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='نام جایزگین')
+	image = models.ImageField(upload_to=logo_upload_path, default='media/11.png', verbose_name='تصویر')
+	created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
 
 	class Meta:
 		ordering = ('created',)
-
-	def save(self, *args, **kwargs):
-		if not self.custom_name:
-			timestamp = timezone.now().strftime("%Y%m%d")
-			self.custom_name = f"{timestamp}"
-		super().save(*args, **kwargs)
+		verbose_name = 'لوگوی فروشگاه'
+		verbose_name_plural = 'لوگوی فروشگاه'
 
 class Variety(models.Model):
-	name = models.CharField(max_length=255)
-	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	stock = models.PositiveIntegerField()
+	name = models.CharField(max_length=255, verbose_name='عنوان')
+	product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
+	stock = models.PositiveIntegerField(verbose_name='تعداد موجود در انبار')
 
 	def __str__(self):
 		return f'{self.product.name} - {self.name}'
+	
+	class Meta:
+		verbose_name = 'تنوع محصولات'
+		verbose_name_plural = 'تنوع محصولات'
 
 class Comment(models.Model):
-	sender = models.ForeignKey(Customer, on_delete=models.CASCADE)
-	email = models.EmailField(null=True, blank=True)
-	product = models.ForeignKey(Product, on_delete = models.CASCADE)
-	body = models.TextField()
-	approved = models.BooleanField(default=False)
-	created_date = models.DateTimeField(auto_now_add = True)
+	sender = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='فرستنده')
+	email = models.EmailField(null=True, blank=True, verbose_name='ایمیل')
+	product = models.ForeignKey(Product, on_delete = models.CASCADE, verbose_name='محصول')
+	body = models.TextField(verbose_name='متن دیدگاه')
+	approved = models.BooleanField(default=False, verbose_name='تایید نمایش')
+	created_date = models.DateTimeField(auto_now_add = True, verbose_name='تاریخ ایجاد')
+
+	class Meta:
+		ordering = ('created_date',)
+		verbose_name = 'دیدگاه‌ها'
+		verbose_name_plural = 'دیدگاه‌ها'
 
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
 
 class CartItem(models.Model):
-	variety = models.ForeignKey(Variety, on_delete = models.CASCADE, null=True, blank=True)
-	quantity = models.PositiveIntegerField(default = 1)
+	variety = models.ForeignKey(Variety, on_delete = models.CASCADE, null=True, blank=True, verbose_name='تنوع کالا')
+	quantity = models.PositiveIntegerField(default = 1, verbose_name='تعداد')
+
+	class Meta:
+		verbose_name = 'آیتم‌های سبد خرید'
+		verbose_name_plural = 'آیتم‌های سبد خرید'
 
 	def __str__(self):
 		return f'{self.variety.product.name} - {self.quantity} عدد'
@@ -555,8 +571,12 @@ class CartItem(models.Model):
 		return item_price
 
 class Cart(models.Model):
-	customer = models.ForeignKey(Customer, on_delete = models.CASCADE)
-	items = models.ManyToManyField(CartItem, blank = True)
+	customer = models.ForeignKey(Customer, on_delete = models.CASCADE, verbose_name='مشتری')
+	items = models.ManyToManyField(CartItem, blank = True, verbose_name='آیتم‌های سبد خرید')
+
+	class Meta:
+		verbose_name = 'سبدهای خرید مشتریان'
+		verbose_name_plural = 'سبدهای خرید مشتریان'
 
 	def get_total_price(self):
 		total_price = 0
@@ -574,6 +594,10 @@ class Coupon(models.Model):
 	discount = models.IntegerField(verbose_name="میزان تخفیف (تومان)", default=0)
 	min_cart_volume = models.IntegerField(verbose_name="حداقل مبلغ سبد خرید (تومان)", default=0)
 
+	class Meta:
+		verbose_name = 'کدهای تخفیف'
+		verbose_name_plural = 'کدهای تخفیف'
+
 	def is_valid(self):
 		"""بررسی می‌کند که آیا کوپن در بازه زمانی معتبر است یا نه."""
 		today = date2jalali(date.today())  # تاریخ امروز به فرمت شمسی
@@ -589,39 +613,50 @@ class Coupon(models.Model):
 		return self.code
 
 class OrderStatus(models.Model):
-	latest_status = models.CharField(max_length = 250)
+	latest_status = models.CharField(max_length = 250, verbose_name='عنوان وضعیت')
+
+	class Meta:
+		verbose_name = 'وضعیت‌های سفارشات خرید'
+		verbose_name_plural = 'وضعیت‌های سفارشات خرید'
 
 	def __str__(self):
 		return self.latest_status
 
 class Cashback(models.Model):
-	repetation = models.IntegerField(default=0)
-	percent = models.IntegerField(default=0)
-	const = models.IntegerField(default=0)
+	repetation = models.IntegerField(default=0, verbose_name='تکرار')
+	percent = models.IntegerField(default=0, verbose_name='درصد')
+	const = models.IntegerField(default=0, verbose_name='مقدار ثابت')
+
+	class Meta:
+		verbose_name = 'کش‌بک'
+		verbose_name_plural = 'کش‌بک'
 
 class Order(models.Model):
-	customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
-	items = models.ManyToManyField(CartItem)
-	total_price = models.IntegerField()
-	status = models.ForeignKey(OrderStatus, on_delete = models.SET_NULL, null=True)
-	created_date = models.DateTimeField(auto_now_add = True)
-	used_coupon = models.BooleanField(default=False)
-	delivery_method = models.ForeignKey(Delivery, on_delete = models.SET_NULL, null=True, blank=True)
-	status_updated_date = models.DateTimeField(auto_now_add = True)
-	reciever_name = models.CharField(max_length=250, null=True, blank=True)
-	reciever_familly_name = models.CharField(max_length=250, null=True, blank=True)
-	reciever_phone_number = models.CharField(max_length=11, null=True, blank=True)
-	reciever_email = models.EmailField(max_length=250, null=True, blank=True)
-	reciever_state = models.CharField(max_length=250, null=True, blank=True)
-	reciever_city = models.CharField(max_length=250, null=True, blank=True)
-	reciever_address = models.CharField(max_length=250, null=True, blank=True)
-	reciever_zip_code = models.CharField(max_length=250, null=True, blank=True)
-	paid_by_wallet = models.IntegerField(default=0)
-	has_express_items = models.BooleanField(default=False)
-	has_normal_items = models.BooleanField(default=False)
-	delivery_description = models.TextField(null=True, blank=True)
-	delivery_cost = models.IntegerField(default=0)
-	delivery_off = models.BooleanField(default=False)
+	customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True, verbose_name='مشتری')
+	items = models.ManyToManyField(CartItem, verbose_name='آیتم‌ها')
+	total_price = models.IntegerField(verbose_name='مبلغ کل')
+	status = models.ForeignKey(OrderStatus, on_delete = models.SET_NULL, null=True, verbose_name='وضعیت سفارش')
+	created_date = models.DateTimeField(auto_now_add = True, verbose_name='تاریخ ایجاد')
+	used_coupon = models.BooleanField(default=False, verbose_name='استفاده از کوپن تخفیف')
+	delivery_method = models.ForeignKey(Delivery, on_delete = models.SET_NULL, null=True, blank=True, verbose_name='شیوه ارسال')
+	status_updated_date = models.DateTimeField(auto_now_add = True, verbose_name='تاریخ بروزرسانی')
+	reciever_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='نام تحویل گیرنده')
+	reciever_familly_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='نام خانوادگی تحویل گیرنده')
+	reciever_phone_number = models.CharField(max_length=11, null=True, blank=True, verbose_name='شماره تماس تحویل گیرنده')
+	reciever_email = models.EmailField(max_length=250, null=True, blank=True, verbose_name='ایمیل تحویل گیرنده')
+	reciever_state = models.CharField(max_length=250, null=True, blank=True, verbose_name='استان تحویل گیرنده')
+	reciever_city = models.CharField(max_length=250, null=True, blank=True, verbose_name='شهر تحویل گیرنده')
+	reciever_address = models.CharField(max_length=250, null=True, blank=True, verbose_name='آدرس تحویل گیرنده')
+	reciever_zip_code = models.CharField(max_length=250, null=True, blank=True, verbose_name='کد پستی تحویل گیرنده')
+	paid_by_wallet = models.IntegerField(default=0, verbose_name='میزان پرداخت با کیف پول')
+	delivery_description = models.TextField(null=True, blank=True, verbose_name='توضیحات سفارش و ارسال')
+	delivery_cost = models.IntegerField(default=0, verbose_name='هزینه ارسال')
+	delivery_off = models.BooleanField(default=False, verbose_name='ارسال رایگان')
+
+	class Meta:
+		ordering = ('created_date',)
+		verbose_name = 'سفارشات'
+		verbose_name_plural = 'سفارشات'
 
 	def get_raw_cost(self):
 		orig_cost = 0
@@ -710,17 +745,19 @@ class Order(models.Model):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
 
 class ContactMessage(models.Model):
-	name = models.CharField(max_length=250)
-	familly_name = models.CharField(max_length=250)
-	email = models.EmailField()
-	phone = models.CharField(max_length=11)
-	subject = models.CharField(max_length=250)
-	message = RichTextField(default = "پیام خود را وارد نمایید.")
-	created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-	is_answered = models.BooleanField(default = False)
+	name = models.CharField(max_length=250, verbose_name='نام')
+	familly_name = models.CharField(max_length=250, verbose_name='نام خانوادگی')
+	email = models.EmailField(verbose_name='ایمیل')
+	phone = models.CharField(max_length=11, verbose_name='شماره تماس')
+	subject = models.CharField(max_length=250, verbose_name='موضوع')
+	message = RichTextField(default = "پیام خود را وارد نمایید.", verbose_name='متن پیام')
+	created = models.DateTimeField(auto_now_add=True, null=True, blank=True, verbose_name='تاریخ ارسال')
+	is_answered = models.BooleanField(default = False, verbose_name='رسیدگی شده')
 
 	class Meta:
-		ordering = ('created',)
+		ordering = ('-created',)
+		verbose_name = 'پیام‌ها'
+		verbose_name_plural = 'پیام‌ها'
 
 	def __str__(self):
 		return f'{self.name} - {self.familly_name} - {self.subject}'
@@ -732,22 +769,17 @@ def slide_upload_path(instance, filename):
 	return f"{filename}"
 
 class Slide(models.Model):
-	alt_name = models.CharField(max_length=250, null=True, blank=True)
-	custom_name = models.CharField(max_length=250, blank=True, null=True)
-	index = models.PositiveIntegerField(default=1)
-	image = models.ImageField(upload_to=slide_upload_path, default='media/11.png')
-	created = models.DateTimeField(auto_now_add=True)
-	tag = models.ManyToManyField(Tag)
-	category = models.ManyToManyField(Category)
+	alt_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='عنوان جایگزین')
+	index = models.PositiveIntegerField(default=1, verbose_name='شماره اسلاید')
+	image = models.ImageField(upload_to=slide_upload_path, default='media/11.png', verbose_name='تصویر')
+	created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+	tag = models.ManyToManyField(Tag, verbose_name='تگ محصولات هدف')
+	category = models.ManyToManyField(Category, verbose_name='دسته‌بندی محصولات هدف')
 
 	class Meta:
 		ordering = ('created',)
-
-	def save(self, *args, **kwargs):
-		if not self.custom_name:
-			timestamp = timezone.now().strftime("%Y%m%d")
-			self.custom_name = f"{timestamp}"
-		super().save(*args, **kwargs)
+		verbose_name = 'اسلایدها'
+		verbose_name_plural = 'اسلایدها'
 
 def banner_upload_path(instance, filename):
 	banner_name = instance.alt_name.replace(" ", "_")
@@ -756,17 +788,18 @@ def banner_upload_path(instance, filename):
 	return f"{filename}"
 
 class Banner(models.Model):
-	alt_name = models.CharField(max_length=250, null=True, blank=True)
-	custom_name = models.CharField(max_length=250, blank=True, null=True)
-	index = models.PositiveIntegerField(default=1)
-	image = models.ImageField(upload_to=banner_upload_path, default='media/11.png')
-	created = models.DateTimeField(auto_now_add=True)
-	tag = models.ManyToManyField(Tag, blank=True)
-	category = models.ManyToManyField(Category, blank=True)
-	size = models.CharField(max_length=250, default='small')
-	
+	alt_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='عنوان جایگزین')
+	index = models.PositiveIntegerField(default=1, verbose_name='شماره بنر')
+	image = models.ImageField(upload_to=banner_upload_path, default='media/11.png', verbose_name='تصویر')
+	created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+	tag = models.ManyToManyField(Tag, blank=True, verbose_name='تگ محصولات هدف')
+	category = models.ManyToManyField(Category, blank=True, verbose_name='دسته‌بندی محصولات هدف')
+	size = models.CharField(max_length=250, default='small', verbose_name='سایز بنر')
+
 	class Meta:
 		ordering = ('created',)
+		verbose_name = 'بنرها'
+		verbose_name_plural = 'بنرها'
 
 	def get_main_image(self):
 		main_image = self.image
@@ -775,22 +808,25 @@ class Banner(models.Model):
 		else:
 			main_image_url = main_image.url
 		return main_image_url
-
-	def save(self, *args, **kwargs):
-		if not self.custom_name:
-			timestamp = timezone.now().strftime("%Y%m%d")
-			self.custom_name = f"{timestamp}"
-		super().save(*args, **kwargs)
 	
 class Faq(models.Model):
-	question = models.CharField(max_length= 500)
-	answer = models.CharField(max_length=2000)
+	question = models.CharField(max_length= 500, verbose_name='متن پرسش')
+	answer = models.CharField(max_length=2000, verbose_name='متن پاسخ')
+
+	class Meta:
+		verbose_name = 'سوالات متداول'
+		verbose_name_plural = 'سوالات متداول'
 
 class WithdrawRecord(models.Model):
-	sheba = models.CharField(max_length = 250)
-	amount = models.IntegerField()
-	created_date = models.DateTimeField(auto_now_add=True)
-	is_paid = models.BooleanField(default=False)
+	sheba = models.CharField(max_length = 250, verbose_name='شماره شبا')
+	amount = models.IntegerField(verbose_name='مبلغ به تومان')
+	created_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ درخواست')
+	is_paid = models.BooleanField(default=False, verbose_name='پرداخت شده')
+
+	class Meta:
+		ordering = ('-created_date',)
+		verbose_name = 'درخواست‌های برداشت وجه'
+		verbose_name_plural = 'درخواست‌های برداشت وجه'
 
 	@property
 	def shamsi_created_date(self):
@@ -800,7 +836,11 @@ class WithdrawRecord(models.Model):
 		return f'{self.amount} - {self.shamsi_created_date}'
 
 class BlogCategory(models.Model):
-	name = models.CharField(max_length=250)
+	name = models.CharField(max_length=250, verbose_name='عنوان دسته‌بندی')
+
+	class Meta:
+		verbose_name = 'دسته‌بندی‌های مقالات'
+		verbose_name_plural = 'دسته‌بندی‌های مقالات'
 
 	def get_slug(self):
 		return self.name.replace('/','').replace(' ','-')
@@ -809,18 +849,23 @@ class BlogCategory(models.Model):
 		return self.name
 
 class BlogPost(models.Model):
-	title = models.CharField(max_length=250)
-	slug = models.CharField(max_length = 250)
-	category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE, null=True, blank=True)
-	body = RichTextField(default = "insert the post body")
-	created_date = models.DateTimeField(auto_now_add=True)
-	published = models.BooleanField(default=False)
-	meta_description = models.CharField(max_length=500, default='')
-	meta_keywords = models.CharField(max_length=500, default='')
-	meta_og_title = models.CharField(max_length=250, default= '')
-	meta_og_description = models.CharField(max_length=1000, default= '')
-	meta_tc_title = models.CharField(max_length=250, default= '')
-	meta_tc_description = models.CharField(max_length=250, default= '')
+	title = models.CharField(max_length=250, verbose_name='عنوان')
+	slug = models.CharField(max_length = 250, verbose_name='نامک')
+	category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE, null=True, blank=True, verbose_name='دسته‌بندی')
+	body = RichTextField(default = "insert the post body", verbose_name='متن مقاله')
+	created_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+	published = models.BooleanField(default=False, verbose_name='انتشار')
+	meta_description = models.CharField(max_length=500, default='', verbose_name='توضیحات متا')
+	meta_keywords = models.CharField(max_length=500, default='', verbose_name='کلمات کلیدی')
+	meta_og_title = models.CharField(max_length=250, default= '', verbose_name='عنوان OpenGraph')
+	meta_og_description = models.CharField(max_length=1000, default= '', verbose_name='توضیحات OpenGraph')
+	meta_tc_title = models.CharField(max_length=250, default= '', verbose_name='عنوان TwitterCard')
+	meta_tc_description = models.CharField(max_length=250, default= '', verbose_name='توضیحات TwitterCard')
+
+	class Meta:
+		ordering = ('-created_date',)
+		verbose_name = 'مقالات وبلاگ'
+		verbose_name_plural = 'مقالات وبلاگ'
 
 	def get_default_meta_description(self):
 		return self.body[0:160]
@@ -866,54 +911,55 @@ def thumbnail_upload_path(instance, filename):
 class PostThumbnail(models.Model):
 	post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
 	alt_name = models.CharField(max_length=250, null=True, blank=True)
-	custom_name = models.CharField(max_length=250, blank=True, null=True)
 	image = models.ImageField(upload_to=thumbnail_upload_path, default='media/11.png')
 	created = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
-		ordering = ('created',)
-
-	def save(self, *args, **kwargs):
-		if not self.custom_name:
-			self.custom_name = f"{self.post.title}"
-		super().save(*args, **kwargs)
+		ordering = ('-created',)
+		verbose_name = 'لوگوی فروشگاه'
+		verbose_name_plural = 'لوگوی فروشگاه'
 
 class UploadedImages(models.Model):
-	alt_name = models.CharField(max_length=250, null=True, blank=True)
-	image = models.ImageField()
+	alt_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='عنوان دلخواه')
+	image = models.ImageField(verbose_name='تصویر')
 
+	class Meta:
+		verbose_name = 'تصاویر آپلود شده'
+		verbose_name_plural = 'تصاویر آپلود شده' 
+		
 def category_upload_path(instance, filename):
 	category_name = instance.alt_name.replace(" ", "_")
 	filename = f"{category_name}_{filename}"
 	return f"{filename}"
 
+
 class CategoryImage(models.Model):
-	alt_name = models.CharField(max_length=250, null=True, blank=True)
-	image = models.ImageField(upload_to=category_upload_path, default='media/11.png')
-	created = models.DateTimeField(auto_now_add=True)
-	category = models.ForeignKey(Category, on_delete=models.CASCADE)
+	alt_name = models.CharField(max_length=250, null=True, blank=True, verbose_name='عنوان جایگزین')
+	image = models.ImageField(upload_to=category_upload_path, default='media/11.png', verbose_name='تصویر')
+	created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+	category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته‌بندی')
 
 	class Meta:
-		ordering = ('created',)
+		ordering = ('-created',)
+		verbose_name = 'تصویر دسته‌بندی'
+		verbose_name_plural = 'تصویر دسته‌بندی'
 
 	def get_absolute_url(self):
 		return self.image.url
 
-	def save(self, *args, **kwargs):
-		if not self.alt_name:
-			self.custom_name = f"{self.category.name}"
-		super().save(*args, **kwargs)
-
 class FeaturedCategories(models.Model):
-	categories = models.ManyToManyField(Category, blank=True)
+	categories = models.ManyToManyField(Category, blank=True, verbose_name='دسته‌بندی‌ها')
+
+	class Meta:
+		verbose_name = 'دسته‌بندی‌های شاخص'
+		verbose_name_plural = 'دسته‌بندی‌های شاخص'
 
 class Subscription(models.Model):
-	email=models.EmailField()
+	email=models.EmailField(verbose_name='ایمیل')
 
-class Services(models.Model):
-	delivery = models.CharField(max_length=250, default = 'شیوه‌های ارسال متنوع قابل انتخاب توسط شما')
-	originality = models.CharField(max_length=250, default = 'تحویل کالای اصل بدون کوچکترین مغایرت با توضیحات')
-	payments = models.CharField(max_length=250, default = 'درگاه پرداخت امن با پشتیبانی از تمامی کارت‌های بانکی')
+	class Meta:
+		verbose_name = 'اشتراک‌ها'
+		verbose_name_plural = 'اشتراک‌ها'
 
 def brand_upload_path(instance):
 	logo_name = instance.name.replace(" ", "_")
@@ -922,68 +968,36 @@ def brand_upload_path(instance):
 	return f"{filename}"
 
 class Brand(models.Model):
-	name = models.CharField(max_length=250)
+	name = models.CharField(max_length=250, verbose_name='نام برند')
+
+	class Meta:
+		verbose_name = 'برندها'
+		verbose_name_plural = 'برندها'
 
 	def __str__(self):
 		return self.name
 
-	def save(self, *args, **kwargs):
-		# بررسی اگر نام برند تغییر کرده باشد
-		if self.pk:
-			original_name = Brand.objects.get(pk=self.pk).name
-			if original_name != self.name:
-				# بروزرسانی نام برند در محصولات مرتبط
-				Product.objects.filter(brand=original_name).update(brand=self.name)
-		super().save(*args, **kwargs)
-
-class Recommender(models.Model):
-	full_name = models.CharField(max_length = 250)
-	phone_number = models.CharField(max_length = 250)
-	created_date = models.DateTimeField(auto_now_add = True)
-	balance = models.IntegerField(default = 0)
-	referal_code = models.CharField(max_length = 6)
-
-class Ticket(models.Model):
-	subject = models.CharField(max_length=250)
-	body = models.TextField()
-	is_answered = models.BooleanField(default=False)
-	is_closed = models.BooleanField(default=False)
-	created_date = models.DateTimeField(auto_now_add=True)
-
-	@property
-	def shamsi_created_date(self):
-		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
-
-	def get_reply_date(self):
-		reply = TicketReply.objects.filter(ticket = self).first()
-		if reply != None:
-			return JalaliDatetime(reply.created_date).strftime('%Y/%m/%d')
-		return 'بدون پاسخ'
-
-	def __str__(self):
-		return f'{self.subject}'
-
-class TicketReply(models.Model):
-	body = models.CharField(max_length=1000)
-	ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-	created_date = models.DateTimeField(auto_now_add=True)
-
-	@property
-	def shamsi_created_date(self):
-		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
-
 class Domain(models.Model):
-	domain = models.CharField(max_length=100)
-	is_active = models.BooleanField(default=False)
-	created_date = models.DateTimeField(auto_now_add=True)
+	domain = models.CharField(max_length=100, verbose_name='نام دامنه')
+	is_active = models.BooleanField(default=False, verbose_name='فعال')
+	created_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+	class Meta:
+		ordering = ('-created_date',)
+		verbose_name = 'دامنه‌ی سایت'
+		verbose_name_plural = 'دامنه‌ی سایت'
 
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
 
 class Filter(models.Model):
-	category = models.ForeignKey(Category, on_delete=models.CASCADE)
-	name = models.CharField(max_length=250)
+	category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته‌بندی')
+	name = models.CharField(max_length=250, verbose_name='عنوان فیلتر')
+
+	class Meta:
+		verbose_name = 'فیلترهای دسته‌بندی‌های محصولات'
+		verbose_name_plural = 'فیلترهای دسته‌بندی‌های محصولات'
 
 	def get_values(self):
 		return FilterValue.objects.filter(filter=self)
@@ -992,30 +1006,38 @@ class Filter(models.Model):
 		return f'{self.name}'
 	
 class FilterValue(models.Model):
-	value = models.CharField(max_length=250)	
-	product = models.ForeignKey('Product',on_delete=models.CASCADE, related_name='filter_values', null=True, blank=True)  # اضافه کردن related_name
-	filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=True, blank=True)
+	value = models.CharField(max_length=250, verbose_name='مقدار')	
+	product = models.ForeignKey('Product',on_delete=models.CASCADE, related_name='filter_values', null=True, blank=True, verbose_name='محصول')  # اضافه کردن related_name
+	filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=True, blank=True, verbose_name='عنوان فیلتر')
+
+	class Meta:
+		verbose_name = 'مقادیر فیلترها'
+		verbose_name_plural = 'مقادیر فیلترها'
 
 class ProductFilter(models.Model):
-	product = models.ForeignKey(Product, on_delete=models.CASCADE)
-	filter = models.ForeignKey(Filter, on_delete=models.CASCADE)
-	values = models.ManyToManyField(FilterValue, blank=True)
+	product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
+	filter = models.ForeignKey(Filter, on_delete=models.CASCADE, verbose_name='فیلتر')
+	values = models.ManyToManyField(FilterValue, blank=True, verbose_name='مقدار فیلتر')
+
+	class Meta:
+		verbose_name = 'فیلترهای محصولات'
+		verbose_name_plural = 'فیلترهای محصولات'
 
 	def __str__(self):
 		return f"{self.product.name} - {self.filter.name}"
 	
 class Announcement(models.Model):
-	subject = models.CharField(max_length=250, blank = True, null=True)
-	message = models.TextField()
-	is_active = models.BooleanField(default=True)
-	created = models.DateTimeField(auto_now_add=True)
+	subject = models.CharField(max_length=250, blank = True, null=True, verbose_name='موضوع')
+	message = models.TextField(verbose_name='متن اطلاعیه')
+	is_active = models.BooleanField(default=True, verbose_name='فعال')
+	created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+	class Meta:
+		ordering = ('-created',)
+		verbose_name = 'اطلاعیه‌ها'
+		verbose_name_plural = 'اطلاعیه‌ها'
 
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created).strftime('%Y/%m/%d')
-
-class ExpressDeliveryInterval(models.Model):
-	start_time = models.IntegerField()
-	end_time = models.IntegerField()
-	total_cap = models.IntegerField(default=100)
-	teken_cap = models.IntegerField(default=0)
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
