@@ -11,6 +11,11 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.urls import path
 from . import views
+from django.contrib.auth.models import User, Group
+from admin_interface.models import Theme
+
+
+admin.site.unregister(Group)
 
 
 class OtpCodeAdmin(admin.ModelAdmin):
@@ -103,7 +108,7 @@ class ProductAdmin(admin.ModelAdmin):
 	@admin.display(description='Active Price')
 	def active_price(self, obj):
 		return obj.get_active_price()
-	list_display = ('name' ,'slug','price','sales_price','off_active', 'active_price','stock_alarm')
+	list_display = ('name' ,'id','price','sales_price','off_active', 'active_price','stock_alarm')
 	list_editable = ('price','off_active','sales_price')
 	search_fields = ['name', 'slug']
 	autocomplete_fields = ['category', 'tags']
@@ -128,11 +133,18 @@ class CartAdmin(admin.ModelAdmin):
 class OrderStatusAdmin(admin.ModelAdmin):
 	list_display = ('latest_status',)
 
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ('variety', 'quantity')  # ستون‌هایی که در لیست نمایش داده می‌شوند
+    list_filter = ('variety',)  # امکان فیلتر کردن بر اساس فیلد variety
+    search_fields = ('variety__name',)  # امکان جستجو بر اساس نام variety
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
 	list_display = ('customer', 'total_price', 'status', 'created_date', 'used_coupon', 'status_updated_date')
 	list_filter = ('status', 'used_coupon')
 	search_fields = ['customer__full_name', 'status__latest_status']
+	autocomplete_fields = ['items',]
 
 # @admin.register(Size)
 # class SizeAdmin(admin.ModelAdmin):
@@ -274,8 +286,6 @@ class DomainAdmin(admin.ModelAdmin):
 	list_display = ('domain', 'is_active', 'shamsi_created_date')  # Add 'shamsi_created_date' to the list_display
 
 admin.site.register(Domain, DomainAdmin)
-
-
 
 
 

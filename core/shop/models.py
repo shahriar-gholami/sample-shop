@@ -488,7 +488,7 @@ class Product(models.Model):
 		return list(related_products)
 
 	def __str__(self):
-		return f'{self.name}'
+		return f'{self.name} - id: {self.id}'
 	
 def image_upload_path(instance, filename):
 	product_name = instance.product.name.replace(" ", "_")
@@ -564,7 +564,7 @@ class CartItem(models.Model):
 		verbose_name_plural = 'آیتم‌های سبد خرید'
 
 	def __str__(self):
-		return f'{self.variety.product.name} - {self.quantity} عدد'
+		return f'{self.variety.product.name} - id: {self.id} - {self.quantity} عدد'
 
 	def get_item_price(self):
 		item_price = self.quantity*self.variety.product.get_active_price()
@@ -855,12 +855,12 @@ class BlogPost(models.Model):
 	body = RichTextField(default = "insert the post body", verbose_name='متن مقاله')
 	created_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
 	published = models.BooleanField(default=False, verbose_name='انتشار')
-	meta_description = models.CharField(max_length=500, default='', verbose_name='توضیحات متا')
-	meta_keywords = models.CharField(max_length=500, default='', verbose_name='کلمات کلیدی')
-	meta_og_title = models.CharField(max_length=250, default= '', verbose_name='عنوان OpenGraph')
-	meta_og_description = models.CharField(max_length=1000, default= '', verbose_name='توضیحات OpenGraph')
-	meta_tc_title = models.CharField(max_length=250, default= '', verbose_name='عنوان TwitterCard')
-	meta_tc_description = models.CharField(max_length=250, default= '', verbose_name='توضیحات TwitterCard')
+	meta_description = models.TextField(default='', verbose_name='توضیحات متا')
+	meta_keywords = models.TextField(default='', verbose_name='کلمات کلیدی')
+	meta_og_title = models.TextField(default= '', verbose_name='عنوان OpenGraph')
+	meta_og_description = models.TextField( default= '', verbose_name='توضیحات OpenGraph')
+	meta_tc_title = models.TextField(default= '', verbose_name='عنوان TwitterCard')
+	meta_tc_description = models.TextField(default= '', verbose_name='توضیحات TwitterCard')
 
 	class Meta:
 		ordering = ('-created_date',)

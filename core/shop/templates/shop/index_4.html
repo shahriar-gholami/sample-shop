@@ -264,7 +264,7 @@
                  {% if product.off_active == True %}
                  <div class="swiper-slide">
                      <div class="product-box">
-                        <a href="">
+                        <a href="{% url 'shop:product_detail' product.slug %}">
                             <div class="product-image">
                                 <img alt="" class="img-fluid"
                                     src="{{product.get_main_image}}">
