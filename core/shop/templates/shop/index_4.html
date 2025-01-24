@@ -138,10 +138,10 @@
  <!--============ end main slider ==============-->
  
  <!--============ start feature ==============-->
- 
+ {% if store.show_advantages == True %}
  <section class="site-feature d-lg-block d-none">
      <div class="container-fluid">
-         <div class="row py-3 pt-0 shadow-box rounded-3 row-cols-5 g-3 bg-white">
+         <div class="row py-3 pt-0 shadow-box rounded-3 row-cols-4 g-3 bg-white">
              <div class="col border-end">
                  <div class="feature-item ">
                      <div class="feature-icon">
@@ -154,19 +154,7 @@
                      </div>
                  </div>
              </div>
-             <div class="col border-end">
-                 <div class="feature-item ">
-                     <div class="feature-icon">
-                         <img src="{% static 'assets4/image/feature/credit-card.png' %}" alt="" class="img-fluid">
-                     </div>
-                     <div class="feature-desc ms-lg-3 text-center">
-                         <h6>تضمین قیمت
-                         </h6>
-                         <p class="text-muted my-2 d-none d-xl-block">کمترین قیمت بازار
-                         </p>
-                     </div>
-                 </div>
-             </div>
+            
              <div class="col border-end">
                  <div class="feature-item ">
                      <div class="feature-icon">
@@ -206,11 +194,12 @@
          </div>
      </div>
  </section>
- 
+ {% endif %}
  <!--============ end feature ==============-->
  
  <!--============ start category ==============-->
  
+ {% if store.show_featured_categories == True %}
  <section class="category-card">
      <div class="container-fluid">
          <div class="product-slider-box-title">
@@ -245,11 +234,11 @@
          </div>
      </div>
  </section>
- 
+ {% endif %}
  <!--============ end category ==============-->
  
  <!--============ start amazing ==============-->
- 
+ {% if store.show_special_offer %}
  <section class="amazing my-25 py-40 shadow-box">
      <div class="container-fluid">
          <div class="swiper free-mode" id="amazing">
@@ -318,7 +307,7 @@
          </div>
      </div>
  </section>
- 
+ {% endif %}
  <!--============ end amazing ==============-->
  
  <!--============ start banner ==============-->
@@ -414,125 +403,7 @@
  </section>
  
  <!--============ end product slider ==============-->
- 
- <!--============ start quick select ==============-->
- 
- <!-- <section class="quick-select">
-     <div class="container-fluid">
-         <div class="row gy-5">
-             <div class="col-lg-6">
-                 <div class="product-slider-box-title">
-                     <h4 class="title-font product-slider-box-title-title dot">
-                         <span class="main-color-one-color">گوشی بر اساس</span>
-                         <span>قیمت</span>
-                     </h4>
-                 </div>
-                 <div class="quick-select-item">
-                     <div class="row mt-3 align-items-center g-3">
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select">
-                                     <h6 class="fw-normal">گوشی ساده و ارزان</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">20</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">30</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">100</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-             <div class="col-lg-6">
-                 <div class="product-slider-box-title">
-                     <h4 class="title-font product-slider-box-title-title dot">
-                         <span class="main-color-one-color">لپتاپ بر اساس</span>
-                         <span>قیمت</span>
-                     </h4>
-                 </div>
-                 <div class="quick-select-item">
-                     <div class="row mt-3 align-items-center g-3">
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select bs-bg-blue-100">
-                                     <h6 class="fw-normal">لپتاپ استوک</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select bs-bg-teal-100">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select bs-bg-red-100">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">15</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select bs-bg-yellow-100">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">20</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select bs-bg-indigo-100">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">30</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-lg-4 col-sm-6">
-                             <a href="">
-                                 <div class="quick-select-item-select bs-bg-purple-100">
-                                     <h6 class="fw-normal">تا <span class="fw-bold fs-3">100</span> میلیون</h6>
-                                 </div>
-                             </a>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section> -->
- 
- <!--============ end quick select ==============-->
+
  
  <!--============ start banner ==============-->
  
@@ -552,553 +423,20 @@
      </div>
  </section>
  
- <!--============ end banner ==============-->
- 
- <!--============ start product slider ==============-->
- 
- <!-- <section class="product-slider  site-slider">
-     <div class="container-fluid">
-         <div class="product-slider-box-title">
-             <div class="row align-items-center">
-                 <div class="col-lg-8 col-6">
-                     <h4 class="title-font product-slider-box-title-title dot">
-                         <span class="main-color-one-color">محصولات</span>
-                         <span>جدید</span>
-                     </h4>
-                 </div>
-                 <div class="col-lg-4 col-6">
-                     <div class="text-end">
-                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
-                     </div>
-                 </div>
-             </div>
-         </div>
-         <div class="swiper pro-slider">
-             <div class="swiper-wrapper align-items-center">
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/laptop-1.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/laptop-2.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/laptop-3.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/wach2.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/television2.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/product-image1.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="swiper-slide">
-                     <div class="product-box">
-                         <div class="product-image">
-                             <img alt="" class="img-fluid"
-                                  src="{% static 'assets4/image/product/product-image5.jpg' %}">
-                         </div>
-                         <div class="product-title">
-                             <div class="title">
-                                 <p class="title-font font-14">گوشی موبایل شیائومی مدل Redmi Note 13 Pro 5G دو سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت
-                                 </p>
-                             </div>
-                         </div>
-                         <div class="product-action flex-column mt-3">
-                             <div class="price d-flex justify-content-between w-100 align-items-baseline">
-                                 <p class="new-price">3,175,000 <span class="font-12">تومان</span></p>
-                                 <p class="old-price">6,500,000 </p>
-                             </div>
-                             <div class="link w-100 mt-4 d-flex align-items-center justify-content-between">
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-one-bg" href="">
-                                     مشاهده
-                                     <i class="bi bi-arrow-left ms-4 text-white"></i>
-                                 </a>
-                                 <a class="btn border-0 d-flex align-items-center rounded-3 main-color-two-bg" href="">
-                                     <i class="bi bi-plus fs-5 text-white"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-             <div class="swiper-button-next"></div>
-             <div class="swiper-button-prev"></div>
-         </div>
-     </div>
- </section>
-  -->
- <!--============ end product slider ==============-->
- 
- <!--============ start offer ==============-->
- 
- <!-- <section class="offers">
-     <div class="container-fluid">
-         <div class="offer slider-parent">
-             <div class="row">
-                 <div class="col-lg-8">
-                     <div  class="swiper" id="offerItem">
-                         <div class="swiper-wrapper">
-                             <div class="swiper-slide">
-                                 <div class="offer-item">
-                                     <div class="row">
-                                         <div class="col-md-5">
-                                             <div class="offer-discount">
-                                                 <span>٪48 تخفیف</span>
-                                             </div>
-                                             <div class="offer-img">
-                                                 <img src="{% static 'assets4/image/product/television3.jpg' %}" alt=""
-                                                      class="img-fluid">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-7">
-                                             <div class="offer-content">
-                                                 <div class="offer-title d-md-inline-block d-none">
-                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
-                                                 </div>
-                                                 <div class="offer-desc">
-                                                     <h4>
-                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                                     </h4>
-                                                     <div class="offer-desc-price">
-                                                         <span class="old">2,000,000 تومان</span>
-                                                         <span class="new">1,300,000 تومان</span>
-                                                     </div>
-                                                 </div>
-                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
-                                                 </div>
- 
-                                                 <div class="offer-btn">
-                                                     <a href=""><i class="bi bi-basket me-1"></i>
-                                                         بریم واسه
-                                                         خرید!</a>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="swiper-slide">
-                                 <div class="offer-item">
-                                     <div class="row">
-                                         <div class="col-md-5">
-                                             <div class="offer-discount">
-                                                 <span>٪13 تخفیف</span>
-                                             </div>
-                                             <div class="offer-img">
-                                                 <img src="{% static 'assets4/image/product/wach3.jpg' %}" alt=""
-                                                      class="img-fluid">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-7">
-                                             <div class="offer-content">
-                                                 <div class="offer-title d-md-inline-block d-none">
-                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
-                                                 </div>
-                                                 <div class="offer-desc">
-                                                     <h4>
-                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                                     </h4>
-                                                     <div class="offer-desc-price">
-                                                         <span class="old">2,000,000 تومان</span>
-                                                         <span class="new">1,300,000 تومان</span>
-                                                     </div>
-                                                 </div>
-                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
-                                                 </div>
- 
-                                                 <div class="offer-btn">
-                                                     <a href=""><i class="bi bi-basket me-1"></i>
-                                                         بریم واسه
-                                                         خرید!</a>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="swiper-slide">
-                                 <div class="offer-item">
-                                     <div class="row">
-                                         <div class="col-md-5">
-                                             <div class="offer-discount">
-                                                 <span>٪8 تخفیف</span>
-                                             </div>
-                                             <div class="offer-img">
-                                                 <img src="{% static 'assets4/image/product/product-image5.jpg' %}" alt=""
-                                                      class="img-fluid">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-7">
-                                             <div class="offer-content">
-                                                 <div class="offer-title d-md-inline-block d-none">
-                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
-                                                 </div>
-                                                 <div class="offer-desc">
-                                                     <h4>
-                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                                     </h4>
-                                                     <div class="offer-desc-price">
-                                                         <span class="old">2,000,000 تومان</span>
-                                                         <span class="new">1,300,000 تومان</span>
-                                                     </div>
-                                                 </div>
-                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
-                                                 </div>
- 
-                                                 <div class="offer-btn">
-                                                     <a href=""><i class="bi bi-basket me-1"></i>
-                                                         بریم واسه
-                                                         خرید!</a>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="swiper-slide">
-                                 <div class="offer-item">
-                                     <div class="row">
-                                         <div class="col-md-5">
-                                             <div class="offer-discount">
-                                                 <span>٪32 تخفیف</span>
-                                             </div>
-                                             <div class="offer-img">
-                                                 <img src="{% static 'assets4/image/product/laptop1.jpg' %}" alt=""
-                                                      class="img-fluid">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-7">
-                                             <div class="offer-content">
-                                                 <div class="offer-title d-md-inline-block d-none">
-                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
-                                                 </div>
-                                                 <div class="offer-desc">
-                                                     <h4>
-                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                                     </h4>
-                                                     <div class="offer-desc-price">
-                                                         <span class="old">2,000,000 تومان</span>
-                                                         <span class="new">1,300,000 تومان</span>
-                                                     </div>
-                                                 </div>
-                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
-                                                 </div>
- 
-                                                 <div class="offer-btn">
-                                                     <a href=""><i class="bi bi-basket me-1"></i>
-                                                         بریم واسه
-                                                         خرید!</a>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="swiper-slide">
-                                 <div class="offer-item">
-                                     <div class="row">
-                                         <div class="col-md-5">
-                                             <div class="offer-discount">
-                                                 <span>٪50 تخفیف</span>
-                                             </div>
-                                             <div class="offer-img">
-                                                 <img src="{% static 'assets4/image/product/laptop4.jpg' %}" alt=""
-                                                      class="img-fluid">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-7">
-                                             <div class="offer-content">
-                                                 <div class="offer-title d-md-inline-block d-none">
-                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
-                                                 </div>
-                                                 <div class="offer-desc">
-                                                     <h4>
-                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                                     </h4>
-                                                     <div class="offer-desc-price">
-                                                         <span class="old">2,000,000 تومان</span>
-                                                         <span class="new">1,300,000 تومان</span>
-                                                     </div>
-                                                 </div>
-                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
-                                                 </div>
- 
-                                                 <div class="offer-btn">
-                                                     <a href=""><i class="bi bi-basket me-1"></i>
-                                                         بریم واسه
-                                                         خرید!</a>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="swiper-slide">
-                                 <div class="offer-item">
-                                     <div class="row">
-                                         <div class="col-md-5">
-                                             <div class="offer-discount">
-                                                 <span>٪48 تخفیف</span>
-                                             </div>
-                                             <div class="offer-img">
-                                                 <img src="{% static 'assets4/image/product/television2.jpg' %}" alt=""
-                                                      class="img-fluid">
-                                             </div>
-                                         </div>
-                                         <div class="col-md-7">
-                                             <div class="offer-content">
-                                                 <div class="offer-title d-md-inline-block d-none">
-                                                     <h4>پیشنهاد <span class="title-font">لحظه ای</span></h4>
-                                                 </div>
-                                                 <div class="offer-desc">
-                                                     <h4>
-                                                         ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                                     </h4>
-                                                     <div class="offer-desc-price">
-                                                         <span class="old">2,000,000 تومان</span>
-                                                         <span class="new">1,300,000 تومان</span>
-                                                     </div>
-                                                 </div>
-                                                 <div class='countdown' data-date="2028-01-01" data-time="18:30">
-                                                 </div>
-                                                 <div class="offer-btn">
-                                                     <a href=""><i class="bi bi-basket me-1"></i>
-                                                         بریم واسه
-                                                         خرید!</a>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="swiper-pagination d-lg-none d-block"></div>
-                     </div>
-                 </div>
-                 <div class="col-lg-4 d-lg-block d-none">
-                     <div class="offer-item-link">
-                         <div class="swiper" id="offerItemLink">
-                             <div class="swiper-wrapper">
-                                 <div class="swiper-slide">
-                                     <div class="offer-item-link-item shadow-sm">
-                                         <h6>
-                                             ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی
-                                         </h6>
-                                     </div>
-                                 </div>
-                                 <div class="swiper-slide">
-                                     <div class="offer-item-link-item shadow-sm">
-                                         <h6>گوشی موبایل شیائومی مدل Redmi 12C دو سیم کارت ظرفیت 128 گیگابایت و
-                                             رم 6 گیگابایت - گلوبال</h6>
-                                     </div>
-                                 </div>
-                                 <div class="swiper-slide">
-                                     <div class="offer-item-link-item shadow-sm">
-                                         <h6>گوشی موبایل شیائومی مدل Redmi Note 12 4G دو سیم کارت ظرفیت 256
-                                             گیگابایت و رم 8 گیگابایت - گلوبال</h6>
-                                     </div>
-                                 </div>
-                                 <div class="swiper-slide">
-                                     <div class="offer-item-link-item shadow-sm">
-                                         <h6>گوشی موبایل سامسونگ مدل Galaxy A14 دو سیم کارت ظرفیت 64 گیگابایت و
-                                             رم 4 گیگابایت - ویتنام</h6>
-                                     </div>
-                                 </div>
-                                 <div class="swiper-slide">
-                                     <div class="offer-item-link-item shadow-sm">
-                                         <h6>گوشی موبایل سامسونگ مدل Galaxy A14 دو سیم کارت ظرفیت 128 گیگابایت و
-                                             رم 4 گیگابایت - ویتنام</h6>
-                                     </div>
-                                 </div>
-                                 <div class="swiper-slide">
-                                     <div class="offer-item-link-item shadow-sm">
-                                         <h6>ساعت هوشمند هوآوی مدل GT2 Pro 46mm بند سیلیکونی</h6>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section> -->
- 
- <!--============ end offer ==============-->
- 
- <!--============ start new product ==============-->
- 
+ {% if store.show_specials == True %}
  <section class="product-row">
      <div class="container-fluid position-relative">
          <div class="product-slider-box-title">
              <div class="row align-items-center">
                  <div class="col-lg-8 col-6">
                      <h4 class="title-font product-slider-box-title-title dot">
-                         <span class="main-color-one-color">جدیدترین</span>
-                         <span>محصولات</span>
+                         <span class="main-color-one-color">محصولات</span>
+                         <span>ویژه</span>
                      </h4>
                  </div>
                  <div class="col-lg-4 col-6">
                      <div class="text-end">
-                         <a href="" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
+                         <a href="{% url 'shop:product_list' %}" class="btn main-color-one-bg rounded-3">مشاهده همه</a>
                      </div>
                  </div>
              </div>
@@ -1171,7 +509,7 @@
          <div class="Dottedsquare"></div>
      </div>
  </section>
- 
+ {% endif %}
  <!--============ end new prodcut ==============-->
  
  <!--============ start banner ==============-->
@@ -1196,7 +534,7 @@
  <!--============ end banner ==============-->
  
  <!--============ start blog slider ==============-->
- 
+ {% if store.show_blog == True %}
  <section class="blog-slider site-slider py-30">
      <div class="container-fluid position-relative">
          <div class="product-slider-box-title">
@@ -1243,7 +581,7 @@
  
      </div>
  </section>
- 
+ {% endif %}
  <!--============ end blog slider ==============-->
  
 

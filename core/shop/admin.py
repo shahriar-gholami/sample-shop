@@ -44,7 +44,8 @@ class StoreAdmin(admin.ModelAdmin):
 			  'phone_number', 'email','show_brands' , 'color', 
 			  'meta_description', 'meta_keywords', 'meta_og_title', 
 			  'meta_og_description', 'meta_tc_title', 'meta_tc_description', 'has_domain', 'has_payment_gw',
-			  'template_index', 'index_title', 'enamad_code')
+			  'template_index', 'index_title', 'enamad_code','show_advantages','show_featured_categories','show_special_offer',
+			  'show_specials','show_blog')
 
 @admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
@@ -124,27 +125,29 @@ class ProductAdmin(admin.ModelAdmin):
 	# view_on_site_icon.short_description = 'View on Site'  # عنوان ستون در ادمین
 	# view_on_site_icon.allow_tags = True
 
-@admin.register(Cart)
-class CartAdmin(admin.ModelAdmin):
-	list_display = ('customer',)
-	filter_horizontal = ('items',) 
+# @admin.register(Cart)
+# class CartAdmin(admin.ModelAdmin):
+# 	list_display = ('customer',)
+# 	filter_horizontal = ('items',) 
 
 @admin.register(OrderStatus)
 class OrderStatusAdmin(admin.ModelAdmin):
 	list_display = ('latest_status',)
 
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('variety', 'quantity')  # ستون‌هایی که در لیست نمایش داده می‌شوند
-    list_filter = ('variety',)  # امکان فیلتر کردن بر اساس فیلد variety
-    search_fields = ('variety__name',)  # امکان جستجو بر اساس نام variety
+# @admin.register(CartItem)
+# class CartItemAdmin(admin.ModelAdmin):
+#     list_display = ('variety', 'quantity')  # ستون‌هایی که در لیست نمایش داده می‌شوند
+#     list_filter = ('variety',)  # امکان فیلتر کردن بر اساس فیلد variety
+#     search_fields = ('variety__name',)  # امکان جستجو بر اساس نام variety
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
 	list_display = ('customer', 'total_price', 'status', 'shamsi_created_date', 'used_coupon', 'shamsi_updated_date')
 	list_filter = ('status', 'used_coupon')
 	search_fields = ['customer__full_name', 'status__latest_status']
-	autocomplete_fields = ['items',]
+	readonly_fields = ['items',]
+	exclude = ('delivery_description',)
+	
 
 # @admin.register(Size)
 # class SizeAdmin(admin.ModelAdmin):
@@ -230,10 +233,10 @@ class BlogPostAdmin(admin.ModelAdmin):
 	search_fields = ['title', 'category__name', 'shamsi_created_date']
 	list_filter = ('category',)
 
-@admin.register(UploadedImages)
-class UploadedImagesAdmin(admin.ModelAdmin):
-	list_display = ('alt_name', 'image')
-	search_fields = ['alt_name',]
+# @admin.register(UploadedImages)
+# class UploadedImagesAdmin(admin.ModelAdmin):
+# 	list_display = ('alt_name', 'image')
+# 	search_fields = ['alt_name',]
 
 class CategoryImageAdmin(admin.ModelAdmin):
 	list_display = ('category', 'alt_name')

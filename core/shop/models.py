@@ -61,7 +61,11 @@ class Store(models.Model):
 	index_title = models.CharField(max_length=250, null=True, blank=True, default='خانه', verbose_name='عنوان صفحه نخست')
 	enamad_code = models.CharField(max_length=1000, null=True, blank=True, default='none', verbose_name='کد ای‌نماد')
 	domain = models.CharField(max_length=250, null=True, blank=True, verbose_name='دامنه')
-
+	show_advantages = models.BooleanField(default=True, verbose_name='نمایش نقاط قوت فروشگاه')
+	show_featured_categories = models.BooleanField(default=True, verbose_name='نمایش دسته‌بندی‌های ویژه')
+	show_special_offer = models.BooleanField(default=True, verbose_name='نمایش پیشنهادات شگفت‌انگیز')
+	show_specials = models.BooleanField(default=True, verbose_name='نمایش محصولات ویژه')
+	show_blog = models.BooleanField(default=True, verbose_name='نمایش وبلاگ')
 	
 	@property
 	def shamsi_created_date(self):
@@ -160,7 +164,7 @@ class Customer(models.Model):
 	is_verified = models.BooleanField(default=False, verbose_name = 'تایید')
 	city = models.CharField(max_length = 250, default = 'Tehran', verbose_name = 'شهر')
 	zip_code = models.CharField(max_length = 10, default = '1234567890', verbose_name = 'کد پستی')
-	address = models.CharField(max_length = 250, default = 'نام محله - بلوار اصلی - خیابان اصلی - خیابان فرعی - کوچه - پلاک - واحد', verbose_name = 'آدرس')
+	address = models.TextField(default = 'نام محله - بلوار اصلی - خیابان اصلی - خیابان فرعی - کوچه - پلاک - واحد', verbose_name = 'آدرس')
 	favorites = models.ManyToManyField('Product', blank=True, verbose_name = 'علاقمندی‌ها')
 	created_date = models.DateTimeField(auto_now_add=True, null=True, blank = True, verbose_name = 'تاریخ ثبت‌نام')
 	updated_date = models.DateTimeField(auto_now_add=True, null=True, blank = True, verbose_name = 'آخرین بروزرسانی')
@@ -540,7 +544,7 @@ class StoreLogoImage(models.Model):
 
 	@property
 	def shamsi_created_date(self):
-		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+		return JalaliDatetime(self.created).strftime('%Y/%m/%d')
 	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
 
 class Variety(models.Model):
@@ -583,7 +587,7 @@ class CartItem(models.Model):
 		verbose_name_plural = 'آیتم‌های سبد خرید'
 
 	def __str__(self):
-		return f'{self.variety.product.name} - id: {self.id} - {self.quantity} عدد'
+		return f'{self.variety.product.name} - id: {self.id} - تنوع: {self.variety.name} - تعداد: {self.quantity} عدد\n'
 
 	def get_item_price(self):
 		item_price = self.quantity*int(self.variety.product.get_active_price().replace(',',''))
@@ -665,7 +669,7 @@ class Order(models.Model):
 	reciever_email = models.EmailField(max_length=250, null=True, blank=True, verbose_name='ایمیل تحویل گیرنده')
 	reciever_state = models.CharField(max_length=250, null=True, blank=True, verbose_name='استان تحویل گیرنده')
 	reciever_city = models.CharField(max_length=250, null=True, blank=True, verbose_name='شهر تحویل گیرنده')
-	reciever_address = models.CharField(max_length=250, null=True, blank=True, verbose_name='آدرس تحویل گیرنده')
+	reciever_address = models.TextField(null=True, blank=True, verbose_name='آدرس تحویل گیرنده')
 	reciever_zip_code = models.CharField(max_length=250, null=True, blank=True, verbose_name='کد پستی تحویل گیرنده')
 	paid_by_wallet = models.IntegerField(default=0, verbose_name='میزان پرداخت با کیف پول')
 	delivery_description = models.TextField(null=True, blank=True, verbose_name='توضیحات سفارش و ارسال')
@@ -957,6 +961,9 @@ class CategoryImage(models.Model):
 
 	def get_absolute_url(self):
 		return self.image.url
+	
+	def __str__(self):
+		return f'تصویر دسته‌بندی {self.category.name}'
 
 class FeaturedCategories(models.Model):
 	categories = models.ManyToManyField(Category, blank=True, verbose_name='دسته‌بندی‌ها')

@@ -20,7 +20,7 @@ from shop.models import *
 import random
 from accounts.models import User
 from utils import send_otp_code
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.apps import apps
@@ -1788,7 +1788,11 @@ class OrderVerifyView(LoginRequiredMixin, View):
 		else:
 			return render(request, self.template_name, {'message':'پرداخت ناموفق ', 'store_name':store_name})
 
+class UserLogoutView(View):
 
+	def get(self, request):
+		logout(request)
+		return redirect('shop:index')
 
 
 

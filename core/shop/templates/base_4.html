@@ -152,6 +152,7 @@
                         <span class="position-absolute top-0 bg-white rounded-circle wh-20 border-2 border border-primary z-2">{{cart_items_count}}</span>
                         <a href="{% if request.user.is_authenticated %}{% url 'shop:cart_view' cart.id %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="btn main-color-one-bg rounded-circle btn-float-cart"><i class="bi bi-bag"></i></a>
                     </div>
+                    {% if request.user.is_authenticated %}
                     <div class="bg-white header-btn-group shadow-sm rounded-pill">
                         <div class="dropdown">
                             <a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard' %}{% else %}{% url 'shop:customer_authentication' %}{% endif %}" data-bs-toggle="dropdown" aria-expanded="false" role="button"
@@ -171,11 +172,23 @@
                                     من</a></li>
                                 <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_favorites'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-heart me-2"></i>محصولات مورد
                                     علاقه</a></li>
-                                <li><a href="" class="dropdown-item mct-hover"><i
+                                <li><a href="{% url 'shop:logout' %}" class="dropdown-item mct-hover"><i
                                         class="bi bi-arrow-right-square me-2"></i>خروج از حساب کاربری</a></li>
                             </ul>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="bg-white header-btn-group shadow-sm rounded-pill">
+                        <div class="dropdown">
+                            <a href="{% url 'shop:customer_authentication'  %}"
+                               class="btn btn-white no-highlight header-register border-0 rounded-pill">
+                                <i class="bi bi-person-circle font-20 text-muted me-1"></i>
+                                <span>ورود / ثبت‌نام</span>
+                            </a>
+                           
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

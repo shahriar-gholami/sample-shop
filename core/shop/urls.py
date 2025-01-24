@@ -59,5 +59,6 @@ urlpatterns = [
     path('order-payment/<int:order_id>/', views.OrderPayView.as_view(), name='order_payment'),
     path('orders/verify/', views.OrderVerifyView.as_view(), name='order_verify'),
     path('api/v1/', include('shop.api.v1.urls')),
+    path('logout/', views.UserLogoutView.as_view(), name='logout'),
     
    ]

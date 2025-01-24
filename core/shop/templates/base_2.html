@@ -55,6 +55,7 @@
                         </div>
                         <!-- end mini cart -->
                     </div>
+                    {% if request.user.is_authenticated %}
                     <div class="header-auth ms-3">
                         <div class="dropdown">
                             <a href="#register" data-bs-toggle="dropdown" aria-expanded="true" role="button"
@@ -80,11 +81,23 @@
                                     من</a></li>
                                 <li><a href="{% if request.user.is_authenticated %}{% url 'shop:customer_dashboard_favorites'  %}{% else %}{% url 'shop:customer_authentication'  %}{% endif %}" class="dropdown-item"><i class="bi bi-heart me-2"></i>محصولات مورد
                                     علاقه</a></li>
-                                <li><a href="" class="dropdown-item mct-hover"><i
+                                <li><a href="{% url 'shop:logout' %}" class="dropdown-item mct-hover"><i
                                         class="bi bi-arrow-right-square me-2"></i>خروج از حساب کاربری</a></li>
                             </ul>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="header-auth ms-3">
+                        <div class="dropdown">
+                            <a href="{% url 'shop:customer_authentication'  %}" 
+                               class="btn btn-white header-register border-0 rounded-pill show">
+                                <span class="fw-bold d-lg-inline-block d-none">ورود / ثبت‌نام</span>
+                                <i class="bi bi-person-check fs-1 d-lg-none d-inline"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
