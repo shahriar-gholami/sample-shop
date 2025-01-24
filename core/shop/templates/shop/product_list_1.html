@@ -225,14 +225,14 @@
                                                         <i class="fa fa-star-o text-warning"></i>
                                                     </div>
                                                     {% if product.off_active == True %}
-                                                    <div class="price">{{product.sales_price|intcomma}} تومان
+                                                    <div class="price">{{product.get_sales_price}} تومان
                                                          <p class="text-danger">
-                                                            <del>{{ product.price|intcomma }} تومان</del>
+                                                            <del>{{ product.get_normal_price }} تومان</del>
                                                         </p>
                                                     </div>
                                                     {% else %}
-                                                    <div class="price">{{ product.price|intcomma }} تومان
-                                                        <p class="text-white">{{ product.price|intcomma }} تومان</p>
+                                                    <div class="price">{{ product.get_normal_price }} تومان
+                                                        <p class="text-white">{{ product.get_normal_price }} تومان</p>
                                                     </div>
                                                     {% endif %}
                                                 </div>

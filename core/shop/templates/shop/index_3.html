@@ -81,10 +81,10 @@
                                         <div class="product-box-price">
                                             <div class="product-box-price-discount">
                                                 <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
-                                                <del>{{product.price|intcomma}}</del>
+                                                <del>{{product.get_normal_price}}</del>
                                             </div>
                                             <div class="product-box-price-price">
-                                                <h5 class="title-font main-color-green-color h2 mb-0">{{ product.sales_price|intcomma }}</h5>
+                                                <h5 class="title-font main-color-green-color h2 mb-0">{{ product.get_sales_price }}</h5>
                                                 <p class="mb-0 text-muted">تومان</p>
                                             </div>
                                         </div>
@@ -276,10 +276,10 @@
                                 <div class="product-box-price">
                                     <div class="product-box-price-discount">
                                         <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
-                                        <del>{{product.price|intcomma}}</del>
+                                        <del>{{product.get_normal_price}}</del>
                                     </div>
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-green-color h2 mb-0">{{ product.sales_price|intcomma }}</h5>
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{ product.get_sales_price }}</h5>
                                         <p class="mb-0 text-muted">تومان</p>
                                     </div>
                                 </div>
@@ -396,10 +396,10 @@
                                 <div class="product-box-price">
                                     <div class="product-box-price-discount">
                                         <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
-                                        <del>{{ product.price|intcomma }}</del>
+                                        <del>{{ product.get_normal_price }}</del>
                                     </div>
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.sales_price|intcomma}}</h5>
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.get_sales_price}}</h5>
                                         <p class="mb-0 text-muted">تومان</p>
                                     </div>
                                 </div>
@@ -409,7 +409,7 @@
                                         <del></del>
                                     </div>
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.price|intcomma}}</h5>
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.get_normal_price}}</h5>
                                         <p class="mb-0 text-muted">تومان</p>
                                     </div>
                                 </div>

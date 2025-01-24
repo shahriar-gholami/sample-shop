@@ -166,6 +166,11 @@ class Customer(models.Model):
 	updated_date = models.DateTimeField(auto_now_add=True, null=True, blank = True, verbose_name = 'آخرین بروزرسانی')
 	wallet_balance = models.IntegerField(default=0, null=True, blank=True, verbose_name = 'اعتبار کیف پول')
 
+	@property
+	def shamsi_created_date(self):
+		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ثبت‌نام"
+
 	def get_total_purchase(self):
 		status = OrderStatus.objects.get(id=1)
 		orders = Order.objects.filter(customer=self, status=status)
@@ -207,6 +212,11 @@ class OtpCode(models.Model):
 		ordering = ['-created']
 		verbose_name = 'کدهای OTP'
 		verbose_name_plural = 'کدهای OTP'
+
+	@property
+	def shamsi_created_date(self):
+		return JalaliDatetime(self.created).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
 
 	def __str__(self):
 		return f'{self.phone_number} - {self.code} - {self.created}'	
@@ -328,6 +338,12 @@ class Product(models.Model):
 	meta_tc_description = models.TextField(null=True, blank=True, verbose_name = 'توضیحات TwitterCard')
 	stock_alarm_volume = models.IntegerField(default=0, null=True, blank=True, verbose_name = 'هشدار اتمام موجودی')
 
+	def get_normal_price(self):
+		return "{:,}".format(self.price)
+	
+	def get_sales_price(self):
+		return "{:,}".format(self.sales_price)
+
 	def save(self, *args, **kwargs):
 		# تولید اسلاگ فارسی با پشتیبانی از یونیکد
 		self.slug = slugify(self.name, allow_unicode=True)
@@ -412,7 +428,6 @@ class Product(models.Model):
 		verbose_name = 'محصولات'
 		verbose_name_plural = 'محصولات'
 		
-
 	def get_main_image(self):
 		images = ProductImage.objects.filter(product=self)
 		main_image = images.first()
@@ -431,17 +446,14 @@ class Product(models.Model):
 		for cat in self.category.all():
 			selected_cats.append(cat.name)
 		return selected_cats
-	
-	def get_class_price(self):
-		class_price = self.ref_price * self.ref_class.price_coef /100
-		return class_price
+
 	
 	def get_active_price(self):
 		if self.off_active == True and self.sales_price != None:
 			active_price = self.sales_price
 		else:
 			active_price = self.price
-		return active_price
+		return "{:,}".format(active_price)
 
 	def get_product_varieties(self):
 		varieties = Variety.objects.filter(product = self)
@@ -526,6 +538,11 @@ class StoreLogoImage(models.Model):
 		verbose_name = 'لوگوی فروشگاه'
 		verbose_name_plural = 'لوگوی فروشگاه'
 
+	@property
+	def shamsi_created_date(self):
+		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
+
 class Variety(models.Model):
 	name = models.CharField(max_length=255, verbose_name='عنوان')
 	product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='محصول')
@@ -546,14 +563,16 @@ class Comment(models.Model):
 	approved = models.BooleanField(default=False, verbose_name='تایید نمایش')
 	created_date = models.DateTimeField(auto_now_add = True, verbose_name='تاریخ ایجاد')
 
+	@property
+	def shamsi_created_date(self):
+		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
+
 	class Meta:
 		ordering = ('created_date',)
 		verbose_name = 'دیدگاه‌ها'
 		verbose_name_plural = 'دیدگاه‌ها'
 
-	@property
-	def shamsi_created_date(self):
-		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
 
 class CartItem(models.Model):
 	variety = models.ForeignKey(Variety, on_delete = models.CASCADE, null=True, blank=True, verbose_name='تنوع کالا')
@@ -567,8 +586,8 @@ class CartItem(models.Model):
 		return f'{self.variety.product.name} - id: {self.id} - {self.quantity} عدد'
 
 	def get_item_price(self):
-		item_price = self.quantity*self.variety.product.get_active_price()
-		return item_price
+		item_price = self.quantity*int(self.variety.product.get_active_price().replace(',',''))
+		return f'{item_price:,}'
 
 class Cart(models.Model):
 	customer = models.ForeignKey(Customer, on_delete = models.CASCADE, verbose_name='مشتری')
@@ -581,8 +600,8 @@ class Cart(models.Model):
 	def get_total_price(self):
 		total_price = 0
 		for item in self.items.all():
-			total_price = total_price + item.get_item_price()
-		return total_price
+			total_price = total_price + int(item.get_item_price().replace(',',''))
+		return "{:,}".format(total_price)
 	
 	def __str__(self):
 		return f'{self.customer.phone_number}'
@@ -653,6 +672,9 @@ class Order(models.Model):
 	delivery_cost = models.IntegerField(default=0, verbose_name='هزینه ارسال')
 	delivery_off = models.BooleanField(default=False, verbose_name='ارسال رایگان')
 
+	def get_total_price(self):
+		return f'{self.total_price:,}'
+
 	class Meta:
 		ordering = ('created_date',)
 		verbose_name = 'سفارشات'
@@ -662,7 +684,7 @@ class Order(models.Model):
 		orig_cost = 0
 		for item in self.items.all():
 			orig_cost = orig_cost + item.quantity*item.variety.product.price
-		return orig_cost
+		return f'{orig_cost:,}'
 	
 	def get_wallet_payment_volume(self):
 		if self.delivery_method != None:
@@ -675,14 +697,14 @@ class Order(models.Model):
 				wallet_payment = self.customer.wallet_balance
 			if self.customer.wallet_balance > total:
 				wallet_payment = total
-		return wallet_payment
+		return f'{wallet_payment:,}'
 	
 	def get_without_cashback_cost(self):
 		if self.delivery_method != None:
 			total = self.delivery_method.price + self.total_price
 		else:
 			total = self.total_price
-		return total
+		return f'{total:,}'
 
 	def get_final_payment(self):
 		if self.delivery_method != None:
@@ -694,7 +716,7 @@ class Order(models.Model):
 				total = total - self.customer.wallet_balance
 			else:
 				total = 0
-		return total
+		return f'{total:,}'
 	
 	def get_selled_products(self):
 		selled_products = []
@@ -708,41 +730,23 @@ class Order(models.Model):
 					'quantity': quantity,
 				})
 		return selled_products
-
-	def get_order_express_products(self):
-		order_express_products = []
-		selled_products = []
-		items = self.items.all()
-		for item in items:
-			product = item.variety.product
-			selled_products.append(product)
-		for product in selled_products:
-			if product.express == True:
-				order_express_products.append(product)
-		return order_express_products
-
-	def get_order_normal_products(self):
-		order_normal_products = []
-		selled_products = []
-		items = self.items.all()
-		for item in items:
-			product = item.variety.product
-			selled_products.append(product)
-		for product in selled_products:
-			if product.express == False:
-				order_normal_products.append(product)
-		return order_normal_products
 		
 	def get_discount(self):
 		orig_cost = 0
 		for item in self.items.all():
 			orig_cost = orig_cost + item.quantity*item.variety.product.price
 		discount = orig_cost-self.total_price
-		return discount
+		return f'{discount:,}'
 
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
+
+	@property
+	def shamsi_updated_date(self):
+		return JalaliDatetime(self.status_updated_date).strftime('%Y/%m/%d')
+	shamsi_updated_date.fget.short_description = "آخرین بروزرسانی"
 
 class ContactMessage(models.Model):
 	name = models.CharField(max_length=250, verbose_name='نام')
@@ -761,6 +765,11 @@ class ContactMessage(models.Model):
 
 	def __str__(self):
 		return f'{self.name} - {self.familly_name} - {self.subject}'
+	
+	@property
+	def shamsi_created_date(self):
+		return JalaliDatetime(self.created).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "آخرین ایجاد"
 
 def slide_upload_path(instance, filename):
 	slide_name = instance.alt_name.replace(" ", "_")
@@ -831,6 +840,7 @@ class WithdrawRecord(models.Model):
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
 
 	def __str__(self):
 		return f'{self.amount} - {self.shamsi_created_date}'
@@ -901,6 +911,7 @@ class BlogPost(models.Model):
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
 
 def thumbnail_upload_path(instance, filename):
 	thumbnail_name = instance.alt_name.replace(" ", "_")
@@ -990,6 +1001,7 @@ class Domain(models.Model):
 	@property
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
 
 class Filter(models.Model):
 	category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته‌بندی')

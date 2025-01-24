@@ -67,50 +67,34 @@
                     <div class="col-lg-4">
                         <div class="pro_gallery">
                             <div class="icon-product-box">
-                                <!-- <div class="icon-product-box-item" data-bs-toggle="modal" data-bs-target="#shareModal"
-                                     data-bs-placement="right" title="اشتراک گذاری">
-                                    <i class="bi bi-share"></i>
-                                </div> -->
                                 <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
                                      data-bs-title="افزودن به علاقه مندی">
                                     <a href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"><i class="bi bi-heart"></i></a>
                                 </div>
-                                <!-- <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
-                                     data-bs-title="مقایسه محصول">
-                                    <i class="bi bi-arrow-left-right"></i>
-                                </div> -->
-                                <!-- <div class="icon-product-box-item" data-bs-toggle="modal" data-bs-target="#chartModal"
-                                     data-bs-toggle="tooltip" data-bs-placement="right" title="نمودار تغییر قیمت">
-                                    <i class="bi bi-bar-chart"></i>
-                                </div> -->
+                                
                             </div>
-                            <div class="pro-gallery-parent">
-                                <div class="swiper product-gallery">
-                                    <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
-                                        
-                                            <div class="swiper-slide">
-                                                <img class="img-fluid" src="{{product.get_main_image}}"/>
-                                            </div>
-                                        
-                                        
-                                    </div>
-                                    <div class="swiper-button-next d-none d-lg-flex"></div>
-                                    <div class="swiper-button-prev d-none d-lg-flex"></div>
-                                    <div class="swiper-pagination d-none d-lg-block"></div>
-                                </div>
-                            </div>
-                            <div thumbsSlider="" class="swiper product-gallery-thumb">
-                                <div class="swiper-wrapper">
-                                    {% if product.get_gallery != None %}
+                            <div class="swiper product-gallery">
+                                <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
                                     {% for image in product.get_gallery %}
                                     <div class="swiper-slide">
-                                        <img class="img-fluid" src="{{image.image.url}}"/>
+                                        <div class="swiper-zoom-container">
+                                            <img  src="{{ image.image.url }}"
+                                                 alt=""/>
+                                        </div>
                                     </div>
                                     {% endfor %}
-                                    {% endif %}
+                                </div>
+                                <div class="swiper-pagination d-none d-lg-block"></div>
+                            </div>
+                            <div class="swiper product-gallery-thumb">
+                                <div class="swiper-wrapper">
+                                    {% for image in product.get_gallery %}
+                                    <div class="swiper-slide">
+                                        <img src="{{ image.image.url }}" alt=""/>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-lg-8">
@@ -181,8 +165,8 @@
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                         <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                            {{ product.price|intcomma }}</p>
-                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                            {{ product.get_normal_price }}</p>
+                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_sales_price}}
                                             تومان</h6>
                                     </div>
                                 </div>
@@ -190,7 +174,7 @@
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                         
-                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
+                                        <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_normal_price}}
                                             تومان</h6>
                                     </div>
                                 </div>
@@ -620,10 +604,10 @@
                                 <div class="product-box-price">
                                     <div class="product-box-price-discount">
                                         <span class="d-block badge main-color-one-bg text-white font-14 rounded-pill">تخفیف ویژه</span>
-                                        <del>{{ product.price|intcomma }}</del>
+                                        <del>{{ product.get_normal_price }}</del>
                                     </div>
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.sales_price|intcomma}}</h5>
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.get_sales_price}}</h5>
                                         <p class="mb-0 text-muted">تومان</p>
                                     </div>
                                 </div>
@@ -633,7 +617,7 @@
                                         <del></del>
                                     </div>
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.price|intcomma}}</h5>
+                                        <h5 class="title-font main-color-green-color h2 mb-0">{{product.get_normal_price}}</h5>
                                         <p class="mb-0 text-muted">تومان</p>
                                     </div>
                                 </div>

@@ -19,7 +19,7 @@ admin.site.unregister(Group)
 
 
 class OtpCodeAdmin(admin.ModelAdmin):
-	list_display = ('phone_number', 'code', 'created')
+	list_display = ('phone_number', 'code', 'shamsi_created_date')
 	search_fields = ('phone_number',)
 
 admin.site.register(OtpCode, OtpCodeAdmin)
@@ -141,7 +141,7 @@ class CartItemAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-	list_display = ('customer', 'total_price', 'status', 'created_date', 'used_coupon', 'status_updated_date')
+	list_display = ('customer', 'total_price', 'status', 'shamsi_created_date', 'used_coupon', 'shamsi_updated_date')
 	list_filter = ('status', 'used_coupon')
 	search_fields = ['customer__full_name', 'status__latest_status']
 	autocomplete_fields = ['items',]
@@ -165,16 +165,14 @@ class CouponAdmin(admin.ModelAdmin):
 	search_fields = ('code',)
 
 class StoreLogoImageAdmin(admin.ModelAdmin):
-	list_display = ('alt_name', 'created')
+	list_display = ('alt_name', 'shamsi_created_date')
 	search_fields = ('alt_name',)
-	list_filter = ('created',)
-	date_hierarchy = 'created'
 
 admin.site.register(StoreLogoImage, StoreLogoImageAdmin)
 
 
 class ContactMessageAdmin(admin.ModelAdmin):
-	list_display = ('name', 'familly_name', 'email', 'phone', 'subject', 'created')
+	list_display = ('name', 'familly_name', 'email', 'phone', 'subject', 'shamsi_created_date')
 	search_fields = ('name', 'familly_name', 'email', 'phone', 'subject')
 	list_filter = ('subject',)
 
@@ -188,7 +186,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Slide)
 class SlideAdmin(admin.ModelAdmin):
-	list_display = ('index', 'alt_name', 'image_preview', 'created')
+	list_display = ('index', 'alt_name', 'image_preview')
 	search_fields = ['alt_name', ]
 	autocomplete_fields = ['category', 'tag']
 
@@ -200,7 +198,7 @@ class SlideAdmin(admin.ModelAdmin):
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-	list_display = ('index', 'alt_name', 'image_preview', 'size','created')
+	list_display = ('index', 'alt_name', 'image_preview', 'size')
 	search_fields = ['alt_name',]
 	autocomplete_fields = ['category', 'tag']
 
@@ -217,8 +215,8 @@ class FaqModelAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-	list_display = ('sender', 'email', 'product', 'approved', 'created_date')
-	search_fields = ['sender', 'email', 'product__name', 'created_date']
+	list_display = ('sender', 'email', 'product', 'approved', 'shamsi_created_date')
+	search_fields = ['sender', 'email', 'product__name', 'shamsi_created_date']
 	list_filter = ('approved',)
 
 @admin.register(BlogCategory)
@@ -228,8 +226,8 @@ class BlogCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-	list_display = ('title', 'category', 'created_date')
-	search_fields = ['title', 'category__name', 'created_date']
+	list_display = ('title', 'category', 'shamsi_created_date')
+	search_fields = ['title', 'category__name', 'shamsi_created_date']
 	list_filter = ('category',)
 
 @admin.register(UploadedImages)
@@ -238,10 +236,9 @@ class UploadedImagesAdmin(admin.ModelAdmin):
 	search_fields = ['alt_name',]
 
 class CategoryImageAdmin(admin.ModelAdmin):
-	list_display = ('category', 'alt_name', 'created')
+	list_display = ('category', 'alt_name')
 	search_fields = ('category__name', 'alt_name')
-	list_filter = ('category', 'created')
-	date_hierarchy = 'created'
+	list_filter = ('category', )
 
 admin.site.register(CategoryImage, CategoryImageAdmin)
 
@@ -261,7 +258,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 
 class CustomerAdmin(admin.ModelAdmin):
-	list_display = ('phone_number', 'email', 'full_name', 'is_active', 'is_verified', 'city', 'zip_code', 'created_date', 'updated_date')
+	list_display = ('phone_number', 'email', 'full_name', 'is_active', 'is_verified', 'city', 'zip_code', 'shamsi_created_date', 'updated_date')
 	search_fields = ['phone_number', 'full_name']
 	autocomplete_fields = ['favorites',]
 

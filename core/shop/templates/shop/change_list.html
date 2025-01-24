@@ -1,23 +1,21 @@
 {% extends "admin/change_list.html" %}
 {% block extrahead %}
+    {{ block.super }} <!-- اضافه کردن اسکریپت‌های پیش‌فرض جنگو -->
     <style>
         .object-tools {
             display: flex;
             justify-content: first baseline;
             align-items: center;
         }
-
         .object-tools a.addlink {
             font-weight: normal;  /* تطبیق فونت */
             background-color: #3c8dbc; /* رنگ پس‌زمینه مشابه دکمه‌ها */
             border-color: #2c6e8f; /* رنگ حاشیه */
         }
-
         .object-tools a.addlink:hover {
             background-color: #31708f; /* تغییر رنگ هنگام hover */
             border-color: #2c6e8f;
         }
-
         .object-tools a {
             margin-left: 10px;  /* فاصله از دکمه‌های دیگر */
         }

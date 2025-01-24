@@ -1588,7 +1588,7 @@ class CreateOrderView(IsCustomerUserMixin, View):
 			total_price = 0
 			order_status = OrderStatus.objects.get(pk=2)
 			for item in items:
-				price = item.variety.product.get_active_price()*item.quantity
+				price = int(item.variety.product.get_active_price().replace(',',''))*item.quantity
 				total_price += price
 			order = Order.objects.create(customer=customer, total_price=total_price, status = order_status)
 			order.items.set(items)
@@ -1632,7 +1632,7 @@ class OrderDetailView(IsCustomerUserMixin ,View):
 			delivery_description = ''
 			delivery_description = delivery_description+'اقلام سفارش: <br>'
 			for item in order.items.all():
-				delivery_description = delivery_description+f"{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price():,} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {item.get_item_price()*item.quantity:,} تومان<br>"
+				delivery_description = delivery_description+f"{item.variety.product.name} - تنوع: {item.variety.name.replace('default variety','ندارد')} - قیمت: {item.get_item_price()} تومان - تعداد: {item.quantity} عدد - مجموع هزینه: {int(item.get_item_price().replace(',',''))*item.quantity:,} تومان<br>"
 			delivery_description = delivery_description+'شیوه ارسال: <br>'
 			if order.total_price <= delivery_method.min_cart_free:
 				delivery_description = delivery_description+f'{delivery_method.name} + {delivery_method.price:,} تومان  <br>'

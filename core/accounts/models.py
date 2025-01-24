@@ -52,6 +52,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    class Meta:
+        verbose_name = 'حساب‌های کاربری'
+        verbose_name_plural = 'حساب‌های کاربری'
+
     def __str__(self):
         return self.phone_number
     

@@ -65,47 +65,32 @@
                     <div class="col-lg-4">
                         <div class="pro_gallery">
                             <div class="icon-product-box">
-                                <!-- <div class="icon-product-box-item" data-bs-placement="top" data-bs-target="#shareModal"
-                                     data-bs-toggle="modal" title="اشتراک گذاری">
-                                    <i class="bi bi-share"></i>
-                                </div> -->
-                                <div class="icon-product-box-item" data-bs-placement="top"
-                                     data-bs-title="افزودن به علاقه مندی"
-                                     data-bs-toggle="tooltip">
+                                <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
+                                     data-bs-title="افزودن به علاقه مندی">
                                     <a href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"><i class="bi bi-heart"></i></a>
                                 </div>
-                                <!-- <div class="icon-product-box-item" data-bs-placement="top" data-bs-title="مقایسه محصول"
-                                     data-bs-toggle="tooltip">
-                                    <i class="bi bi-arrow-left-right"></i>
-                                </div> -->
-                                <!-- <div class="icon-product-box-item" data-bs-placement="top" data-bs-target="#chartModal"
-                                     data-bs-toggle="modal" data-bs-toggle="modal" title="نمودار تغییر قیمت">
-                                    <i class="bi bi-bar-chart"></i>
-                                </div> -->
+                                
                             </div>
                             <div class="swiper product-gallery">
                                 <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
-                                    <div class="swiper-slide">
-                                        <img class="img-fluid" src="{{product.get_main_image}}"/>
-                                    </div>        
-                                    
-                                </div>
-                                <div class="swiper-button-next d-none d-lg-flex"></div>
-                                <div class="swiper-button-prev d-none d-lg-flex"></div>
-                                <div class="swiper-pagination d-none d-lg-block"></div>
-                            </div>
-                            <div class="swiper product-gallery-thumb" thumbsSlider="">
-                                <div class="swiper-wrapper">
-                                    {% if product.get_gallery != None %}
                                     {% for image in product.get_gallery %}
-                                    <!-- <div class="swiper-slide">
-                                        <img class="img-fluid" src="{{product.get_main_image}}"/>
-                                    </div> -->
                                     <div class="swiper-slide">
-                                        <img class="img-fluid" src="{{image.image.url}}"/>
+                                        <div class="swiper-zoom-container">
+                                            <img  src="{{ image.image.url }}"
+                                                 alt=""/>
+                                        </div>
                                     </div>
                                     {% endfor %}
-                                {% endif %}
+                                </div>
+                                <div class="swiper-pagination d-none d-lg-block"></div>
+                            </div>
+                            <div class="swiper product-gallery-thumb">
+                                <div class="swiper-wrapper">
+                                    {% for image in product.get_gallery %}
+                                    <div class="swiper-slide">
+                                        <img src="{{ image.image.url }}" alt=""/>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -209,14 +194,14 @@
                                         {% if product.off_active == True %}
                                         <div class="product-meta-price d-flex">
                                             <div class="d-flex align-items-center">
-                                                <p class="mb-0 old-price font-16">{{ product.price|intcomma  }} تومان</p>
+                                                <p class="mb-0 old-price font-16">{{ product.get_normal_price  }} تومان</p>
                                             </div>
-                                            <h6 class="title-font new-price">{{product.sales_price|intcomma }} تومان</h6>
+                                            <h6 class="title-font new-price">{{product.get_sales_price }} تومان</h6>
                                         </div>
                                         {% else %}
                                         <div class="product-meta-price d-flex">
                                             
-                                            <h6 class="title-font new-price">{{product.price|intcomma }} تومان</h6>
+                                            <h6 class="title-font new-price">{{product.get_normal_price }} تومان</h6>
                                         </div>
                                         {% endif %}
                                         <div class="d-flex justify-content-between flex-wrap">
@@ -866,16 +851,16 @@
 
                                 {% if product.off_active == True %}
                                 <div>
-                                    <del>{{product.price|intcomma }} </del>
+                                    <del>{{product.get_normal_price }} </del>
                                 </div>
                                 <div class="product-box-price-price">
-                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.sales_price|intcomma }} <span
+                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.get_sales_price }} <span
                                             class="mb-0 text-muted-two">تومان</span></h5>
 
                                 </div>
                                 {% else %}
                                 <div class="product-box-price-price">
-                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.price|intcomma }} <span
+                                    <h5 class="title-font main-color-one-color h2 mb-0">{{product.get_normal_price }} <span
                                             class="mb-0 text-muted-two">تومان</span></h5>
 
                                 </div>

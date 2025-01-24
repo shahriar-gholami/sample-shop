@@ -73,14 +73,38 @@
                                      data-bs-title="افزودن به علاقه مندی">
                                     <a href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"><i class="bi bi-heart"></i></a>
                                 </div>
-                                <!-- <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
-                                     data-bs-title="مقایسه محصول">
-                                    <i class="bi bi-arrow-left-right"></i>
+                                
+                            </div>
+                            <div class="swiper product-gallery">
+                                <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
+                                    {% for image in product.get_gallery %}
+                                    <div class="swiper-slide">
+                                        <div class="swiper-zoom-container">
+                                            <img  src="{{ image.image.url }}"
+                                                 alt=""/>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                <div class="icon-product-box-item" data-bs-toggle="modal" data-bs-target="#chartModal"
-                                     data-toggle="tooltip" data-bs-placement="right" title="نمودار تغییر قیمت">
-                                    <i class="bi bi-bar-chart"></i>
-                                </div> -->
+                                <div class="swiper-pagination d-none d-lg-block"></div>
+                            </div>
+                            <div class="swiper product-gallery-thumb">
+                                <div class="swiper-wrapper">
+                                    {% for image in product.get_gallery %}
+                                    <div class="swiper-slide">
+                                        <img src="{{ image.image.url }}" alt=""/>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="pro_gallery">
+                            <div class="icon-product-box">
+                                <div class="icon-product-box-item" data-bs-toggle="tooltip" data-bs-placement="right"
+                                     data-bs-title="افزودن به علاقه مندی">
+                                    <a href="{% url 'shop:add_to_favorites' product_id=product.id ref='product_detail' %}"><i class="bi bi-heart"></i></a>
+                                </div>
+                                
                             </div>
                             <div class="swiper product-gallery">
                                 <div class="swiper-wrapper" title="برای بزرگنمایی تصویر دابل کلیک کنید">
@@ -104,7 +128,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-xl-8 col-lg-9">
                         <div class="product-meta-title">
@@ -185,15 +209,15 @@
                                                         <div>
                                                             <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
                                                                 <p class="mb-0 old-price font-22 text-muted-two text-decoration-line-through me-3">
-                                                                    {{ product.price|intcomma }}</p>
-                                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                                                    {{ product.get_normal_price }}</p>
+                                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_sales_price}}
                                                                     تومان</h6>
                                                             </div>
                                                         </div>
                                                     {% else %}
                                                         <div >
                                                             <div class="d-flex m-2 align-items-center justify-content-sm-start justify-content-center">
-                                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.price|intcomma}}
+                                                                <h6 class="font-30 title-font new-price main-color-one-color">{{product.get_normal_price}}
                                                                     تومان</h6>
                                                             </div>
                                                         </div>
@@ -994,15 +1018,15 @@
                             <div >
                                 <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                     <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
-                                        {{ product.price|intcomma }}</p>
-                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.sales_price|intcomma}}
+                                        {{ product.get_normal_price }}</p>
+                                    <h6 class="font-18 title-font new-price main-color-one-color">{{product.get_sales_price}}
                                         تومان</h6>
                                 </div>
                             </div>
                             {% else %}
                                 <div >
                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
-                                        <h6 class="font-18 title-font new-price">{{product.price|intcomma}} تومان</h6>
+                                        <h6 class="font-18 title-font new-price">{{product.get_normal_price}} تومان</h6>
                                     </div>
                                 </div>
                             {% endif %}

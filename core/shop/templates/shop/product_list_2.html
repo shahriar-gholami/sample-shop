@@ -393,16 +393,16 @@
 
                                     {% if product.off_active == True %}
                                     <div>
-                                        <del>{{product.price|intcomma}} </del>
+                                        <del>{{product.get_normal_price}} </del>
                                     </div>
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-one-color h2 mb-0">{{product.sales_price|intcomma}} <span
+                                        <h5 class="title-font main-color-one-color h2 mb-0">{{product.get_sales_price}} <span
                                                 class="mb-0 text-muted-two">تومان</span></h5>
 
                                     </div>
                                     {% else %}
                                     <div class="product-box-price-price">
-                                        <h5 class="title-font main-color-one-color h2 mb-0">{{product.price|intcomma}} <span
+                                        <h5 class="title-font main-color-one-color h2 mb-0">{{product.get_normal_price}} <span
                                                 class="mb-0 text-muted-two">تومان</span></h5>
 
                                     </div>

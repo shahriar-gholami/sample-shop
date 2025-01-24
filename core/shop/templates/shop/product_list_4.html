@@ -358,8 +358,8 @@
                                                 <div >
                                                     <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                                         <p class="mb-0 old-price font-18 text-muted-two text-danger text-decoration-line-through me-3">
-                                                            {{ product.price|intcomma }}</p>
-                                                        <h6 class="font-20 title-font new-price">{{product.sales_price|intcomma}}
+                                                            {{ product.get_normal_price }}</p>
+                                                        <h6 class="font-20 title-font new-price">{{product.get_sales_price}}
                                                             تومان</h6>
                                                     </div>
                                                 </div>
@@ -367,7 +367,7 @@
                                             <div >
                                                 <div class="d-flex align-items-center justify-content-sm-start justify-content-center">
                                                     
-                                                    <h6 class="font-20 title-font new-price">{{ product.price|intcomma }} تومان</h6>
+                                                    <h6 class="font-20 title-font new-price">{{ product.get_normal_price }} تومان</h6>
                                                 </div>
                                             </div>
                                         {% endif %}
