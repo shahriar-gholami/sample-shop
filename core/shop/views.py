@@ -169,9 +169,11 @@ class CustomerDashboardView(View):
 			'number_of_favs':number_of_favs,
 		})
 
-class CustomerDashboardOrdersView(IsCustomerUserMixin, View):
+class CustomerDashboardOrdersView(View):
 
 	def get(self, request):
+		if isinstance(request.user, AnonymousUser):
+			return redirect(f'{current_app_name}:customer_authentication')
 		store_name = Store.objects.all().first().name
 		store = Store.objects.all().first()
 		customer = Customer.objects.get(phone_number=request.user.phone_number)		
@@ -187,18 +189,22 @@ class CustomerDashboardOrdersView(IsCustomerUserMixin, View):
 				'customer':customer,
 				'orders':orders})
 
-class CustomerDashboardOrderDatailView(IsCustomerUserMixin, View):
+class CustomerDashboardOrderDatailView(View):
 	
 	def get(self, request, order_id):
-
+		if isinstance(request.user, AnonymousUser):
+			return redirect(f'{current_app_name}:customer_authentication')
 		store = Store.objects.all().first()
 		order = get_object_or_404(Order, id=order_id)
 		return render(request, f'{current_app_name}/order-detail-customer_{store.template_index}.html',
 				 {'order':order, 'store_name':store.name})
 
-class CustomerDashboardFavoritesView(IsCustomerUserMixin, View):
+class CustomerDashboardFavoritesView(View):
 
 	def get(self, request):
+		print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
+		if isinstance(request.user, AnonymousUser):
+			return redirect(f'{current_app_name}:customer_authentication')
 		store = Store.objects.all().first()
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
 		products = customer.favorites.all()
@@ -212,10 +218,13 @@ class CustomerDashboardFavoritesView(IsCustomerUserMixin, View):
 				'customer':customer,
 				})
 
-class CustomerDashboardInfoView(IsCustomerUserMixin, View):
+class CustomerDashboardInfoView(View):
 
 	form_class = CustomerForm
+
 	def get(self, request):
+		if isinstance(request.user, AnonymousUser):
+			return redirect(f'{current_app_name}:customer_authentication')
 		store = Store.objects.all().first()
 		store_name = store.name
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
@@ -235,9 +244,11 @@ class CustomerDashboardInfoView(IsCustomerUserMixin, View):
 			customer.save()
 			return redirect(f'{current_app_name}:customer_dashboard_info')
 
-class CustomerDashboardCommentsView(IsCustomerUserMixin, View):
+class CustomerDashboardCommentsView(View):
 
 	def get(self, request):
+		if isinstance(request.user, AnonymousUser):
+			return redirect(f'{current_app_name}:customer_authentication')
 		store = Store.objects.all().first()
 		store_name = store.name
 		customer = Customer.objects.get(phone_number=request.user.phone_number)
@@ -777,7 +788,7 @@ class AddToCartView(View):
 class CustomerRegisterLoginView(View):
 	
 	template_name = f'{current_app_name}/register-customer.html'
-	message = 'Please Insert Your Phone Number'
+	message = 'لطفا شماره تماس خود را وارد نمایید'
 
 	def get(self, request):
 		form = RequestNumberForm()

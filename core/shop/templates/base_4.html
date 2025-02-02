@@ -244,6 +244,7 @@
                             </li>
                             {% endif %}
 
+                            {% if store.show_specials == True %}
                             <li class="nav-item"><a href="{% url 'shop:index' %}" class="nav-link border-animate fromCenter"><i class="bi bi-menu-app"></i>  ویژه‌ها</a>
                                 <ul class="list-unstyled mage-list-menu shadow-lg back-menu sub-menu mega-container"
                                     style="background: #fff">
@@ -252,6 +253,7 @@
                                     {% endfor %}
                                 </ul>
                             </li>
+                            {% endif %}
 
                             <li class="nav-item">
                                 <a href="" class="nav-link bg-white px-3 py-2 rounded-pill btn no-highlight border border-2 fw-bold">
