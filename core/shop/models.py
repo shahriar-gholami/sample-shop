@@ -1060,3 +1060,18 @@ class Announcement(models.Model):
 	def shamsi_created_date(self):
 		return JalaliDatetime(self.created).strftime('%Y/%m/%d')
 	shamsi_created_date.fget.short_description = "تاریخ ایجاد"
+
+class Invoice(models.Model):
+	order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='invoice', verbose_name='سفارش')
+	invoice_file = models.FileField(upload_to='invoices/', verbose_name='فایل فاکتور')
+	created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+
+	class Meta:
+		ordering = ('-created',)
+		verbose_name = 'فاکتورها'
+		verbose_name_plural = 'فاکتورها'
+
+
+
+	def __str__(self):
+		return f"فاکتور سفارش #{self.order.id}"

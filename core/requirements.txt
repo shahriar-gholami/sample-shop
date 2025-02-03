@@ -25,3 +25,5 @@ bs4
 pytz
 django-admin-interface
 django_jalali
+WeasyPrint
+

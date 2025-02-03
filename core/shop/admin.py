@@ -287,6 +287,12 @@ class DomainAdmin(admin.ModelAdmin):
 
 admin.site.register(Domain, DomainAdmin)
 
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ('order', 'invoice_file', 'created')
+    readonly_fields = ('created', )
+    list_filter = ('created',)
+
+admin.site.register(Invoice, InvoiceAdmin)
 
 
 
