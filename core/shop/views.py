@@ -328,7 +328,7 @@ class ProductListView(View):
 			if brand != '':
 				selected_brand = Brand.objects.filter(id = brand).first()
 				if brand != '0':
-					products = products.filter(brand = selected_brand.name)
+					products = products.filter(brand = selected_brand.id)
 					main_selected_brand = Brand.objects.filter(id = brand).first()
 					brands = list(Brand.objects.filter(id = brand))
 				else:
@@ -1001,6 +1001,9 @@ class SearchView(View):
 		if form.is_valid():
 			search_item = form.cleaned_data['search']
 			return redirect('shop:search_results', search_item)
+		
+		messages.error(request, "لطفاً یک عبارت جستجو وارد کنید.")
+		return redirect(request.META.get('HTTP_REFERER', '/'))
 
 class FaqView(View):
 
@@ -1445,7 +1448,8 @@ class SpecialProductListView(View):
 class BrandProductListView(View):
 
 	def get(self, request, brand_name):
-		products = Product.objects.filter(brand=brand_name)
+		brand = Brand.objects.filter(name=brand_name).first()
+		products = Product.objects.filter(brand=brand.id)
 		items_per_page = 12
 		store = Store.objects.all().first()
 		store_name = store.name

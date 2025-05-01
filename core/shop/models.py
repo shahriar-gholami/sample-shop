@@ -326,7 +326,7 @@ class Product(models.Model):
 	slug = models.CharField(max_length=200, unique=True, blank=True, verbose_name = 'نامک')
 	description = RichTextField(verbose_name = 'توضیحات')
 	features = RichTextField(verbose_name = 'ویژگی‌ها')
-	brand = models.CharField(max_length=255, null=True, blank=True, default='متفرقه', verbose_name = 'برند')
+	brand = models.ForeignKey('Brand', null=True, blank=True, on_delete=models.SET_NULL, verbose_name = 'برند')
 	price = models.IntegerField(verbose_name = 'قیمت')
 	sales_price = models.IntegerField(null=True, blank=True, verbose_name = 'قیمت تخفیف‌دار')
 	off_active = models.BooleanField(default=False, verbose_name = 'فعال بودن فروش با تخفیف')

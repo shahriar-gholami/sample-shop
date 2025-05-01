@@ -40,7 +40,7 @@
                             </div>
                             <div class="offcanvas-body">
                                 <a href="{% url 'shop:index' %}" class="text-center d-block mb-3">
-                                    <img src="{{store.get_logo_image}}" alt="" class="img-fluid menu-responsive-logo" style="width: 80px;">
+                                    <img src="{{store.get_logo_image}}" alt="" class="img-fluid menu-responsive-logo" style="width: 150px;">
                                 </a>
                                 <div class="header-bottom-form mb-4 w-100">
                                     <div class="search-bar">
@@ -126,7 +126,7 @@
                     </div>
                     <div class="header-logo">
                         <a href="{% url 'shop:index' %}">
-                            <img src="{{ store.get_logo_image }}" alt="" style="width: 60px;">
+                            <img src="{{ store.get_logo_image }}" alt="" style="width: 150px;">
                         </a>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
                         </div>
                         <div class="ms-2">
                             <div class="dropdown">
-                                <a href="tel:{{store.phone_number}}" data-bs-toggle="dropdown"class="btn btn-white no-highlight header-register border-0 rounded-pill">
+                                <a data-bs-toggle="dropdown"class="btn btn-white no-highlight header-register border-0 rounded-pill">
                                     <span class="fw-bold">پیگیری سفارش
                                      <br>
                                 <small class="text-muted text-center">{{store.phone_number}}</small>   

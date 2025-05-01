@@ -1,6 +1,13 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /products/featured/
+Disallow: /add-to-favorites/
+Disallow: /owner/
+Disallow: /edit-home/
+Disallow: /customer/
+Disallow: /delivery/
 
-Host: shahrtoy.com
-Sitemap: https://shahrtoy.com/sitemap.xml
+
+Host: liatoy.com
+Sitemap: https://liatoy/sitemap.xml

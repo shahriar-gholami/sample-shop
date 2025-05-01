@@ -8,6 +8,7 @@ from .sitemaps import StoreSitemap, ProductSitemap, CategorySitemap, BlogPostSit
 from django.views.generic import TemplateView
 
 sitemaps = {
+    'store': StoreSitemap,
     'products': ProductSitemap,
     'categories': CategorySitemap,
     'blog posts': BlogPostSitemap,

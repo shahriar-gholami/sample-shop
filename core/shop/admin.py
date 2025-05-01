@@ -41,10 +41,10 @@ class StoreAdmin(admin.ModelAdmin):
 	list_display = ('name', 'get_owner_name', 'phone_number', 'shamsi_created_date', 'has_domain', 'has_payment_gw')
 	fields = ('name', 'is_active', 'address', 'country', 'city', 
 			  'about_description', 'instagram', 'telegram', 'linkedin', 'merchant', 
-			  'phone_number', 'email','show_brands' , 'color', 
+			  'phone_number', 'email', 'color', 
 			  'meta_description', 'meta_keywords', 'meta_og_title', 
 			  'meta_og_description', 'meta_tc_title', 'meta_tc_description', 'has_domain', 'has_payment_gw',
-			  'template_index', 'index_title', 'enamad_code','show_advantages','show_featured_categories','show_special_offer',
+			  'template_index', 'index_title', 'enamad_code','show_brands' ,'show_advantages','show_featured_categories','show_special_offer',
 			  'show_specials','show_blog')
 
 @admin.register(Owner)
@@ -109,7 +109,7 @@ class ProductAdmin(admin.ModelAdmin):
 	@admin.display(description='Active Price')
 	def active_price(self, obj):
 		return obj.get_active_price()
-	list_display = ('name' ,'id','price','sales_price','off_active', 'active_price','stock_alarm')
+	list_display = ('name' ,'id','price','sales_price','off_active', 'active_price','brand' ,'stock_alarm')
 	list_editable = ('price','off_active','sales_price')
 	search_fields = ['name', 'slug']
 	autocomplete_fields = ['category', 'tags']

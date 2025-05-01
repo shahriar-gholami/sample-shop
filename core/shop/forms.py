@@ -38,7 +38,7 @@ class IndexTitleUpdateForm(forms.Form):
     index_title = forms.CharField(required=False)
 
 class SearchForm(forms.Form):
-    search = forms.CharField(required=False)
+    search = forms.CharField()
 
 class EnamadUpdateForm(forms.Form):
     enamad = forms.CharField(required=False)
